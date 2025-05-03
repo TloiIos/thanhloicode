@@ -1,0 +1,15 @@
+workflows:
+  ios-app:
+    name: Build iOS app
+    environment:
+      xcode: latest
+    scripts:
+      - name: Build .ipa for TrollStore
+        script: |
+          xcodebuild -scheme ThanhLoi -configuration Release -sdk iphoneos BUILD_DIR=$CM_BUILD_DIR clean build
+          mkdir -p $CM_BUILD_DIR/Payload
+          cp -r $CM_BUILD_DIR/Release-iphoneos/ThanhLoi.app $CM_BUILD_DIR/Payload/
+          cd $CM_BUILD_DIR
+          zip -r ThanhLoi.ipa Payload
+    artifacts:
+      - $CM_BUILD_DIR/ThanhLoi.ipa
