@@ -2,133 +2,90 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURORA V50 - ADMIN PANEL</title>
+    <title>AURORA V50 - CLOUD ADMIN</title>
     <style>
-        body { 
-            background: #0b0e14; 
-            color: #00d2ff; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            text-align: center; 
-            padding-top: 50px; 
-            margin: 0;
+        body { background: #050505; color: #00ffcc; font-family: 'Segoe UI', monospace; text-align: center; padding-top: 50px; }
+        .panel { 
+            border: 2px solid #00ffcc; display: inline-block; padding: 30px; 
+            border-radius: 15px; box-shadow: 0 0 20px #00ffcc; background: #0a0a0a; 
         }
-        .box { 
-            background: #151921; 
-            padding: 40px; 
-            border-radius: 20px; 
-            border: 2px solid #00d2ff; 
-            display: inline-block;
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.2);
+        h1 { text-shadow: 0 0 10px #00ffcc; letter-spacing: 3px; margin-bottom: 5px; }
+        .sub { font-size: 12px; color: #666; margin-bottom: 25px; }
+        input, select { 
+            background: #000; border: 1px solid #00ffcc; color: #00ffcc; 
+            padding: 12px; width: 280px; border-radius: 5px; margin: 8px 0; outline: none; 
         }
-        h2 { text-shadow: 0 0 10px #00d2ff; margin-bottom: 30px; }
-        input { 
-            background: #1b212c; 
-            border: 1px solid #333; 
-            color: white; 
-            padding: 12px; 
-            margin: 10px; 
-            width: 280px; 
-            border-radius: 8px; 
-            outline: none;
-        }
-        input:focus { border-color: #00d2ff; }
         button { 
-            background: #00d2ff; 
-            color: #000; 
-            border: none; 
-            padding: 12px 25px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            border-radius: 8px; 
-            margin-top: 15px;
-            transition: 0.3s;
+            background: #00ffcc; color: #000; border: none; padding: 12px 30px; 
+            font-weight: bold; cursor: pointer; border-radius: 5px; transition: 0.3s; margin-top: 15px;
         }
-        button:hover { background: #008fb3; transform: scale(1.05); }
-        #msg { margin-top: 20px; font-weight: bold; font-size: 0.9em; }
+        button:hover { background: #00b38f; box-shadow: 0 0 15px #00ffcc; transform: scale(1.05); }
+        #status { margin-top: 20px; font-weight: bold; min-height: 20px; }
     </style>
 </head>
 <body>
+    <div class="panel">
+        <h1>AURORA V50</h1>
+        <div class="sub">CLOUD KEY MANAGEMENT SYSTEM</div>
+        
+        <input type="text" id="key" placeholder="NHẬP TÊN KEY (VÍ DỤ: LOI_VIP_01)"><br>
+        
+        <select id="duration">
+            <option value="1">Gia hạn: 1 Ngày</option>
+            <option value="7">Gia hạn: 7 Ngày</option>
+            <option value="30" selected>Gia hạn: 30 Ngày</option>
+            <option value="365">Gia hạn: 1 Năm</option>
+            <option value="9999">Gia hạn: Vĩnh viễn</option>
+        </select><br>
 
-    <div class="box">
-        <h2>AURORA V50 ADMIN</h2>
-        <input type="password" id="token" placeholder="Dán GitHub Token (ghp_...) vào đây"><br>
-        <input type="text" id="keyName" placeholder="Tên Key muốn tạo (Ví dụ: LOI_VIP)"><br>
-        <button onclick="create()">KÍCH HOẠT NGAY</button>
-        <p id="msg"></p>
+        <button onclick="addKey()">KÍCH HOẠT & GIA HẠN</button>
+        <div id="status"></div>
     </div>
 
     <script>
-        async function create() {
-            const token = document.getElementById('token').value.trim();
-            const keyName = document.getElementById('keyName').value.trim();
-            const msg = document.getElementById('msg');
-            
-            // CẤU HÌNH ĐÃ KHỚP VỚI REPO THANHLOICODE CỦA LỢI
-            const repo = "Tloilos/thanhloicode"; //
-            const filePath = "key.json"; //
+        // LỢI THAY LINK FIREBASE CỦA LỢI VÀO ĐÂY
+        const DB_URL = "https://thanhloi-mode-default-rtdb.asia-southeast1.firebasedatabase.app//keys.json";
 
-            if(!token || !keyName) return alert("Admin Lợi ơi, hãy nhập đủ Token và tên Key nhé!");
-            
-            msg.style.color = "#f1c40f";
-            msg.innerText = "⏳ Đang kết nối GitHub...";
+        async function addKey() {
+            const key = document.getElementById('key').value.trim();
+            const days = parseInt(document.getElementById('duration').value);
+            const status = document.getElementById('status');
+
+            if(!key) return alert("Admin ơi, nhập tên Key trước đã!");
+
+            status.style.color = "#f1c40f";
+            status.innerText = "⏳ Đang kết nối Server...";
+
+            // Tính ngày hết hạn
+            let expireDate = new Date();
+            expireDate.setDate(expireDate.getDate() + days);
+            const expireString = days > 5000 ? "Vĩnh viễn" : expireDate.toLocaleString('vi-VN');
 
             try {
-                // 1. Lấy dữ liệu file hiện tại để có mã SHA (bắt buộc để ghi file)
-                const response = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
-                    headers: { 
-                        'Authorization': `token ${token}`,
-                        'Cache-Control': 'no-cache'
-                    }
-                });
-
-                if (response.status === 401) throw new Error("TOKEN SAI HOẶC ĐÃ BỊ HỦY! Hãy tạo lại cái mới.");
-                if (response.status === 404) throw new Error("KHÔNG TÌM THẤY FILE! Kiểm tra lại tên Repo.");
-                if (!response.ok) throw new Error("Lỗi API: " + response.status);
-
-                const data = await response.json();
-                
-                // Giải mã nội dung file JSON hiện tại
-                let content = {};
-                try {
-                    content = JSON.parse(atob(data.content.replace(/\s/g, '')));
-                } catch(e) {
-                    content = {}; // Nếu file lỗi định dạng thì tạo mới
-                }
-
-                // 2. Thêm Key mới vào danh sách
-                content[keyName] = { 
-                    "rank": "VIP", 
-                    "status": "Active",
-                    "created_at": new Date().toLocaleString('vi-VN')
-                };
-
-                // 3. Gửi yêu cầu cập nhật lại file lên GitHub
-                const updateResponse = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
-                    method: "PUT",
-                    headers: { 
-                        'Authorization': `token ${token}`, 
-                        'Content-Type': 'application/json' 
-                    },
+                const response = await fetch(DB_URL, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        message: "Admin Loi added Key: " + keyName,
-                        content: btoa(unescape(encodeURIComponent(JSON.stringify(content, null, 2)))),
-                        sha: data.sha
+                        [key]: {
+                            "rank": "VIP",
+                            "status": "Active",
+                            "created_at": new Date().toLocaleString('vi-VN'),
+                            "expired_at": expireString,
+                            "days_added": days
+                        }
                     })
                 });
 
-                if(updateResponse.ok) {
-                    msg.style.color = "#2ecc71";
-                    msg.innerHTML = "✅ THÀNH CÔNG!<br>Đã thêm Key: " + keyName;
-                    document.getElementById('keyName').value = ""; // Xóa ô nhập sau khi thành công
+                if(response.ok) {
+                    status.style.color = "#00ffcc";
+                    status.innerHTML = `✅ THÀNH CÔNG!<br>Key: ${key}<br>Hết hạn: ${expireString}`;
+                    document.getElementById('key').value = ""; 
                 } else {
-                    const errData = await updateResponse.json();
-                    throw new Error("GITHUB TỪ CHỐI GHI: " + (errData.message || "Lỗi quyền Token"));
+                    throw new Error("Server Firebase từ chối!");
                 }
-
-            } catch(error) {
-                msg.style.color = "#e74c3c";
-                msg.innerText = "❌ " + error.message;
+            } catch(e) {
+                status.style.color = "#ff4444";
+                status.innerText = "❌ LỖI: Không thể kết nối Cloud!";
             }
         }
     </script>
