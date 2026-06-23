@@ -857,7 +857,144 @@
         }
         .message.user .bubble .label { opacity: 0.8; }
 
-        /* Code Block - VIP */
+        /* ===== IMAGE STYLES ===== */
+        .message .bubble .image-container {
+            position: relative;
+            display: inline-block;
+            margin: 4px 0;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: var(--transition);
+            max-width: 100%;
+        }
+        .message .bubble .image-container:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-glow);
+        }
+        .message .bubble .image-container img {
+            max-width: 100%;
+            max-height: 300px;
+            display: block;
+            border-radius: var(--radius-sm);
+        }
+        .message .bubble .image-container .file-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            padding: 8px 12px;
+            font-size: 10px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .message .bubble .image-container .file-info .name {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .message .bubble .image-container .file-info .size {
+            opacity: 0.7;
+            font-size: 9px;
+            margin-left: 8px;
+        }
+        .message .bubble .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin: 6px 0;
+        }
+        .message .bubble .image-grid .image-container {
+            margin: 0;
+        }
+        .message .bubble .image-grid .image-container img {
+            height: 150px;
+            object-fit: cover;
+        }
+
+        /* ===== IMAGE PREVIEW CONTAINER ===== */
+        .image-preview-container {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 6px 8px;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-sm);
+            margin: 4px 0;
+            max-width: 100%;
+        }
+        .image-preview-container .preview-item {
+            position: relative;
+            width: 70px;
+            height: 70px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+        .image-preview-container .preview-item:hover {
+            border-color: var(--primary);
+        }
+        .image-preview-container .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .image-preview-container .preview-item .remove-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        .image-preview-container .preview-item .remove-btn:hover {
+            background: var(--danger);
+            transform: scale(1.1);
+        }
+        .image-preview-container .preview-item .file-size-badge {
+            position: absolute;
+            bottom: 4px;
+            left: 4px;
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            font-size: 8px;
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+        .image-upload-progress {
+            height: 3px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 4px 8px;
+        }
+        .image-upload-progress .bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.3s;
+            border-radius: 4px;
+        }
+
+        /* ================================================================
+           CODE BLOCK
+           ================================================================ */
         .code-block {
             background: #0d0d14;
             border-radius: var(--radius-sm);
@@ -941,30 +1078,6 @@
             30% { transform: translateY(-6px); opacity: 1; }
         }
 
-        /* Typing indicator - VIP */
-        .typing-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            color: var(--text-muted);
-            font-size: 12px;
-        }
-        .typing-indicator .dots span {
-            width: 4px;
-            height: 4px;
-            background: var(--text-muted);
-            border-radius: 50%;
-            display: inline-block;
-            animation: typingDot 1.2s infinite;
-        }
-        .typing-indicator .dots span:nth-child(2) { animation-delay: 0.2s; }
-        .typing-indicator .dots span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes typingDot {
-            0%, 60%, 100% { transform: translateY(0); opacity: 0.3; }
-            30% { transform: translateY(-4px); opacity: 1; }
-        }
-
         /* Chat Input - VIP */
         .chat-input-container {
             padding: 10px 16px 16px 16px;
@@ -975,7 +1088,8 @@
         }
         .chat-input-wrapper {
             display: flex;
-            gap: 10px;
+            flex-direction: column;
+            gap: 6px;
             background: var(--bg-card);
             border-radius: var(--radius);
             padding: 4px;
@@ -987,18 +1101,23 @@
             border-color: var(--primary);
             box-shadow: 0 0 30px rgba(99, 102, 241, 0.08), 0 2px 12px rgba(0,0,0,0.1);
         }
+        .chat-input-wrapper .input-row {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
         .chat-input-wrapper textarea {
             flex: 1;
             background: transparent;
             border: none;
-            padding: 10px 14px;
+            padding: 8px 12px;
             color: var(--text-primary);
             font-family: inherit;
             font-size: 13.5px;
             resize: none;
             outline: none;
-            min-height: 40px;
-            max-height: 120px;
+            min-height: 36px;
+            max-height: 100px;
             line-height: 1.6;
             -webkit-appearance: none;
         }
@@ -1008,12 +1127,13 @@
         .chat-input-wrapper .input-actions {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 2px;
             padding-right: 4px;
+            flex-shrink: 0;
         }
         .chat-input-wrapper .input-actions button {
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
             border: none;
             background: transparent;
             color: var(--text-muted);
@@ -1024,22 +1144,38 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
         }
         .chat-input-wrapper .input-actions button:active { transform: scale(0.92); }
         .chat-input-wrapper .input-actions button:hover {
             background: var(--bg-hover);
             color: var(--text-primary);
         }
+        .chat-input-wrapper .input-actions button .badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--danger);
+            color: #fff;
+            font-size: 8px;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
         .chat-input-wrapper .send-btn {
-            width: 42px;
-            height: 42px;
+            width: 40px;
+            height: 40px;
             border: none;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border-radius: var(--radius-sm);
             cursor: pointer;
             transition: var(--transition);
-            font-size: 17px;
+            font-size: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1060,8 +1196,14 @@
         .chat-input-wrapper .char-count {
             font-size: 10px;
             color: var(--text-muted);
-            padding: 0 8px;
+            padding: 0 6px;
             font-weight: 500;
+            min-width: 20px;
+            text-align: center;
+        }
+        /* Hide file input */
+        #imageUpload {
+            display: none;
         }
 
         /* ================================================================
@@ -1211,13 +1353,17 @@
             .chat-header .model-selector .model-btn { font-size: 8px; padding: 2px 8px; }
             .chat-messages { padding: 14px 12px; }
             .chat-input-container { padding: 8px 12px 12px 12px; }
-            .chat-input-wrapper textarea { font-size: 14px; min-height: 36px; padding: 8px 12px; }
-            .chat-input-wrapper .send-btn { width: 40px; height: 40px; font-size: 15px; }
-            .message .avatar { width: 30px; height: 30px; font-size: 12px; }
+            .chat-input-wrapper textarea { font-size: 14px; min-height: 32px; padding: 6px 10px; }
+            .chat-input-wrapper .send-btn { width: 38px; height: 38px; font-size: 14px; }
+            .message .avatar { width: 28px; height: 28px; font-size: 12px; }
             .welcome-screen .icon { font-size: 48px; }
             .welcome-screen h2 { font-size: 20px; }
             .welcome-screen .features { gap: 10px; }
             .welcome-screen .features .feature { font-size: 11px; padding: 8px 14px; }
+            .image-preview-container .preview-item { width: 60px; height: 60px; }
+            .message .bubble .image-container img { max-height: 200px; }
+            .message .bubble .image-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+            .message .bubble .image-grid .image-container img { height: 120px; }
         }
 
         @media (max-width: 480px) {
@@ -1237,6 +1383,7 @@
             .welcome-screen h2 { font-size: 18px; }
             .welcome-screen p { font-size: 13px; }
             .toast { font-size: 12px; padding: 10px 18px; top: 60px; }
+            .image-preview-container .preview-item { width: 50px; height: 50px; }
         }
 
         @supports (padding: max(0px)) {
@@ -1259,6 +1406,7 @@
             .conv-item.active { background: var(--bg-card); }
             .chat-header .model-selector .model-btn:hover { background: transparent; color: var(--text-secondary); }
             .chat-header .model-selector .model-btn.active:hover { background: var(--primary); color: #fff; }
+            .image-preview-container .preview-item .remove-btn { display: flex; }
         }
 
         /* Print styles */
@@ -1317,7 +1465,7 @@
                 </button>
                 <span class="icon">✦</span>
                 <span class="brand-name">Thành <span>Lợi</span> AI</span>
-                <span class="version"><span class="pro">✦ PRO</span> v2.0</span>
+                <span class="version"><span class="pro">✦ PRO</span> v3.0</span>
             </div>
             <div class="title-bar-right">
                 <button class="window-btn" onclick="window.location.reload()" title="Làm mới" aria-label="Refresh">
@@ -1395,15 +1543,25 @@
 
                 <div class="chat-input-container">
                     <div class="chat-input-wrapper">
-                        <textarea id="chatInput" placeholder="Nhập tin nhắn... (Shift+Enter để xuống dòng)" rows="1" enterkeyhint="send"></textarea>
-                        <div class="input-actions">
-                            <span class="char-count" id="charCount">0</span>
-                            <button onclick="clearInput()" title="Xóa input" aria-label="Clear input">
-                                <i class="fas fa-times"></i>
-                            </button>
-                            <button class="send-btn" id="sendBtn" onclick="sendMessage()" aria-label="Send message">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
+                        <div class="image-preview-container" id="imagePreviewContainer" style="display:none;"></div>
+                        <div class="image-upload-progress" id="uploadProgress" style="display:none;">
+                            <div class="bar" id="progressBar"></div>
+                        </div>
+                        <div class="input-row">
+                            <textarea id="chatInput" placeholder="Nhập tin nhắn... (Shift+Enter xuống dòng)" rows="1" enterkeyhint="send"></textarea>
+                            <div class="input-actions">
+                                <button onclick="document.getElementById('imageUpload').click()" title="Gửi ảnh" aria-label="Upload image" id="imageBtn">
+                                    <i class="fas fa-image"></i>
+                                </button>
+                                <input type="file" id="imageUpload" accept="image/*" multiple onchange="handleImageUpload(event)" />
+                                <span class="char-count" id="charCount">0</span>
+                                <button onclick="clearInput()" title="Xóa input" aria-label="Clear input">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                <button class="send-btn" id="sendBtn" onclick="sendMessage()" aria-label="Send message">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1413,7 +1571,7 @@
     </div>
 
     <!-- ================================================================
-    SCRIPT - VIP EDITION
+    SCRIPT - VIP EDITION WITH IMAGE SUPPORT
     ================================================================ -->
     <script>
         (function() {
@@ -1435,6 +1593,8 @@
                 DEFAULT_MODEL: 'op/deepseek/deepseek-v4-pro',
                 MAX_HISTORY: 100,
                 MAX_INPUT_LENGTH: 4000,
+                MAX_IMAGE_SIZE: 5 * 1024 * 1024, // 5MB
+                ALLOWED_IMAGE_TYPES: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/bmp'],
                 STORAGE_KEY: 'thanhloi_ai_pro_data',
                 MODEL_STORAGE_KEY: 'thanhloi_ai_pro_model',
                 TOAST_DURATION: 3000,
@@ -1456,6 +1616,8 @@
                 isStreaming: false,
                 abortController: null,
                 searchQuery: '',
+                pendingImages: [],
+                imageData: [],
             };
 
             // ============================================================
@@ -1476,6 +1638,11 @@
             const modelBadge = $('modelBadge');
             const modelSelector = $('modelSelector');
             const charCount = $('charCount');
+            const imageUpload = $('imageUpload');
+            const imagePreviewContainer = $('imagePreviewContainer');
+            const uploadProgress = $('uploadProgress');
+            const progressBar = $('progressBar');
+            const imageBtn = $('imageBtn');
 
             // ============================================================
             // UTILITY FUNCTIONS
@@ -1494,6 +1661,12 @@
                 return div.innerHTML;
             }
 
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' B';
+                if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+                return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+            }
+
             function formatTime(date) {
                 const d = new Date(date);
                 const h = String(d.getHours()).padStart(2, '0');
@@ -1509,21 +1682,8 @@
                 return `${day}/${month}/${year}`;
             }
 
-            function truncateText(text, max = 40) {
-                if (text.length <= max) return text;
-                return text.slice(0, max) + '...';
-            }
-
             function generateId() {
                 return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-            }
-
-            function debounce(fn, delay) {
-                let timer;
-                return function(...args) {
-                    clearTimeout(timer);
-                    timer = setTimeout(() => fn.apply(this, args), delay);
-                };
             }
 
             // ============================================================
@@ -1534,7 +1694,6 @@
                 toast.className = 'toast';
                 if (type) toast.classList.add(type);
                 
-                // Add icon
                 const icons = {
                     success: '✅',
                     error: '❌',
@@ -1625,7 +1784,6 @@
                     state.codeBlocks = data.codeBlocks || {};
                     state.codeIdCounter = data.codeIdCounter || 0;
                     
-                    // Load sidebar state
                     try {
                         const collapsed = localStorage.getItem('thanhloi_sidebar_collapsed');
                         if (collapsed !== null) {
@@ -1686,6 +1844,8 @@
                 state.currentHistory = [];
                 state.codeBlocks = {};
                 state.codeIdCounter = 0;
+                state.pendingImages = [];
+                state.imageData = [];
 
                 renderChat();
                 renderConvList();
@@ -1693,6 +1853,7 @@
                 closeMobileSidebar();
                 chatInput.focus();
                 showToast('✨ Đã tạo cuộc trò chuyện mới', 'success');
+                updateImagePreviewUI();
             }
 
             function loadConversation(index) {
@@ -1708,12 +1869,15 @@
                 state.currentHistory = state.conversations[index].history.slice();
                 state.codeBlocks = {};
                 state.codeIdCounter = 0;
+                state.pendingImages = [];
+                state.imageData = [];
 
                 renderChat();
                 renderConvList();
                 closeMobileSidebar();
                 updateChatTitle();
                 chatInput.focus();
+                updateImagePreviewUI();
             }
 
             function deleteConversation(index) {
@@ -1779,7 +1943,6 @@
                 const display = getModelDisplay(state.currentModel);
                 modelBadge.innerHTML = `<i class="fas fa-robot"></i> ${display.name}`;
                 
-                // Update selector buttons
                 const btns = modelSelector.querySelectorAll('.model-btn');
                 btns.forEach(btn => {
                     btn.classList.toggle('active', btn.dataset.model === state.currentModel);
@@ -1802,6 +1965,134 @@
             }
 
             // ============================================================
+            // IMAGE HANDLING - FULL FEATURED
+            // ============================================================
+            function handleImageUpload(event) {
+                const files = event.target.files;
+                if (!files || files.length === 0) return;
+
+                let validCount = 0;
+                let totalSize = 0;
+
+                for (const file of files) {
+                    // Validate file type
+                    if (!CONFIG.ALLOWED_IMAGE_TYPES.includes(file.type)) {
+                        showToast(`⚠️ Định dạng ${file.type} không được hỗ trợ`, 'warning');
+                        continue;
+                    }
+
+                    // Validate file size
+                    if (file.size > CONFIG.MAX_IMAGE_SIZE) {
+                        showToast(`⚠️ Ảnh ${file.name} quá lớn (tối đa ${formatFileSize(CONFIG.MAX_IMAGE_SIZE)})`, 'warning');
+                        continue;
+                    }
+
+                    // Add to pending list
+                    state.pendingImages.push(file);
+                    totalSize += file.size;
+                    validCount++;
+                    showImagePreview(file);
+                }
+
+                event.target.value = '';
+
+                if (validCount > 0) {
+                    showToast(`📸 Đã chọn ${validCount} ảnh (${formatFileSize(totalSize)})`, 'success');
+                    updateImagePreviewUI();
+                }
+
+                if (validCount === 0 && files.length > 0) {
+                    showToast('⚠️ Không có ảnh hợp lệ nào được chọn', 'warning');
+                }
+            }
+
+            function showImagePreview(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const container = imagePreviewContainer;
+                    container.style.display = 'flex';
+                    
+                    const item = document.createElement('div');
+                    item.className = 'preview-item';
+                    item.dataset.filename = file.name;
+                    item.innerHTML = `
+                        <img src="${e.target.result}" alt="${escapeHtml(file.name)}" />
+                        <span class="file-size-badge">${formatFileSize(file.size)}</span>
+                        <button class="remove-btn" onclick="removePendingImage('${file.name}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    container.appendChild(item);
+                    
+                    // Update button badge
+                    updateImageBadge();
+                };
+                reader.readAsDataURL(file);
+            }
+
+            function removePendingImage(filename) {
+                state.pendingImages = state.pendingImages.filter(f => f.name !== filename);
+                const items = imagePreviewContainer.querySelectorAll('.preview-item');
+                for (const item of items) {
+                    if (item.dataset.filename === filename) {
+                        item.remove();
+                        break;
+                    }
+                }
+                if (imagePreviewContainer.children.length === 0) {
+                    imagePreviewContainer.style.display = 'none';
+                }
+                updateImageBadge();
+                if (state.pendingImages.length === 0) {
+                    showToast('🗑️ Đã xóa ảnh', 'info');
+                }
+            }
+
+            function updateImageBadge() {
+                const count = state.pendingImages.length;
+                const existingBadge = imageBtn.querySelector('.badge');
+                if (existingBadge) existingBadge.remove();
+                
+                if (count > 0) {
+                    const badge = document.createElement('span');
+                    badge.className = 'badge';
+                    badge.textContent = count;
+                    imageBtn.appendChild(badge);
+                }
+            }
+
+            function updateImagePreviewUI() {
+                if (state.pendingImages.length === 0) {
+                    imagePreviewContainer.style.display = 'none';
+                    imagePreviewContainer.innerHTML = '';
+                    updateImageBadge();
+                    return;
+                }
+                // Preview already shown via showImagePreview
+                updateImageBadge();
+            }
+
+            function clearPendingImages() {
+                state.pendingImages = [];
+                imagePreviewContainer.innerHTML = '';
+                imagePreviewContainer.style.display = 'none';
+                updateImageBadge();
+                uploadProgress.style.display = 'none';
+                progressBar.style.width = '0%';
+            }
+
+            function showUploadProgress(percent) {
+                uploadProgress.style.display = 'block';
+                progressBar.style.width = Math.min(percent, 100) + '%';
+                if (percent >= 100) {
+                    setTimeout(() => {
+                        uploadProgress.style.display = 'none';
+                        progressBar.style.width = '0%';
+                    }, 500);
+                }
+            }
+
+            // ============================================================
             // RENDER FUNCTIONS
             // ============================================================
             function renderChat() {
@@ -1816,7 +2107,7 @@
                             <div class="features">
                                 <div class="feature"><i class="fas fa-brain"></i> Đa mô hình</div>
                                 <div class="feature"><i class="fas fa-code"></i> Hỗ trợ code</div>
-                                <div class="feature"><i class="fas fa-globe"></i> Đa ngôn ngữ</div>
+                                <div class="feature"><i class="fas fa-image"></i> Gửi ảnh</div>
                                 <div class="feature"><i class="fas fa-bolt"></i> Phản hồi nhanh</div>
                             </div>
                             <br>
@@ -1831,7 +2122,6 @@
 
                 const conv = state.conversations[state.currentIndex];
                 
-                // Add timestamp
                 let html = `
                     <div class="timestamp">
                         <i class="far fa-calendar-alt"></i> 
@@ -1851,7 +2141,7 @@
                                     <li>🧠 Trả lời câu hỏi và tư vấn</li>
                                     <li>💻 Viết và sửa code</li>
                                     <li>📝 Soạn thảo văn bản</li>
-                                    <li>🌐 Dịch thuật đa ngôn ngữ</li>
+                                    <li>📸 Nhận và phân tích ảnh</li>
                                 </ul>
                                 <br>
                                 Hãy hỏi tôi bất cứ điều gì bạn cần biết!
@@ -1866,7 +2156,7 @@
                                     <div class="avatar"><i class="fas fa-user"></i></div>
                                     <div class="bubble">
                                         <span class="label">Bạn</span>
-                                        ${escapeHtml(msg.content)}
+                                        ${renderMessageContent(msg.content)}
                                     </div>
                                 </div>
                             `;
@@ -1876,7 +2166,7 @@
                                     <div class="avatar">✦</div>
                                     <div class="bubble">
                                         <span class="label">${getModelDisplay(state.currentModel).icon} Thành Lợi AI</span>
-                                        ${renderContent(msg.content)}
+                                        ${renderMessageContent(msg.content)}
                                     </div>
                                 </div>
                             `;
@@ -1889,8 +2179,44 @@
                 updateChatTitle();
             }
 
-            function renderContent(text) {
-                // Parse code blocks with language
+            function renderMessageContent(text) {
+                // Check for image markdown ![alt](url)
+                const imageRegex = /!\[(.*?)\]\((.*?)\)/g;
+                let processedText = text;
+                let match;
+                const images = [];
+                
+                while ((match = imageRegex.exec(text)) !== null) {
+                    images.push({
+                        alt: match[1],
+                        url: match[2],
+                        index: match.index,
+                        full: match[0]
+                    });
+                }
+                
+                // If there are images, render them
+                if (images.length > 0) {
+                    let html = '';
+                    let lastIndex = 0;
+                    for (const img of images) {
+                        html += escapeHtml(text.substring(lastIndex, img.index));
+                        const isGrid = images.length > 1;
+                        html += `
+                            <div class="image-container" onclick="window.open('${escapeHtml(img.url)}', '_blank')">
+                                <img src="${escapeHtml(img.url)}" alt="${escapeHtml(img.alt || 'Ảnh')}" loading="lazy" />
+                                <div class="file-info">
+                                    <span class="name">${escapeHtml(img.alt || 'Ảnh')}</span>
+                                </div>
+                            </div>
+                        `;
+                        lastIndex = img.index + img.full.length;
+                    }
+                    html += escapeHtml(text.substring(lastIndex));
+                    return html;
+                }
+
+                // Parse code blocks
                 const parts = text.split(/(```[\s\S]*?```)/);
                 let html = '';
 
@@ -1919,7 +2245,6 @@
                             </div>
                         `;
                     } else {
-                        // Process inline code and line breaks
                         const inlineParts = part.split(/(`[^`]+`)/);
                         for (const inlinePart of inlineParts) {
                             if (inlinePart.startsWith('`') && inlinePart.endsWith('`')) {
@@ -1971,8 +2296,15 @@
             // ============================================================
             // MESSAGE HANDLING
             // ============================================================
-            function addMessage(content, role) {
-                state.currentHistory.push({ role, content });
+            function addMessage(content, role, images = []) {
+                let messageContent = content;
+                // Add image markdown if images were sent
+                if (images && images.length > 0) {
+                    for (const img of images) {
+                        messageContent += `\n![${img.name || 'Ảnh'}](${img.data})`;
+                    }
+                }
+                state.currentHistory.push({ role, content: messageContent });
                 renderChat();
                 saveCurrentConversation();
                 renderConvList();
@@ -2034,14 +2366,16 @@
             }
 
             // ============================================================
-            // SEND MESSAGE - VIP
+            // SEND MESSAGE - WITH IMAGE SUPPORT
             // ============================================================
             async function sendMessage() {
                 if (state.isSending) return;
 
                 const input = chatInput.value.trim();
-                if (!input) {
-                    showToast('📝 Vui lòng nhập tin nhắn', 'warning');
+                const hasImages = state.pendingImages.length > 0;
+
+                if (!input && !hasImages) {
+                    showToast('📝 Vui lòng nhập tin nhắn hoặc chọn ảnh', 'warning');
                     return;
                 }
 
@@ -2063,21 +2397,61 @@
 
                 // Auto-create title if first message
                 if (state.currentHistory.length === 0 && state.currentIndex >= 0) {
-                    const title = input.length > 35 ? input.slice(0, 35) + '...' : input;
+                    const title = input.length > 35 ? input.slice(0, 35) + '...' : (input || 'Chat có ảnh');
                     state.conversations[state.currentIndex].title = title;
                     renderConvList();
                     saveData();
                 }
 
-                addMessage(input, 'user');
+                // Convert images to base64
+                let imageData = [];
+                if (hasImages) {
+                    showUploadProgress(10);
+                    imageData = await Promise.all(state.pendingImages.map((file, index) => {
+                        return new Promise((resolve) => {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                showUploadProgress(10 + ((index + 1) / state.pendingImages.length) * 80);
+                                resolve({
+                                    name: file.name,
+                                    size: file.size,
+                                    type: file.type,
+                                    data: e.target.result
+                                });
+                            };
+                            reader.readAsDataURL(file);
+                        });
+                    }));
+                    showUploadProgress(100);
+                    
+                    // Store for later use
+                    state.imageData = imageData;
+                }
+
+                // Build message content
+                let messageContent = input;
+                if (hasImages) {
+                    const count = imageData.length;
+                    messageContent = input + (input ? '\n\n' : '') + `📸 Đã gửi ${count} ảnh`;
+                    // Add image info
+                    for (const img of imageData) {
+                        messageContent += `\n- ${img.name} (${formatFileSize(img.size)})`;
+                    }
+                }
+
+                // Add user message with images
+                addMessage(messageContent, 'user', imageData);
+
+                // Clear input and images
                 chatInput.value = '';
                 autoResize();
                 updateCharCount();
+                clearPendingImages();
 
                 showThinking();
 
                 try {
-                    await askAI(input);
+                    await askAI(input, imageData);
                 } catch (error) {
                     removeThinking();
                     addSystemMessage(`❌ Lỗi: ${error.message}`, 'error');
@@ -2088,27 +2462,40 @@
                     chatInput.disabled = false;
                     chatInput.style.opacity = '1';
                     chatInput.focus();
+                    state.imageData = [];
                 }
             }
 
-            async function askAI(userInput) {
+            async function askAI(userInput, imageData = []) {
                 const messages = state.currentHistory.map(m => ({
                     role: m.role,
                     content: m.content
                 }));
 
-                // Add system prompt for better responses
-                const systemPrompt = `Bạn là Thành Lợi AI Pro, một trợ lý thông minh đa mô hình. Bạn có khả năng:
+                const systemPrompt = `Bạn là Thành Lợi AI Pro, một trợ lý thông minh đa mô hình.
+Bạn có khả năng:
 - Trả lời câu hỏi chính xác và chi tiết
 - Viết và sửa code với giải thích rõ ràng
 - Tư vấn và đưa ra lời khuyên hữu ích
 - Hỗ trợ nhiều ngôn ngữ
+- Phân tích và mô tả ảnh (nếu được gửi kèm)
 
 Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
 
+                // Build message with image context
+                let userMessage = userInput;
+                if (imageData.length > 0) {
+                    userMessage += `\n\n[Đã gửi ${imageData.length} ảnh]`;
+                    for (const img of imageData) {
+                        userMessage += `\n- ${img.name} (${formatFileSize(img.size)}, ${img.type})`;
+                    }
+                    userMessage += `\n\nVui lòng phân tích và mô tả nội dung của các ảnh này.`;
+                }
+
                 const fullMessages = [
                     { role: 'system', content: systemPrompt },
-                    ...messages
+                    ...messages.slice(0, -1),
+                    { role: 'user', content: userMessage }
                 ];
 
                 const response = await fetch(CONFIG.API_URL, {
@@ -2155,7 +2542,6 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     navigator.clipboard.writeText(code).then(() => {
                         showToast(`✅ Đã sao chép code #${codeId}`, 'success');
-                        // Update button
                         const btn = document.querySelector(`.copy-btn[onclick*="${codeId}"]`);
                         if (btn) {
                             btn.classList.add('copied');
@@ -2201,12 +2587,12 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
 
                 const conv = state.conversations[state.currentIndex];
                 let text = '✦ Thành Lợi AI Pro - Xuất cuộc trò chuyện\n';
-                text += `=${'='.repeat(60)}\n`;
+                text += `${'='.repeat(60)}\n`;
                 text += `Tiêu đề: ${conv.title}\n`;
                 text += `Ngày tạo: ${new Date(conv.created_at).toLocaleString('vi-VN')}\n`;
                 text += `Số tin nhắn: ${conv.history.length}\n`;
                 text += `Model: ${getModelDisplay(state.currentModel).name}\n`;
-                text += `=${'='.repeat(60)}\n\n`;
+                text += `${'='.repeat(60)}\n\n`;
 
                 for (const msg of state.currentHistory) {
                     if (msg.role === 'user') {
@@ -2216,9 +2602,9 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                     }
                 }
 
-                text += `=${'='.repeat(60)}\n`;
+                text += `${'='.repeat(60)}\n`;
                 text += `Xuất lúc: ${new Date().toLocaleString('vi-VN')}\n`;
-                text += `✦ Thành Lợi AI Pro v2.0`;
+                text += `✦ Thành Lợi AI Pro v3.0`;
 
                 const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
                 const url = URL.createObjectURL(blob);
@@ -2261,7 +2647,7 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
             // ============================================================
             function autoResize() {
                 chatInput.style.height = 'auto';
-                const newHeight = Math.min(chatInput.scrollHeight, 120);
+                const newHeight = Math.min(chatInput.scrollHeight, 100);
                 chatInput.style.height = newHeight + 'px';
             }
 
@@ -2269,21 +2655,21 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
             // KEYBOARD SHORTCUTS
             // ============================================================
             function handleKeyboardShortcuts(e) {
-                // Ctrl+Enter or Cmd+Enter to send
                 if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
                     e.preventDefault();
                     sendMessage();
                 }
-                // Escape to close sidebar
                 if (e.key === 'Escape') {
                     closeMobileSidebar();
+                    if (state.pendingImages.length > 0) {
+                        clearPendingImages();
+                        showToast('🗑️ Đã xóa ảnh đang chọn', 'info');
+                    }
                 }
-                // Ctrl+N for new chat
                 if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
                     e.preventDefault();
                     newChat();
                 }
-                // Ctrl+Shift+D to clear messages
                 if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D') {
                     e.preventDefault();
                     clearMessages();
@@ -2294,7 +2680,6 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
             // INIT
             // ============================================================
             document.addEventListener('DOMContentLoaded', () => {
-                // Hide loading
                 if (document.readyState === 'complete') {
                     hideLoading();
                 } else {
@@ -2302,10 +2687,8 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                     setTimeout(hideLoading, 2000);
                 }
 
-                // Load data
                 const hasData = loadData();
 
-                // Load sidebar state
                 try {
                     const collapsed = localStorage.getItem('thanhloi_sidebar_collapsed');
                     if (collapsed !== null) {
@@ -2317,11 +2700,9 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                     }
                 } catch (e) {}
 
-                // Initialize model selector
                 renderModelSelector();
                 updateModelUI();
 
-                // Initialize chat
                 if (hasData && state.conversations.length > 0) {
                     if (state.currentIndex < 0 || state.currentIndex >= state.conversations.length) {
                         state.currentIndex = 0;
@@ -2338,7 +2719,6 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                     newChat();
                 }
 
-                // Event listeners
                 chatInput.addEventListener('input', () => {
                     autoResize();
                     updateCharCount();
@@ -2353,7 +2733,25 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
 
                 document.addEventListener('keydown', handleKeyboardShortcuts);
 
-                // Window resize handler
+                // Drag and drop support for images
+                document.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                });
+                document.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        const input = new DataTransfer();
+                        for (const file of files) {
+                            if (CONFIG.ALLOWED_IMAGE_TYPES.includes(file.type)) {
+                                input.items.add(file);
+                            }
+                        }
+                        imageUpload.files = input.files;
+                        handleImageUpload({ target: imageUpload });
+                    }
+                });
+
                 let resizeTimer;
                 window.addEventListener('resize', () => {
                     clearTimeout(resizeTimer);
@@ -2370,7 +2768,6 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                     }, 200);
                 });
 
-                // Prevent zoom on double tap (mobile)
                 let lastTouchEnd = 0;
                 document.addEventListener('touchend', (e) => {
                     const now = Date.now();
@@ -2380,20 +2777,22 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                     lastTouchEnd = now;
                 }, { passive: false });
 
-                // Auto-save on page unload
                 window.addEventListener('beforeunload', () => {
                     saveCurrentConversation();
                 });
 
-                // Visibility change
                 document.addEventListener('visibilitychange', () => {
                     if (document.hidden) {
                         saveCurrentConversation();
                     }
                 });
 
-                // Focus input on load
                 setTimeout(() => chatInput.focus(), 300);
+
+                console.log('✦ Thành Lợi AI Pro v3.0 loaded successfully!');
+                console.log(`📊 ${state.conversations.length} conversations, ${state.currentHistory.length} messages`);
+                console.log(`🤖 Current model: ${getModelDisplay(state.currentModel).name}`);
+                console.log(`📸 Image support: ENABLED (${CONFIG.ALLOWED_IMAGE_TYPES.length} formats)`);
             });
 
             // ============================================================
@@ -2413,13 +2812,11 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
             window.clearAllData = clearAllData;
             window.clearInput = clearInput;
             window.showToast = showToast;
-
-            console.log('✦ Thành Lợi AI Pro v2.0 loaded successfully!');
-            console.log(`📊 ${state.conversations.length} conversations, ${state.currentHistory.length} messages`);
-            console.log(`🤖 Current model: ${getModelDisplay(state.currentModel).name}`);
+            window.handleImageUpload = handleImageUpload;
+            window.removePendingImage = removePendingImage;
+            window.clearPendingImages = clearPendingImages;
 
         })();
     </script>
-
 </body>
 </html>
