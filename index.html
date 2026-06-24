@@ -5,39 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     
-    <!-- ===== PRELOAD & PRECONNECT ===== -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
-    <link rel="dns-prefetch" href="https://api.vilao.ai" />
-    
-    <!-- ===== FONTS ===== -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     
-    <!-- ===== SEO META ===== -->
     <title>Thành Lợi AI Pro - Trợ lý thông minh đa mô hình</title>
-    <meta name="description" content="Thành Lợi AI Pro - Trợ lý thông minh đa mô hình với DeepSeek V4 & ChatGPT" />
-    <meta name="keywords" content="AI, Chat, Thành Lợi, Trợ lý AI, DeepSeek, ChatGPT" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>" />
     
-    <!-- ===== PWA ===== -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="theme-color" content="#0b0b12" />
-    
     <style>
-        /* ================================================================
-           RESET & VARIABLES - VIP Edition
-           ================================================================ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         :root {
             --primary: #6366f1;
@@ -53,8 +30,6 @@
             --bg-tertiary: #16161e;
             --bg-card: #1a1a26;
             --bg-hover: #2a2a3e;
-            --bg-gradient-start: #0b0b12;
-            --bg-gradient-end: #1a1a2e;
             --text-primary: #e8e8f0;
             --text-secondary: #a0a0b8;
             --text-muted: #6b6b80;
@@ -65,18 +40,12 @@
             --radius-sm: 8px;
             --radius-full: 50px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             --safe-top: env(safe-area-inset-top, 0px);
             --safe-bottom: env(safe-area-inset-bottom, 0px);
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
-        html, body {
-            height: 100%;
-            overflow: hidden;
-            touch-action: manipulation;
-        }
-
+        html, body { height: 100%; overflow: hidden; touch-action: manipulation; }
         body {
             font-family: var(--font-family);
             background: var(--bg-primary);
@@ -91,25 +60,10 @@
             height: 100%;
         }
 
-        /* Scrollbar styling */
-        ::-webkit-scrollbar {
-            width: 4px;
-            height: 4px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted);
-        }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
 
-        /* ================================================================
-           APP CONTAINER
-           ================================================================ */
         .app-container {
             width: 100%;
             height: 100%;
@@ -121,15 +75,9 @@
             overflow: hidden;
         }
 
-        /* ================================================================
-           LOADING SCREEN - VIP
-           ================================================================ */
         .loading-screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: var(--bg-primary);
             display: flex;
             flex-direction: column;
@@ -138,11 +86,7 @@
             z-index: 9999;
             transition: opacity 0.6s ease, visibility 0.6s ease;
         }
-        .loading-screen.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
+        .loading-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
         .loading-screen .loader {
             position: relative;
             width: 60px;
@@ -184,9 +128,7 @@
             color: var(--text-secondary);
             letter-spacing: 1px;
         }
-        .loading-screen .logo-text span {
-            color: var(--secondary);
-        }
+        .loading-screen .logo-text span { color: var(--secondary); }
         .loading-screen .sub-text {
             margin-top: 6px;
             font-size: 12px;
@@ -209,17 +151,314 @@
             border-radius: 4px;
             animation: progressLoad 2s ease-in-out forwards;
         }
-        @keyframes progressLoad {
-            0% { width: 0%; }
-            100% { width: 100%; }
+        @keyframes progressLoad { 0% { width: 0%; } 100% { width: 100%; } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        @keyframes glowPulse {
+            0%, 100% { text-shadow: 0 0 10px rgba(139, 92, 246, 0.3); }
+            50% { text-shadow: 0 0 30px rgba(139, 92, 246, 0.6); }
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
         }
 
-        /* ================================================================
-           TITLE BAR - VIP
-           ================================================================ */
+        .login-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.4s ease;
+        }
+        .login-overlay.active { display: flex; }
+        .login-overlay.hidden { display: none; }
+        
+        .login-modal {
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            padding: 40px 36px;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: var(--shadow-glow-strong);
+            position: relative;
+            overflow: hidden;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .login-modal::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 200px;
+            background: radial-gradient(ellipse, rgba(139, 92, 246, 0.1), transparent 70%);
+            pointer-events: none;
+        }
+        .login-modal .auth-icon {
+            text-align: center;
+            font-size: 52px;
+            margin-bottom: 8px;
+            color: var(--secondary);
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+        .login-modal h2 {
+            text-align: center;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .login-modal h2 span { color: var(--secondary); }
+        .login-modal .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 24px;
+        }
+        .login-modal .form-group {
+            margin-bottom: 14px;
+        }
+        .login-modal .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+        .login-modal .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            transition: var(--transition);
+            outline: none;
+        }
+        .login-modal .form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.1);
+        }
+        .login-modal .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+        .login-modal .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 8px;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        }
+        .login-modal .login-btn:active { transform: scale(0.98); }
+        .login-modal .login-btn:hover {
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.4);
+            transform: translateY(-1px);
+        }
+        .login-modal .login-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .login-modal .switch-auth {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .login-modal .switch-auth a {
+            color: var(--secondary);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .login-modal .switch-auth a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+        .login-modal .error-msg {
+            color: var(--danger);
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+            padding: 8px 12px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        .login-modal .error-msg.show { display: block; }
+        .login-modal .success-msg {
+            color: var(--success);
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+            padding: 8px 12px;
+            background: rgba(52, 211, 153, 0.1);
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+        }
+        .login-modal .success-msg.show { display: block; }
+
+        .login-modal .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0 6px 0;
+        }
+        .login-modal .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+        .login-modal .remember-me label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .login-modal .divider {
+            display: flex;
+            align-items: center;
+            margin: 18px 0;
+            color: var(--text-muted);
+            font-size: 12px;
+            gap: 16px;
+        }
+        .login-modal .divider::before,
+        .login-modal .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .login-modal .support-section {
+            margin-top: 16px;
+            padding: 16px;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+        }
+        .login-modal .support-section h4 {
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .login-modal .support-section .qr-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .login-modal .support-section .qr-container .qr-box {
+            background: white;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            max-width: 200px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-modal .support-section .qr-container .qr-box img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 4px;
+        }
+        .login-modal .support-section .qr-container .qr-box .qr-placeholder {
+            color: var(--text-muted);
+            font-size: 12px;
+            text-align: center;
+        }
+        .login-modal .support-section .qr-container .qr-info {
+            color: var(--text-secondary);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        .login-modal .support-section .qr-container .qr-info strong {
+            color: var(--text-primary);
+        }
+
+        .login-modal .user-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 16px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .login-modal .user-info .avatar {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        .login-modal .user-info .details {
+            flex: 1;
+            min-width: 0;
+        }
+        .login-modal .user-info .details .name {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-primary);
+        }
+        .login-modal .user-info .details .email {
+            font-size: 12px;
+            color: var(--text-muted);
+            word-break: break-all;
+        }
+        .login-modal .user-info .logout-btn {
+            padding: 8px 16px;
+            background: var(--bg-hover);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        .login-modal .user-info .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+        .login-modal .user-info .logout-btn:active { transform: scale(0.95); }
+
+        /* ===== TITLE BAR ===== */
         .title-bar {
             height: 50px;
             min-height: 50px;
@@ -249,19 +488,13 @@
             flex-shrink: 0;
             animation: glowPulse 3s ease-in-out infinite;
         }
-        @keyframes glowPulse {
-            0%, 100% { text-shadow: 0 0 10px rgba(139, 92, 246, 0.3); }
-            50% { text-shadow: 0 0 25px rgba(139, 92, 246, 0.6); }
-        }
         .title-bar-left .brand-name {
             font-size: 15px;
             font-weight: 800;
             color: var(--text-primary);
             white-space: nowrap;
         }
-        .title-bar-left .brand-name span {
-            color: var(--secondary);
-        }
+        .title-bar-left .brand-name span { color: var(--secondary); }
         .title-bar-left .version {
             font-size: 9px;
             color: var(--text-muted);
@@ -273,9 +506,7 @@
             font-weight: 600;
             letter-spacing: 0.5px;
         }
-        .title-bar-left .version .pro {
-            color: var(--warning);
-        }
+        .title-bar-left .version .pro { color: var(--warning); }
         .title-bar-right {
             display: flex;
             gap: 4px;
@@ -298,15 +529,24 @@
         }
         .window-btn:active { transform: scale(0.92); }
         .window-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
-        .window-btn .badge {
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            width: 8px;
-            height: 8px;
-            background: var(--success);
+        .window-btn .user-avatar {
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
-            animation: pulse-dot 2s infinite;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+        }
+        .window-btn .logout-header-btn {
+            color: var(--danger);
+            font-size: 16px;
+        }
+        .window-btn .logout-header-btn:hover {
+            color: #ff6b6b;
         }
         .menu-toggle {
             display: none;
@@ -325,19 +565,8 @@
         .menu-toggle:active { transform: scale(0.92); }
         .menu-toggle:hover { background: var(--bg-hover); color: var(--text-primary); }
 
-        /* ================================================================
-           MAIN LAYOUT
-           ================================================================ */
-        .main-layout {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* ================================================================
-           SIDEBAR - VIP
-           ================================================================ */
+        /* ===== SIDEBAR ===== */
+        .main-layout { display: flex; flex: 1; overflow: hidden; position: relative; }
         .sidebar {
             width: 280px;
             background: var(--bg-secondary);
@@ -357,13 +586,8 @@
         .sidebar.collapsed .conv-item .delete-btn,
         .sidebar.collapsed .sidebar-footer .status span,
         .sidebar.collapsed .sidebar-footer .actions button span,
-        .sidebar.collapsed .conv-item .time {
-            display: none;
-        }
-        .sidebar.collapsed .new-chat-btn {
-            justify-content: center;
-            padding: 10px;
-        }
+        .sidebar.collapsed .conv-item .time { display: none; }
+        .sidebar.collapsed .new-chat-btn { justify-content: center; padding: 10px; }
         .sidebar.collapsed .new-chat-btn i { margin: 0; }
         .sidebar.collapsed .conv-item { justify-content: center; }
         .sidebar.collapsed .conv-item .conv-icon { margin: 0; }
@@ -379,17 +603,6 @@
             position: relative;
             overflow: hidden;
             min-height: 64px;
-        }
-        .sidebar-header::before {
-            content: '';
-            position: absolute;
-            top: -30%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 150px;
-            height: 80px;
-            background: radial-gradient(ellipse, rgba(139, 92, 246, 0.12), transparent 70%);
-            pointer-events: none;
         }
         .sidebar-header .brand {
             display: flex;
@@ -443,7 +656,6 @@
         .toggle-btn:active { transform: scale(0.92); }
         .toggle-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
 
-        /* New Chat Button - VIP */
         .new-chat-btn {
             margin: 10px 12px 8px 12px;
             padding: 12px 16px;
@@ -464,27 +676,13 @@
             position: relative;
             overflow: hidden;
         }
-        .new-chat-btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            opacity: 0;
-            transition: var(--transition);
-        }
         .new-chat-btn:active { transform: scale(0.96); }
-        .new-chat-btn:hover::after { opacity: 1; }
         .new-chat-btn i { font-size: 14px; }
 
-        /* Conversation List - VIP */
         .conv-list {
             flex: 1;
             overflow-y: auto;
             padding: 4px 8px 8px 8px;
-            -webkit-overflow-scrolling: touch;
         }
         .conv-item {
             padding: 10px 12px;
@@ -554,7 +752,6 @@
             color: var(--danger);
         }
 
-        /* Sidebar Footer - VIP */
         .sidebar-footer {
             padding: 12px 16px;
             border-top: 1px solid var(--border-color);
@@ -579,10 +776,6 @@
             border-radius: 50%;
             background: var(--success);
             animation: pulse-dot 2s infinite;
-        }
-        @keyframes pulse-dot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.8); }
         }
         .sidebar-footer .actions {
             display: flex;
@@ -611,46 +804,20 @@
             background: rgba(239, 68, 68, 0.15);
             color: var(--danger);
         }
-        .sidebar-footer .actions button .tooltip {
-            display: none;
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--bg-card);
-            color: var(--text-primary);
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 10px;
-            white-space: nowrap;
-            border: 1px solid var(--border-color);
-        }
 
-        /* ================================================================
-           SIDEBAR OVERLAY (Mobile)
-           ================================================================ */
         .sidebar-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.7);
             z-index: 9;
             opacity: 0;
             transition: opacity 0.35s ease;
             backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
         }
-        .sidebar-overlay.active {
-            display: block;
-            opacity: 1;
-        }
+        .sidebar-overlay.active { display: block; opacity: 1; }
 
-        /* ================================================================
-           CHAT PANEL - VIP
-           ================================================================ */
+        /* ===== CHAT PANEL ===== */
         .chat-panel {
             flex: 1;
             display: flex;
@@ -660,12 +827,10 @@
             position: relative;
         }
 
-        /* Chat Header - VIP */
         .chat-header {
             padding: 14px 20px;
             background: rgba(18, 18, 26, 0.95);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
@@ -675,6 +840,7 @@
             overflow: hidden;
             min-height: 56px;
             gap: 12px;
+            flex-wrap: wrap;
         }
         .chat-header::after {
             content: '';
@@ -727,6 +893,7 @@
             align-items: center;
             gap: 6px;
             flex-shrink: 0;
+            flex-wrap: wrap;
         }
         .chat-header .model-badge {
             padding: 4px 14px;
@@ -748,6 +915,7 @@
             display: flex;
             gap: 4px;
             flex-shrink: 0;
+            flex-wrap: wrap;
         }
         .chat-header .model-selector .model-btn {
             padding: 3px 10px;
@@ -774,12 +942,10 @@
             border-color: var(--primary);
         }
 
-        /* Chat Messages - VIP */
         .chat-messages {
             flex: 1;
             overflow-y: auto;
             padding: 20px 18px;
-            -webkit-overflow-scrolling: touch;
             background: radial-gradient(ellipse at 50% 0%, rgba(99, 102, 241, 0.03) 0%, transparent 70%);
         }
         .chat-messages .timestamp {
@@ -789,9 +955,7 @@
             padding: 8px 0 16px 0;
             letter-spacing: 0.5px;
         }
-        .chat-messages .timestamp i { margin-right: 4px; }
 
-        /* Message Styles - VIP */
         .message {
             display: flex;
             gap: 12px;
@@ -857,144 +1021,6 @@
         }
         .message.user .bubble .label { opacity: 0.8; }
 
-        /* ===== IMAGE STYLES ===== */
-        .message .bubble .image-container {
-            position: relative;
-            display: inline-block;
-            margin: 4px 0;
-            border-radius: var(--radius-sm);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            transition: var(--transition);
-            max-width: 100%;
-        }
-        .message .bubble .image-container:hover {
-            transform: scale(1.02);
-            box-shadow: var(--shadow-glow);
-        }
-        .message .bubble .image-container img {
-            max-width: 100%;
-            max-height: 300px;
-            display: block;
-            border-radius: var(--radius-sm);
-        }
-        .message .bubble .image-container .file-info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.7));
-            padding: 8px 12px;
-            font-size: 10px;
-            color: #fff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .message .bubble .image-container .file-info .name {
-            flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .message .bubble .image-container .file-info .size {
-            opacity: 0.7;
-            font-size: 9px;
-            margin-left: 8px;
-        }
-        .message .bubble .image-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 8px;
-            margin: 6px 0;
-        }
-        .message .bubble .image-grid .image-container {
-            margin: 0;
-        }
-        .message .bubble .image-grid .image-container img {
-            height: 150px;
-            object-fit: cover;
-        }
-
-        /* ===== IMAGE PREVIEW CONTAINER ===== */
-        .image-preview-container {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            padding: 6px 8px;
-            background: var(--bg-tertiary);
-            border-radius: var(--radius-sm);
-            margin: 4px 0;
-            max-width: 100%;
-        }
-        .image-preview-container .preview-item {
-            position: relative;
-            width: 70px;
-            height: 70px;
-            border-radius: var(--radius-sm);
-            overflow: hidden;
-            border: 2px solid var(--border-color);
-            transition: var(--transition);
-            flex-shrink: 0;
-        }
-        .image-preview-container .preview-item:hover {
-            border-color: var(--primary);
-        }
-        .image-preview-container .preview-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .image-preview-container .preview-item .remove-btn {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-        .image-preview-container .preview-item .remove-btn:hover {
-            background: var(--danger);
-            transform: scale(1.1);
-        }
-        .image-preview-container .preview-item .file-size-badge {
-            position: absolute;
-            bottom: 4px;
-            left: 4px;
-            background: rgba(0,0,0,0.7);
-            color: #fff;
-            font-size: 8px;
-            padding: 1px 6px;
-            border-radius: 4px;
-        }
-        .image-upload-progress {
-            height: 3px;
-            background: var(--border-color);
-            border-radius: 4px;
-            overflow: hidden;
-            margin: 4px 8px;
-        }
-        .image-upload-progress .bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            width: 0%;
-            transition: width 0.3s;
-            border-radius: 4px;
-        }
-
-        /* ================================================================
-           CODE BLOCK
-           ================================================================ */
         .code-block {
             background: #0d0d14;
             border-radius: var(--radius-sm);
@@ -1003,7 +1029,6 @@
             overflow-x: auto;
             position: relative;
             border: 1px solid var(--border-color);
-            -webkit-overflow-scrolling: touch;
         }
         .code-block .code-header {
             display: flex;
@@ -1038,12 +1063,9 @@
             background: var(--bg-hover);
             color: var(--text-primary);
         }
-        .code-block .code-header .copy-btn.copied {
-            color: var(--success);
-        }
         .code-block pre {
             margin: 0;
-            font-family: 'Consolas', 'Courier New', 'Fira Code', monospace;
+            font-family: 'Consolas', 'Courier New', monospace;
             font-size: 12px;
             color: #d4d4d4;
             white-space: pre-wrap;
@@ -1051,7 +1073,6 @@
             line-height: 1.6;
         }
 
-        /* Thinking Indicator - VIP */
         .thinking {
             display: flex;
             align-items: center;
@@ -1078,7 +1099,6 @@
             30% { transform: translateY(-6px); opacity: 1; }
         }
 
-        /* Chat Input - VIP */
         .chat-input-container {
             padding: 10px 16px 16px 16px;
             background: var(--bg-secondary);
@@ -1119,7 +1139,6 @@
             min-height: 36px;
             max-height: 100px;
             line-height: 1.6;
-            -webkit-appearance: none;
         }
         .chat-input-wrapper textarea::placeholder {
             color: var(--text-muted);
@@ -1150,21 +1169,6 @@
         .chat-input-wrapper .input-actions button:hover {
             background: var(--bg-hover);
             color: var(--text-primary);
-        }
-        .chat-input-wrapper .input-actions button .badge {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background: var(--danger);
-            color: #fff;
-            font-size: 8px;
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
         }
         .chat-input-wrapper .send-btn {
             width: 40px;
@@ -1201,47 +1205,7 @@
             min-width: 20px;
             text-align: center;
         }
-        /* Hide file input */
-        #imageUpload {
-            display: none;
-        }
 
-        /* ================================================================
-           TOAST - VIP
-           ================================================================ */
-        .toast {
-            position: fixed;
-            top: 70px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-120px);
-            background: var(--bg-card);
-            color: var(--text-primary);
-            padding: 12px 24px;
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-glow-strong);
-            z-index: 1000;
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
-            font-size: 13px;
-            font-weight: 600;
-            max-width: 90%;
-            text-align: center;
-            opacity: 0;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-        .toast.success { border-color: var(--success); }
-        .toast.error { border-color: var(--danger); }
-        .toast.warning { border-color: var(--warning); }
-        .toast i { margin-right: 8px; }
-
-        /* ================================================================
-           WELCOME SCREEN
-           ================================================================ */
         .welcome-screen {
             display: flex;
             flex-direction: column;
@@ -1251,10 +1215,6 @@
             padding: 20px;
             text-align: center;
             animation: fadeIn 0.6s ease;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
         }
         .welcome-screen .icon {
             font-size: 64px;
@@ -1297,22 +1257,71 @@
             font-size: 14px;
         }
 
-        /* ================================================================
-           RESPONSIVE - VIP
-           ================================================================ */
-        @media (max-width: 1024px) {
-            .sidebar { width: 240px; }
-            .sidebar.collapsed { width: 56px; }
-            .chat-header .info h2 { font-size: 14px; }
+        .toast {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-120px);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-glow-strong);
+            z-index: 1000;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+            font-size: 13px;
+            font-weight: 600;
+            max-width: 90%;
+            text-align: center;
+            opacity: 0;
+            backdrop-filter: blur(20px);
         }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        .toast.success { border-color: var(--success); }
+        .toast.error { border-color: var(--danger); }
+        .toast.warning { border-color: var(--warning); }
+        .toast i { margin-right: 8px; }
+
+        .stop-btn-container {
+            display: flex;
+            justify-content: center;
+            padding: 4px 0 12px 0;
+        }
+        .stop-btn {
+            padding: 10px 24px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 2px solid var(--danger);
+            color: var(--danger);
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: inherit;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-height: 48px;
+            min-width: 180px;
+            justify-content: center;
+            animation: pulseStop 1.5s ease-in-out infinite;
+        }
+        @keyframes pulseStop {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.3); }
+            50% { box-shadow: 0 0 20px 5px rgba(239, 68, 68, 0.15); }
+        }
+        .stop-btn:active { transform: scale(0.95); }
+        .stop-btn i { animation: spin 1s linear infinite; }
 
         @media (max-width: 768px) {
             .menu-toggle { display: flex !important; }
             .sidebar {
                 position: fixed;
-                top: 0;
-                left: 0;
-                bottom: 0;
+                top: 0; left: 0; bottom: 0;
                 z-index: 10;
                 width: 290px;
                 transform: translateX(-100%);
@@ -1330,9 +1339,7 @@
             .sidebar.collapsed .conv-item .delete-btn,
             .sidebar.collapsed .sidebar-footer .status span,
             .sidebar.collapsed .sidebar-footer .actions button span,
-            .sidebar.collapsed .conv-item .time {
-                display: flex;
-            }
+            .sidebar.collapsed .conv-item .time { display: flex; }
             .sidebar.collapsed .new-chat-btn { justify-content: flex-start; padding: 12px 16px; }
             .sidebar.collapsed .conv-item { justify-content: space-between; }
             .sidebar.collapsed .conv-item .conv-icon { margin-right: 8px; }
@@ -1341,12 +1348,7 @@
             .title-bar { padding: 0 12px; }
             .title-bar-left .version { display: none; }
             .message .bubble { max-width: 88%; font-size: 13px; padding: 10px 14px; }
-            .chat-header {
-                padding: 10px 14px;
-                min-height: 48px;
-                flex-wrap: wrap;
-                gap: 6px;
-            }
+            .chat-header { padding: 10px 14px; min-height: 48px; }
             .chat-header .info h2 { font-size: 13px; }
             .chat-header .info p { font-size: 10px; }
             .chat-header .model-badge { font-size: 9px; padding: 2px 10px; }
@@ -1358,12 +1360,8 @@
             .message .avatar { width: 28px; height: 28px; font-size: 12px; }
             .welcome-screen .icon { font-size: 48px; }
             .welcome-screen h2 { font-size: 20px; }
-            .welcome-screen .features { gap: 10px; }
-            .welcome-screen .features .feature { font-size: 11px; padding: 8px 14px; }
-            .image-preview-container .preview-item { width: 60px; height: 60px; }
-            .message .bubble .image-container img { max-height: 200px; }
-            .message .bubble .image-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
-            .message .bubble .image-grid .image-container img { height: 120px; }
+            .login-modal { padding: 30px 20px; }
+            .login-modal .support-section .qr-container .qr-box { max-width: 150px; }
         }
 
         @media (max-width: 480px) {
@@ -1373,64 +1371,31 @@
             .chat-header .info h2 { font-size: 12px; }
             .chat-header .model-badge { display: none; }
             .message .bubble { font-size: 12.5px; padding: 8px 12px; max-width: 92%; }
-            .code-block pre { font-size: 11px; }
-            .new-chat-btn { font-size: 12px; padding: 10px 14px; min-height: 38px; }
-            .conv-item { padding: 8px 10px; min-height: 36px; }
-            .conv-item .title { font-size: 11px; }
-            .sidebar-footer { padding: 8px 12px; min-height: 44px; }
-            .sidebar-footer .status { font-size: 10px; }
-            .chat-input-wrapper textarea { font-size: 13px; }
-            .welcome-screen h2 { font-size: 18px; }
-            .welcome-screen p { font-size: 13px; }
-            .toast { font-size: 12px; padding: 10px 18px; top: 60px; }
-            .image-preview-container .preview-item { width: 50px; height: 50px; }
+            .login-modal { padding: 24px 16px; }
+            .login-modal h2 { font-size: 20px; }
+            .login-modal .support-section .qr-container .qr-box { max-width: 120px; }
+            .stop-btn { padding: 10px 16px; font-size: 13px; min-height: 44px; min-width: 140px; }
         }
 
         @supports (padding: max(0px)) {
-            .title-bar {
-                padding-top: max(8px, env(safe-area-inset-top));
-                height: max(50px, calc(42px + env(safe-area-inset-top)));
-            }
-            .chat-input-container {
-                padding-bottom: max(16px, env(safe-area-inset-bottom));
-            }
+            .title-bar { padding-top: max(8px, env(safe-area-inset-top)); height: max(50px, calc(42px + env(safe-area-inset-top))); }
+            .chat-input-container { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
         }
 
         @media (hover: none) {
             .conv-item .delete-btn { opacity: 1; }
             .window-btn:hover { background: transparent; }
             .toggle-btn:hover { background: transparent; }
-            .new-chat-btn:hover { transform: none; box-shadow: none; }
-            .sidebar-footer .actions button:hover { background: transparent; }
             .conv-item:hover { background: transparent; }
             .conv-item.active { background: var(--bg-card); }
             .chat-header .model-selector .model-btn:hover { background: transparent; color: var(--text-secondary); }
             .chat-header .model-selector .model-btn.active:hover { background: var(--primary); color: #fff; }
-            .image-preview-container .preview-item .remove-btn { display: flex; }
-        }
-
-        /* Print styles */
-        @media print {
-            .sidebar, .title-bar, .chat-input-container, .chat-header {
-                display: none !important;
-            }
-            .chat-messages {
-                padding: 20px !important;
-                overflow: visible !important;
-                height: auto !important;
-            }
-            .message .bubble {
-                border: 1px solid #ccc !important;
-                box-shadow: none !important;
-            }
         }
     </style>
 </head>
 <body>
 
-    <!-- ================================================================
-    LOADING SCREEN
-    ================================================================ -->
+    <!-- ===== LOADING ===== -->
     <div class="loading-screen" id="loadingScreen">
         <div class="loader">
             <div class="ring"></div>
@@ -1442,48 +1407,120 @@
         <div class="progress-bar"><div class="fill"></div></div>
     </div>
 
-    <!-- ================================================================
-    TOAST
-    ================================================================ -->
+    <!-- ===== TOAST ===== -->
     <div class="toast" id="toast"></div>
 
-    <!-- ================================================================
-    MOBILE OVERLAY
-    ================================================================ -->
+    <!-- ===== LOGIN MODAL ===== -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-modal" id="loginModal">
+            <div class="auth-icon">✦</div>
+            <h2>Thành <span>Lợi</span> AI</h2>
+            <p class="subtitle" id="loginSubtitle">Đăng nhập để trải nghiệm đầy đủ tính năng</p>
+            
+            <div id="authForm">
+                <div class="form-group" id="nameGroup">
+                    <label for="loginName">Họ và tên</label>
+                    <input type="text" id="loginName" placeholder="Nhập họ tên của bạn" />
+                </div>
+                <div class="form-group">
+                    <label for="loginEmail">Email / Tên đăng nhập</label>
+                    <input type="text" id="loginEmail" placeholder="email@example.com hoặc tên đăng nhập" />
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Mật khẩu</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" />
+                </div>
+                
+                <div class="remember-me">
+                    <input type="checkbox" id="rememberMe" checked />
+                    <label for="rememberMe">Ghi nhớ thiết bị</label>
+                </div>
+                
+                <div id="loginError" class="error-msg"></div>
+                <div id="loginSuccess" class="success-msg"></div>
+                <button class="login-btn" id="loginBtn" onclick="handleLogin()">
+                    <i class="fas fa-sign-in-alt"></i> <span id="loginBtnText">Đăng nhập</span>
+                </button>
+                
+                <div class="switch-auth">
+                    <span id="switchText">Chưa có tài khoản?</span> 
+                    <a onclick="switchAuthMode()" id="switchLink">Đăng ký ngay</a>
+                </div>
+
+                <div class="support-section">
+                    <h4>🌸 Ủng hộ Admin</h4>
+                    <div class="qr-container">
+                        <div class="qr-box" id="qrBox">
+                            <!-- ========================================== -->
+                            <!--  DÁN LINK ẢNH QR VÀO ĐÂY (thay thế src bên dưới) -->
+                            <!-- ========================================== -->
+                            <img id="qrImage" src="" alt="QR ủng hộ" style="display:none;width:100%;height:auto;border-radius:4px;" />
+                            <div class="qr-placeholder" id="qrPlaceholder">
+                                <i class="fas fa-qrcode" style="font-size:40px;display:block;margin-bottom:8px;opacity:0.3;"></i>
+                                <span>Chưa có QR</span><br>
+                                <span style="font-size:10px;">Thêm link ảnh QR vào code</span>
+                            </div>
+                        </div>
+                        <div class="qr-info">
+                            <strong>🌸 Ủng hộ để phát triển!</strong><br>
+                            Quét mã QR để ủng hộ admin<br>
+                            <span style="font-size:11px;color:var(--text-muted);">Mọi đóng góp đều được trân trọng ❤️</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="userInfo" style="display:none;">
+                <div class="user-info">
+                    <div class="avatar" id="userAvatar">TL</div>
+                    <div class="details">
+                        <div class="name" id="userName">Thành Lợi</div>
+                        <div class="email" id="userEmail">user@example.com</div>
+                    </div>
+                    <button class="logout-btn" onclick="logoutUser()">
+                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== OVERLAY ===== -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- ================================================================
-    APP
-    ================================================================ -->
+    <!-- ===== APP ===== -->
     <div class="app-container">
 
-        <!-- Title Bar -->
         <div class="title-bar">
             <div class="title-bar-left">
-                <button class="menu-toggle" onclick="toggleMobileSidebar()" aria-label="Menu">
+                <button class="menu-toggle" onclick="toggleMobileSidebar()">
                     <i class="fas fa-bars"></i>
                 </button>
                 <span class="icon">✦</span>
                 <span class="brand-name">Thành <span>Lợi</span> AI</span>
-                <span class="version"><span class="pro">✦ PRO</span> v3.0</span>
+                <span class="version"><span class="pro">✦ PRO</span> v3.2</span>
             </div>
             <div class="title-bar-right">
-                <button class="window-btn" onclick="window.location.reload()" title="Làm mới" aria-label="Refresh">
+                <button class="window-btn" onclick="window.location.reload()">
                     <i class="fas fa-sync-alt"></i>
                 </button>
-                <button class="window-btn" onclick="exportChat()" title="Xuất chat" aria-label="Export">
+                <button class="window-btn" onclick="exportChat()">
                     <i class="fas fa-download"></i>
                 </button>
-                <button class="window-btn" onclick="clearAllData()" title="Xóa dữ liệu" aria-label="Clear data">
+                <button class="window-btn" onclick="clearAllData()">
                     <i class="fas fa-trash-alt"></i>
+                </button>
+                <button class="window-btn" onclick="logoutUser()" id="logoutHeaderBtn" title="Đăng xuất" style="display:none;">
+                    <i class="fas fa-sign-out-alt logout-header-btn"></i>
+                </button>
+                <button class="window-btn" onclick="openLoginModal()" id="accountBtn">
+                    <div class="user-avatar" id="headerAvatar">👤</div>
                 </button>
             </div>
         </div>
 
-        <!-- Main Layout -->
         <div class="main-layout">
 
-            <!-- Sidebar -->
             <div class="sidebar" id="sidebar">
                 <div class="sidebar-header">
                     <div class="brand">
@@ -1493,7 +1530,7 @@
                             <span class="sub">AI Assistant Pro</span>
                         </div>
                     </div>
-                    <button class="toggle-btn" onclick="toggleSidebar()" title="Thu gọn" aria-label="Toggle sidebar">
+                    <button class="toggle-btn" onclick="toggleSidebar()">
                         <i class="fas fa-chevron-left" id="toggleIcon"></i>
                     </button>
                 </div>
@@ -1511,17 +1548,16 @@
                         <span>Online</span>
                     </div>
                     <div class="actions">
-                        <button onclick="clearMessages()" class="danger" title="Xóa tin nhắn" aria-label="Clear messages">
+                        <button onclick="clearMessages()" class="danger">
                             <i class="fas fa-eraser"></i>
                         </button>
-                        <button onclick="exportChat()" title="Xuất chat" aria-label="Export chat">
+                        <button onclick="exportChat()">
                             <i class="fas fa-file-export"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Chat Panel -->
             <div class="chat-panel">
                 <div class="chat-header">
                     <div class="info">
@@ -1543,22 +1579,14 @@
 
                 <div class="chat-input-container">
                     <div class="chat-input-wrapper">
-                        <div class="image-preview-container" id="imagePreviewContainer" style="display:none;"></div>
-                        <div class="image-upload-progress" id="uploadProgress" style="display:none;">
-                            <div class="bar" id="progressBar"></div>
-                        </div>
                         <div class="input-row">
-                            <textarea id="chatInput" placeholder="Nhập tin nhắn... (Shift+Enter xuống dòng)" rows="1" enterkeyhint="send"></textarea>
+                            <textarea id="chatInput" placeholder="Nhập tin nhắn... (Enter gửi, Shift+Enter xuống dòng)" rows="1"></textarea>
                             <div class="input-actions">
-                                <button onclick="document.getElementById('imageUpload').click()" title="Gửi ảnh" aria-label="Upload image" id="imageBtn">
-                                    <i class="fas fa-image"></i>
-                                </button>
-                                <input type="file" id="imageUpload" accept="image/*" multiple onchange="handleImageUpload(event)" />
                                 <span class="char-count" id="charCount">0</span>
-                                <button onclick="clearInput()" title="Xóa input" aria-label="Clear input">
+                                <button onclick="clearInput()">
                                     <i class="fas fa-times"></i>
                                 </button>
-                                <button class="send-btn" id="sendBtn" onclick="sendMessage()" aria-label="Send message">
+                                <button class="send-btn" id="sendBtn" onclick="sendMessage()">
                                     <i class="fas fa-paper-plane"></i>
                                 </button>
                             </div>
@@ -1570,18 +1598,23 @@
         </div>
     </div>
 
-    <!-- ================================================================
-    SCRIPT - VIP EDITION WITH IMAGE SUPPORT
-    ================================================================ -->
     <script>
         (function() {
             'use strict';
 
             // ============================================================
-            // CONFIGURATION - VIP
+            // ⭐ DÁN LINK ẢNH QR VÀO ĐÂY ⭐
             // ============================================================
+            // Bước 1: Upload ảnh QR lên hosting (imgur, postimg, hoặc hosting của bạn)
+            // Bước 2: Lấy link ảnh (VD: https://example.com/qr.png)
+            // Bước 3: Dán link vào biến QR_IMAGE_URL bên dưới
+            // ============================================================
+            const QR_IMAGE_URL = 'https://ibb.co/whRXwhkg'; // <-- Dán link ảnh QR vào đây
+            // Ví dụ: const QR_IMAGE_URL = 'https://i.imgur.com/abc123.png';
+            // ============================================================
+
             const CONFIG = {
-                API_URL: 'https://api.vilao.ai/v1/chat/completions',
+                API_URL: 'https://i.imgur.com/OVCaM6H.png',
                 API_KEYS: {
                     'op/deepseek/deepseek-v4-pro': 'sk-544f92225e50d338088b2d54c52c96a8ae0ea709d3546448ff023fa85fc6befb',
                     'cd/gpt-5.4': 'sk-262800e49253720ecedd13eddb3cabff9fb1aaef803131a9df0b2ff23298312e',
@@ -1591,18 +1624,12 @@
                     'cd/gpt-5.4': { name: 'GPT 5.4', provider: 'ChatGPT', icon: '⚡' },
                 },
                 DEFAULT_MODEL: 'op/deepseek/deepseek-v4-pro',
-                MAX_HISTORY: 100,
-                MAX_INPUT_LENGTH: 4000,
-                MAX_IMAGE_SIZE: 5 * 1024 * 1024, // 5MB
-                ALLOWED_IMAGE_TYPES: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/bmp'],
                 STORAGE_KEY: 'thanhloi_ai_pro_data',
-                MODEL_STORAGE_KEY: 'thanhloi_ai_pro_model',
+                AUTH_STORAGE_KEY: 'thanhloi_ai_auth_v3',
+                USERS_STORAGE_KEY: 'thanhloi_ai_users_v3',
                 TOAST_DURATION: 3000,
             };
 
-            // ============================================================
-            // STATE
-            // ============================================================
             const state = {
                 conversations: [],
                 currentIndex: -1,
@@ -1613,16 +1640,13 @@
                 codeBlocks: {},
                 codeIdCounter: 0,
                 currentModel: CONFIG.DEFAULT_MODEL,
-                isStreaming: false,
                 abortController: null,
-                searchQuery: '',
-                pendingImages: [],
-                imageData: [],
+                isAuthMode: 'login',
+                currentUser: null,
+                isGenerating: false,
             };
 
-            // ============================================================
-            // DOM REFS
-            // ============================================================
+            // DOM refs
             const $ = (id) => document.getElementById(id);
             const chatMessages = $('chatMessages');
             const chatInput = $('chatInput');
@@ -1638,14 +1662,58 @@
             const modelBadge = $('modelBadge');
             const modelSelector = $('modelSelector');
             const charCount = $('charCount');
-            const imageUpload = $('imageUpload');
-            const imagePreviewContainer = $('imagePreviewContainer');
-            const uploadProgress = $('uploadProgress');
-            const progressBar = $('progressBar');
-            const imageBtn = $('imageBtn');
+            const headerAvatar = $('headerAvatar');
+            const logoutHeaderBtn = $('logoutHeaderBtn');
+
+            const loginOverlay = $('loginOverlay');
+            const authForm = $('authForm');
+            const userInfo = $('userInfo');
+            const loginName = $('loginName');
+            const loginEmail = $('loginEmail');
+            const loginPassword = $('loginPassword');
+            const loginBtn = $('loginBtn');
+            const loginBtnText = $('loginBtnText');
+            const loginSubtitle = $('loginSubtitle');
+            const loginError = $('loginError');
+            const loginSuccess = $('loginSuccess');
+            const switchText = $('switchText');
+            const switchLink = $('switchLink');
+            const nameGroup = $('nameGroup');
+            const userName = $('userName');
+            const userEmail = $('userEmail');
+            const userAvatar = $('userAvatar');
+            const rememberMe = $('rememberMe');
+            const qrImage = $('qrImage');
+            const qrPlaceholder = $('qrPlaceholder');
 
             // ============================================================
-            // UTILITY FUNCTIONS
+            // HIỂN THỊ QR TỪ LINK
+            // ============================================================
+            function loadQR() {
+                if (QR_IMAGE_URL && QR_IMAGE_URL.length > 0) {
+                    qrImage.src = QR_IMAGE_URL;
+                    qrImage.onload = function() {
+                        qrImage.style.display = 'block';
+                        qrPlaceholder.style.display = 'none';
+                    };
+                    qrImage.onerror = function() {
+                        // Nếu ảnh lỗi, hiển thị placeholder
+                        qrImage.style.display = 'none';
+                        qrPlaceholder.style.display = 'block';
+                        qrPlaceholder.innerHTML = `
+                            <i class="fas fa-exclamation-triangle" style="font-size:40px;display:block;margin-bottom:8px;opacity:0.5;color:var(--warning);"></i>
+                            <span>Không tải được QR</span><br>
+                            <span style="font-size:10px;">Kiểm tra lại link ảnh</span>
+                        `;
+                    };
+                } else {
+                    qrImage.style.display = 'none';
+                    qrPlaceholder.style.display = 'block';
+                }
+            }
+
+            // ============================================================
+            // UTILITY
             // ============================================================
             function getApiKey() {
                 return CONFIG.API_KEYS[state.currentModel] || CONFIG.API_KEYS[CONFIG.DEFAULT_MODEL];
@@ -1661,69 +1729,373 @@
                 return div.innerHTML;
             }
 
-            function formatFileSize(bytes) {
-                if (bytes < 1024) return bytes + ' B';
-                if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-                return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-            }
-
             function formatTime(date) {
                 const d = new Date(date);
-                const h = String(d.getHours()).padStart(2, '0');
-                const m = String(d.getMinutes()).padStart(2, '0');
-                return `${h}:${m}`;
+                return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
             }
 
             function formatDate(date) {
                 const d = new Date(date);
-                const day = String(d.getDate()).padStart(2, '0');
-                const month = String(d.getMonth() + 1).padStart(2, '0');
-                const year = d.getFullYear();
-                return `${day}/${month}/${year}`;
+                return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear();
             }
 
             function generateId() {
                 return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
             }
 
-            // ============================================================
-            // TOAST SYSTEM
-            // ============================================================
+            function getInitials(name) {
+                if (!name) return 'TL';
+                const parts = name.trim().split(' ');
+                if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+                return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+            }
+
             function showToast(message, type = 'info', duration = CONFIG.TOAST_DURATION) {
-                toast.textContent = message;
                 toast.className = 'toast';
+                const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+                toast.innerHTML = (icons[type] || 'ℹ️') + ' ' + message;
                 if (type) toast.classList.add(type);
-                
-                const icons = {
-                    success: '✅',
-                    error: '❌',
-                    warning: '⚠️',
-                    info: 'ℹ️'
-                };
-                if (icons[type]) {
-                    toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i> ${message}`;
-                }
-                
                 toast.classList.add('show');
                 clearTimeout(toast._timer);
-                toast._timer = setTimeout(() => {
-                    toast.classList.remove('show');
-                }, duration);
+                toast._timer = setTimeout(() => { toast.classList.remove('show'); }, duration);
             }
 
-            // ============================================================
-            // LOADING SCREEN
-            // ============================================================
             function hideLoading() {
                 loadingScreen.classList.add('hidden');
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                }, 600);
+                setTimeout(() => { loadingScreen.style.display = 'none'; }, 600);
             }
 
-            // ============================================================
-            // SIDEBAR TOGGLES
-            // ============================================================
+            // Auth
+            function getUsers() {
+                try { return JSON.parse(localStorage.getItem(CONFIG.USERS_STORAGE_KEY) || '[]'); } catch (e) { return []; }
+            }
+
+            function saveUsers(users) {
+                try { localStorage.setItem(CONFIG.USERS_STORAGE_KEY, JSON.stringify(users)); } catch (e) {}
+            }
+
+            function findUserByEmail(email) {
+                const users = getUsers();
+                return users.find(u => u.email.toLowerCase() === email.toLowerCase());
+            }
+
+            function findUserByUsername(username) {
+                const users = getUsers();
+                return users.find(u => u.username && u.username.toLowerCase() === username.toLowerCase());
+            }
+
+            function createUser(name, email, password) {
+                const users = getUsers();
+                const username = email.split('@')[0];
+                const newUser = {
+                    id: generateId(),
+                    name: name || username,
+                    username: username,
+                    email: email,
+                    password: password,
+                    registeredAt: new Date().toISOString(),
+                    lastLogin: new Date().toISOString(),
+                };
+                users.push(newUser);
+                saveUsers(users);
+                return newUser;
+            }
+
+            function updateUserLogin(email) {
+                const users = getUsers();
+                const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+                if (user) {
+                    user.lastLogin = new Date().toISOString();
+                    saveUsers(users);
+                    return user;
+                }
+                return null;
+            }
+
+            function loadAuth() {
+                try {
+                    const data = localStorage.getItem(CONFIG.AUTH_STORAGE_KEY);
+                    if (data) {
+                        const user = JSON.parse(data);
+                        const users = getUsers();
+                        const exists = users.find(u => u.id === user.id);
+                        if (exists) {
+                            state.currentUser = exists;
+                            return true;
+                        }
+                        clearAuth();
+                    }
+                } catch (e) {}
+                return false;
+            }
+
+            function saveAuth(user) {
+                try {
+                    localStorage.setItem(CONFIG.AUTH_STORAGE_KEY, JSON.stringify(user));
+                    state.currentUser = user;
+                } catch (e) {}
+            }
+
+            function clearAuth() {
+                localStorage.removeItem(CONFIG.AUTH_STORAGE_KEY);
+                state.currentUser = null;
+            }
+
+            function updateAuthUI() {
+                if (state.currentUser) {
+                    authForm.style.display = 'none';
+                    userInfo.style.display = 'block';
+                    userName.textContent = state.currentUser.name || 'Người dùng';
+                    userEmail.textContent = state.currentUser.email || '';
+                    userAvatar.textContent = getInitials(state.currentUser.name);
+                    headerAvatar.textContent = getInitials(state.currentUser.name);
+                    logoutHeaderBtn.style.display = 'flex';
+                    loginOverlay.classList.add('hidden');
+                    document.body.style.overflow = '';
+                } else {
+                    authForm.style.display = 'block';
+                    userInfo.style.display = 'none';
+                    headerAvatar.textContent = '👤';
+                    logoutHeaderBtn.style.display = 'none';
+                }
+            }
+
+            function openLoginModal() {
+                if (state.currentUser) {
+                    loginOverlay.classList.add('active');
+                    updateAuthUI();
+                    return;
+                }
+                loginOverlay.classList.add('active');
+                authForm.style.display = 'block';
+                userInfo.style.display = 'none';
+                loginName.value = '';
+                loginEmail.value = '';
+                loginPassword.value = '';
+                loginError.classList.remove('show');
+                loginError.textContent = '';
+                loginSuccess.classList.remove('show');
+                loginSuccess.textContent = '';
+                document.body.style.overflow = 'hidden';
+                if (state.isAuthMode === 'login') {
+                    nameGroup.style.display = 'none';
+                } else {
+                    nameGroup.style.display = 'block';
+                }
+                loadQR();
+            }
+
+            function closeLoginModal() {
+                loginOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            function switchAuthMode() {
+                if (state.isAuthMode === 'login') {
+                    state.isAuthMode = 'register';
+                    loginBtnText.textContent = 'Đăng ký';
+                    loginBtn.innerHTML = '<i class="fas fa-user-plus"></i> <span id="loginBtnText">Đăng ký</span>';
+                    loginSubtitle.textContent = 'Tạo tài khoản để trải nghiệm đầy đủ tính năng';
+                    switchText.textContent = 'Đã có tài khoản?';
+                    switchLink.textContent = 'Đăng nhập';
+                    nameGroup.style.display = 'block';
+                    loginName.focus();
+                } else {
+                    state.isAuthMode = 'login';
+                    loginBtnText.textContent = 'Đăng nhập';
+                    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span id="loginBtnText">Đăng nhập</span>';
+                    loginSubtitle.textContent = 'Đăng nhập để trải nghiệm đầy đủ tính năng';
+                    switchText.textContent = 'Chưa có tài khoản?';
+                    switchLink.textContent = 'Đăng ký ngay';
+                    nameGroup.style.display = 'none';
+                    loginEmail.focus();
+                }
+                loginError.classList.remove('show');
+                loginError.textContent = '';
+                loginSuccess.classList.remove('show');
+                loginSuccess.textContent = '';
+            }
+
+            function handleLogin() {
+                const name = loginName.value.trim();
+                const emailOrUsername = loginEmail.value.trim();
+                const password = loginPassword.value.trim();
+
+                loginError.classList.remove('show');
+                loginError.textContent = '';
+                loginSuccess.classList.remove('show');
+                loginSuccess.textContent = '';
+
+                if (!emailOrUsername || !password) {
+                    loginError.textContent = 'Vui lòng điền đầy đủ thông tin!';
+                    loginError.classList.add('show');
+                    return;
+                }
+
+                if (password.length < 4) {
+                    loginError.textContent = 'Mật khẩu phải có ít nhất 4 ký tự!';
+                    loginError.classList.add('show');
+                    return;
+                }
+
+                if (state.isAuthMode === 'register' && !name) {
+                    loginError.textContent = 'Vui lòng nhập họ tên!';
+                    loginError.classList.add('show');
+                    return;
+                }
+
+                loginBtn.disabled = true;
+                loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+
+                setTimeout(() => {
+                    try {
+                        if (state.isAuthMode === 'register') {
+                            if (!emailOrUsername.includes('@') || !emailOrUsername.includes('.')) {
+                                loginError.textContent = 'Email không hợp lệ!';
+                                loginError.classList.add('show');
+                                loginBtn.disabled = false;
+                                loginBtn.innerHTML = '<i class="fas fa-user-plus"></i> <span id="loginBtnText">Đăng ký</span>';
+                                return;
+                            }
+
+                            const existing = findUserByEmail(emailOrUsername);
+                            if (existing) {
+                                loginError.textContent = 'Email đã được đăng ký! Vui lòng đăng nhập.';
+                                loginError.classList.add('show');
+                                loginBtn.disabled = false;
+                                loginBtn.innerHTML = '<i class="fas fa-user-plus"></i> <span id="loginBtnText">Đăng ký</span>';
+                                return;
+                            }
+
+                            const newUser = createUser(name, emailOrUsername, password);
+                            
+                            loginSuccess.textContent = '✅ Đăng ký thành công! Vui lòng đăng nhập.';
+                            loginSuccess.classList.add('show');
+                            showToast('✅ Đăng ký thành công! Vui lòng đăng nhập.', 'success');
+                            
+                            state.isAuthMode = 'login';
+                            loginBtnText.textContent = 'Đăng nhập';
+                            loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span id="loginBtnText">Đăng nhập</span>';
+                            loginSubtitle.textContent = 'Đăng nhập để trải nghiệm đầy đủ tính năng';
+                            switchText.textContent = 'Chưa có tài khoản?';
+                            switchLink.textContent = 'Đăng ký ngay';
+                            nameGroup.style.display = 'none';
+                            
+                            loginEmail.value = emailOrUsername;
+                            loginPassword.value = password;
+                            
+                            loginBtn.disabled = false;
+                            loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span id="loginBtnText">Đăng nhập</span>';
+                            
+                        } else {
+                            let user = null;
+                            if (emailOrUsername.includes('@')) {
+                                user = findUserByEmail(emailOrUsername);
+                            } else {
+                                user = findUserByUsername(emailOrUsername);
+                            }
+                            
+                            if (!user) {
+                                loginError.textContent = 'Tài khoản không tồn tại! Vui lòng đăng ký.';
+                                loginError.classList.add('show');
+                                loginBtn.disabled = false;
+                                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span id="loginBtnText">Đăng nhập</span>';
+                                return;
+                            }
+                            
+                            if (user.password !== password) {
+                                loginError.textContent = 'Mật khẩu không đúng! Vui lòng thử lại.';
+                                loginError.classList.add('show');
+                                loginBtn.disabled = false;
+                                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span id="loginBtnText">Đăng nhập</span>';
+                                return;
+                            }
+                            
+                            const updatedUser = updateUserLogin(user.email);
+                            saveAuth(updatedUser || user);
+                            
+                            loginSuccess.textContent = '👋 Chào mừng trở lại, ' + (user.name || '') + '!';
+                            loginSuccess.classList.add('show');
+                            showToast('👋 Chào mừng trở lại, ' + (user.name || '') + '!', 'success');
+                            
+                            if (rememberMe && rememberMe.checked) {
+                                showToast('🔒 Đã ghi nhớ thiết bị', 'info');
+                            }
+                            
+                            updateAuthUI();
+                            setTimeout(() => {
+                                closeLoginModal();
+                            }, 300);
+                            
+                            loginBtn.disabled = false;
+                            loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span id="loginBtnText">Đăng nhập</span>';
+                        }
+                        
+                    } catch (error) {
+                        console.error('Auth error:', error);
+                        loginError.textContent = 'Đã xảy ra lỗi. Vui lòng thử lại!';
+                        loginError.classList.add('show');
+                        loginBtn.disabled = false;
+                        loginBtn.innerHTML = state.isAuthMode === 'login' ? 
+                            '<i class="fas fa-sign-in-alt"></i> <span id="loginBtnText">Đăng nhập</span>' : 
+                            '<i class="fas fa-user-plus"></i> <span id="loginBtnText">Đăng ký</span>';
+                    }
+                }, 800);
+            }
+
+            function logoutUser() {
+                if (!confirm('Bạn có chắc muốn đăng xuất?')) return;
+                clearAuth();
+                updateAuthUI();
+                closeLoginModal();
+                showToast('👋 Đã đăng xuất', 'info');
+                
+                state.conversations = [];
+                state.currentIndex = -1;
+                state.currentHistory = [];
+                renderChat();
+                renderConvList();
+                newChat();
+                
+                setTimeout(() => { openLoginModal(); }, 500);
+            }
+
+            // Stop generation
+            function stopGeneration() {
+                if (state.abortController) {
+                    state.abortController.abort();
+                    state.abortController = null;
+                    state.isGenerating = false;
+                    removeThinking();
+                    showToast('⏹️ Đã dừng tạo câu trả lời', 'warning');
+                    state.isSending = false;
+                    sendBtn.disabled = false;
+                    chatInput.disabled = false;
+                    chatInput.style.opacity = '1';
+                    sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+                    removeStopButton();
+                }
+            }
+
+            function showStopButton() {
+                const container = document.createElement('div');
+                container.className = 'stop-btn-container';
+                container.id = 'stopBtnContainer';
+                container.innerHTML = `
+                    <button class="stop-btn" onclick="window.stopGeneration()">
+                        <i class="fas fa-stop-circle"></i> Dừng tạo câu trả lời
+                    </button>
+                `;
+                chatMessages.appendChild(container);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function removeStopButton() {
+                const container = document.getElementById('stopBtnContainer');
+                if (container) container.remove();
+            }
+
+            // Sidebar
             function toggleSidebar() {
                 if (window.innerWidth <= 768) {
                     toggleMobileSidebar();
@@ -1753,9 +2125,7 @@
                 }
             }
 
-            // ============================================================
-            // STORAGE
-            // ============================================================
+            // Storage
             function saveData() {
                 try {
                     const data = {
@@ -1767,9 +2137,7 @@
                         codeIdCounter: state.codeIdCounter,
                     };
                     localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(data));
-                } catch (e) {
-                    console.error('Save error:', e);
-                }
+                } catch (e) {}
             }
 
             function loadData() {
@@ -1783,7 +2151,6 @@
                     state.currentModel = data.currentModel || CONFIG.DEFAULT_MODEL;
                     state.codeBlocks = data.codeBlocks || {};
                     state.codeIdCounter = data.codeIdCounter || 0;
-                    
                     try {
                         const collapsed = localStorage.getItem('thanhloi_sidebar_collapsed');
                         if (collapsed !== null) {
@@ -1794,12 +2161,8 @@
                             }
                         }
                     } catch (e) {}
-                    
                     return true;
-                } catch (e) {
-                    console.error('Load error:', e);
-                    return false;
-                }
+                } catch (e) { return false; }
             }
 
             function saveCurrentConversation() {
@@ -1810,30 +2173,17 @@
                 }
             }
 
-            function clearAllData() {
-                if (!confirm('⚠️ Bạn có chắc chắn muốn xóa TẤT CẢ dữ liệu? Hành động này không thể hoàn tác!')) return;
-                localStorage.removeItem(CONFIG.STORAGE_KEY);
-                localStorage.removeItem(CONFIG.MODEL_STORAGE_KEY);
-                state.conversations = [];
-                state.currentIndex = -1;
-                state.currentHistory = [];
-                state.codeBlocks = {};
-                state.codeIdCounter = 0;
-                renderChat();
-                renderConvList();
-                newChat();
-                showToast('🗑️ Đã xóa tất cả dữ liệu', 'success');
-            }
-
-            // ============================================================
-            // CONVERSATION MANAGEMENT
-            // ============================================================
+            // Conversations
             function newChat() {
+                if (state.isSending) {
+                    showToast('⏳ Vui lòng đợi tin nhắn hiện tại hoàn tất', 'warning');
+                    return;
+                }
                 if (state.currentHistory.length > 0) saveCurrentConversation();
 
                 const conv = {
                     id: generateId(),
-                    title: `Chat mới ${state.conversations.length + 1}`,
+                    title: 'Chat mới ' + (state.conversations.length + 1),
                     history: [],
                     created_at: Date.now(),
                     updated_at: Date.now(),
@@ -1844,8 +2194,6 @@
                 state.currentHistory = [];
                 state.codeBlocks = {};
                 state.codeIdCounter = 0;
-                state.pendingImages = [];
-                state.imageData = [];
 
                 renderChat();
                 renderConvList();
@@ -1853,7 +2201,7 @@
                 closeMobileSidebar();
                 chatInput.focus();
                 showToast('✨ Đã tạo cuộc trò chuyện mới', 'success');
-                updateImagePreviewUI();
+                removeStopButton();
             }
 
             function loadConversation(index) {
@@ -1862,22 +2210,19 @@
                     showToast('⏳ Vui lòng đợi tin nhắn hiện tại hoàn tất', 'warning');
                     return;
                 }
-                
                 saveCurrentConversation();
 
                 state.currentIndex = index;
                 state.currentHistory = state.conversations[index].history.slice();
                 state.codeBlocks = {};
                 state.codeIdCounter = 0;
-                state.pendingImages = [];
-                state.imageData = [];
 
                 renderChat();
                 renderConvList();
                 closeMobileSidebar();
                 updateChatTitle();
                 chatInput.focus();
-                updateImagePreviewUI();
+                removeStopButton();
             }
 
             function deleteConversation(index) {
@@ -1906,6 +2251,7 @@
                 renderConvList();
                 saveData();
                 showToast('🗑️ Đã xóa cuộc trò chuyện', 'info');
+                removeStopButton();
             }
 
             function updateChatTitle() {
@@ -1917,13 +2263,10 @@
                 const conv = state.conversations[state.currentIndex];
                 const title = conv.title || 'Cuộc trò chuyện';
                 chatTitle.innerHTML = `<span class="online-dot"></span> 💬 ${escapeHtml(title)}`;
-                const msgCount = conv.history.length;
-                chatSubtitle.textContent = `${msgCount} tin nhắn • ${formatDate(conv.created_at)}`;
+                chatSubtitle.textContent = conv.history.length + ' tin nhắn • ' + formatDate(conv.created_at);
             }
 
-            // ============================================================
-            // MODEL MANAGEMENT
-            // ============================================================
+            // Model
             function switchModel(modelKey) {
                 if (state.isSending) {
                     showToast('⏳ Vui lòng đợi tin nhắn hiện tại hoàn tất', 'warning');
@@ -1936,13 +2279,12 @@
                 state.currentModel = modelKey;
                 updateModelUI();
                 saveData();
-                showToast(`✅ Đã chuyển sang ${getModelDisplay(modelKey).name}`, 'success');
+                showToast('✅ Đã chuyển sang ' + getModelDisplay(modelKey).name, 'success');
             }
 
             function updateModelUI() {
                 const display = getModelDisplay(state.currentModel);
                 modelBadge.innerHTML = `<i class="fas fa-robot"></i> ${display.name}`;
-                
                 const btns = modelSelector.querySelectorAll('.model-btn');
                 btns.forEach(btn => {
                     btn.classList.toggle('active', btn.dataset.model === state.currentModel);
@@ -1953,9 +2295,9 @@
                 modelSelector.innerHTML = '';
                 for (const [key, display] of Object.entries(CONFIG.MODEL_DISPLAY)) {
                     const btn = document.createElement('button');
-                    btn.className = `model-btn${state.currentModel === key ? ' active' : ''}`;
+                    btn.className = 'model-btn' + (state.currentModel === key ? ' active' : '');
                     btn.dataset.model = key;
-                    btn.textContent = `${display.icon} ${display.name}`;
+                    btn.textContent = display.icon + ' ' + display.name;
                     btn.onclick = (e) => {
                         e.stopPropagation();
                         switchModel(key);
@@ -1964,137 +2306,7 @@
                 }
             }
 
-            // ============================================================
-            // IMAGE HANDLING - FULL FEATURED
-            // ============================================================
-            function handleImageUpload(event) {
-                const files = event.target.files;
-                if (!files || files.length === 0) return;
-
-                let validCount = 0;
-                let totalSize = 0;
-
-                for (const file of files) {
-                    // Validate file type
-                    if (!CONFIG.ALLOWED_IMAGE_TYPES.includes(file.type)) {
-                        showToast(`⚠️ Định dạng ${file.type} không được hỗ trợ`, 'warning');
-                        continue;
-                    }
-
-                    // Validate file size
-                    if (file.size > CONFIG.MAX_IMAGE_SIZE) {
-                        showToast(`⚠️ Ảnh ${file.name} quá lớn (tối đa ${formatFileSize(CONFIG.MAX_IMAGE_SIZE)})`, 'warning');
-                        continue;
-                    }
-
-                    // Add to pending list
-                    state.pendingImages.push(file);
-                    totalSize += file.size;
-                    validCount++;
-                    showImagePreview(file);
-                }
-
-                event.target.value = '';
-
-                if (validCount > 0) {
-                    showToast(`📸 Đã chọn ${validCount} ảnh (${formatFileSize(totalSize)})`, 'success');
-                    updateImagePreviewUI();
-                }
-
-                if (validCount === 0 && files.length > 0) {
-                    showToast('⚠️ Không có ảnh hợp lệ nào được chọn', 'warning');
-                }
-            }
-
-            function showImagePreview(file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const container = imagePreviewContainer;
-                    container.style.display = 'flex';
-                    
-                    const item = document.createElement('div');
-                    item.className = 'preview-item';
-                    item.dataset.filename = file.name;
-                    item.innerHTML = `
-                        <img src="${e.target.result}" alt="${escapeHtml(file.name)}" />
-                        <span class="file-size-badge">${formatFileSize(file.size)}</span>
-                        <button class="remove-btn" onclick="removePendingImage('${file.name}')">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    `;
-                    container.appendChild(item);
-                    
-                    // Update button badge
-                    updateImageBadge();
-                };
-                reader.readAsDataURL(file);
-            }
-
-            function removePendingImage(filename) {
-                state.pendingImages = state.pendingImages.filter(f => f.name !== filename);
-                const items = imagePreviewContainer.querySelectorAll('.preview-item');
-                for (const item of items) {
-                    if (item.dataset.filename === filename) {
-                        item.remove();
-                        break;
-                    }
-                }
-                if (imagePreviewContainer.children.length === 0) {
-                    imagePreviewContainer.style.display = 'none';
-                }
-                updateImageBadge();
-                if (state.pendingImages.length === 0) {
-                    showToast('🗑️ Đã xóa ảnh', 'info');
-                }
-            }
-
-            function updateImageBadge() {
-                const count = state.pendingImages.length;
-                const existingBadge = imageBtn.querySelector('.badge');
-                if (existingBadge) existingBadge.remove();
-                
-                if (count > 0) {
-                    const badge = document.createElement('span');
-                    badge.className = 'badge';
-                    badge.textContent = count;
-                    imageBtn.appendChild(badge);
-                }
-            }
-
-            function updateImagePreviewUI() {
-                if (state.pendingImages.length === 0) {
-                    imagePreviewContainer.style.display = 'none';
-                    imagePreviewContainer.innerHTML = '';
-                    updateImageBadge();
-                    return;
-                }
-                // Preview already shown via showImagePreview
-                updateImageBadge();
-            }
-
-            function clearPendingImages() {
-                state.pendingImages = [];
-                imagePreviewContainer.innerHTML = '';
-                imagePreviewContainer.style.display = 'none';
-                updateImageBadge();
-                uploadProgress.style.display = 'none';
-                progressBar.style.width = '0%';
-            }
-
-            function showUploadProgress(percent) {
-                uploadProgress.style.display = 'block';
-                progressBar.style.width = Math.min(percent, 100) + '%';
-                if (percent >= 100) {
-                    setTimeout(() => {
-                        uploadProgress.style.display = 'none';
-                        progressBar.style.width = '0%';
-                    }, 500);
-                }
-            }
-
-            // ============================================================
-            // RENDER FUNCTIONS
-            // ============================================================
+            // Render
             function renderChat() {
                 chatMessages.innerHTML = '';
 
@@ -2107,7 +2319,6 @@
                             <div class="features">
                                 <div class="feature"><i class="fas fa-brain"></i> Đa mô hình</div>
                                 <div class="feature"><i class="fas fa-code"></i> Hỗ trợ code</div>
-                                <div class="feature"><i class="fas fa-image"></i> Gửi ảnh</div>
                                 <div class="feature"><i class="fas fa-bolt"></i> Phản hồi nhanh</div>
                             </div>
                             <br>
@@ -2121,7 +2332,6 @@
                 }
 
                 const conv = state.conversations[state.currentIndex];
-                
                 let html = `
                     <div class="timestamp">
                         <i class="far fa-calendar-alt"></i> 
@@ -2141,7 +2351,6 @@
                                     <li>🧠 Trả lời câu hỏi và tư vấn</li>
                                     <li>💻 Viết và sửa code</li>
                                     <li>📝 Soạn thảo văn bản</li>
-                                    <li>📸 Nhận và phân tích ảnh</li>
                                 </ul>
                                 <br>
                                 Hãy hỏi tôi bất cứ điều gì bạn cần biết!
@@ -2180,43 +2389,6 @@
             }
 
             function renderMessageContent(text) {
-                // Check for image markdown ![alt](url)
-                const imageRegex = /!\[(.*?)\]\((.*?)\)/g;
-                let processedText = text;
-                let match;
-                const images = [];
-                
-                while ((match = imageRegex.exec(text)) !== null) {
-                    images.push({
-                        alt: match[1],
-                        url: match[2],
-                        index: match.index,
-                        full: match[0]
-                    });
-                }
-                
-                // If there are images, render them
-                if (images.length > 0) {
-                    let html = '';
-                    let lastIndex = 0;
-                    for (const img of images) {
-                        html += escapeHtml(text.substring(lastIndex, img.index));
-                        const isGrid = images.length > 1;
-                        html += `
-                            <div class="image-container" onclick="window.open('${escapeHtml(img.url)}', '_blank')">
-                                <img src="${escapeHtml(img.url)}" alt="${escapeHtml(img.alt || 'Ảnh')}" loading="lazy" />
-                                <div class="file-info">
-                                    <span class="name">${escapeHtml(img.alt || 'Ảnh')}</span>
-                                </div>
-                            </div>
-                        `;
-                        lastIndex = img.index + img.full.length;
-                    }
-                    html += escapeHtml(text.substring(lastIndex));
-                    return html;
-                }
-
-                // Parse code blocks
                 const parts = text.split(/(```[\s\S]*?```)/);
                 let html = '';
 
@@ -2284,7 +2456,7 @@
                                 ${escapeHtml(conv.title)}
                                 <span class="time">${time}</span>
                             </span>
-                            <button class="delete-btn" onclick="event.stopPropagation();deleteConversation(${i})" aria-label="Delete conversation">
+                            <button class="delete-btn" onclick="event.stopPropagation();deleteConversation(${i})">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
@@ -2293,18 +2465,9 @@
                 convList.innerHTML = html;
             }
 
-            // ============================================================
-            // MESSAGE HANDLING
-            // ============================================================
-            function addMessage(content, role, images = []) {
-                let messageContent = content;
-                // Add image markdown if images were sent
-                if (images && images.length > 0) {
-                    for (const img of images) {
-                        messageContent += `\n![${img.name || 'Ảnh'}](${img.data})`;
-                    }
-                }
-                state.currentHistory.push({ role, content: messageContent });
+            // Messages
+            function addMessage(content, role) {
+                state.currentHistory.push({ role, content });
                 renderChat();
                 saveCurrentConversation();
                 renderConvList();
@@ -2340,11 +2503,13 @@
                 `;
                 chatMessages.insertAdjacentHTML('beforeend', html);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
+                showStopButton();
             }
 
             function removeThinking() {
                 const el = document.getElementById('thinkingMsg');
                 if (el) el.remove();
+                removeStopButton();
             }
 
             function clearInput() {
@@ -2357,116 +2522,73 @@
             function updateCharCount() {
                 const len = chatInput.value.length;
                 charCount.textContent = len > 0 ? len : '';
-                charCount.style.color = len > CONFIG.MAX_INPUT_LENGTH * 0.9 ? 'var(--warning)' : 'var(--text-muted)';
-                if (len > CONFIG.MAX_INPUT_LENGTH) {
-                    chatInput.value = chatInput.value.slice(0, CONFIG.MAX_INPUT_LENGTH);
-                    updateCharCount();
-                    showToast(`⚠️ Giới hạn ${CONFIG.MAX_INPUT_LENGTH} ký tự`, 'warning');
-                }
             }
 
-            // ============================================================
-            // SEND MESSAGE - WITH IMAGE SUPPORT
-            // ============================================================
+            function autoResize() {
+                chatInput.style.height = 'auto';
+                chatInput.style.height = Math.min(chatInput.scrollHeight, 100) + 'px';
+            }
+
+            // Send message
             async function sendMessage() {
                 if (state.isSending) return;
 
                 const input = chatInput.value.trim();
-                const hasImages = state.pendingImages.length > 0;
-
-                if (!input && !hasImages) {
-                    showToast('📝 Vui lòng nhập tin nhắn hoặc chọn ảnh', 'warning');
-                    return;
-                }
-
-                if (input.length > CONFIG.MAX_INPUT_LENGTH) {
-                    showToast(`⚠️ Tin nhắn quá dài (${CONFIG.MAX_INPUT_LENGTH} ký tự tối đa)`, 'error');
+                if (!input) {
+                    showToast('📝 Vui lòng nhập tin nhắn', 'warning');
                     return;
                 }
 
                 const apiKey = getApiKey();
-                if (!apiKey || apiKey === '') {
+                if (!apiKey) {
                     addSystemMessage('⚠️ Vui lòng cấu hình API Key trong code!', 'error');
                     return;
                 }
 
                 state.isSending = true;
+                state.isGenerating = true;
                 sendBtn.disabled = true;
                 chatInput.disabled = true;
                 chatInput.style.opacity = '0.6';
+                sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
-                // Auto-create title if first message
                 if (state.currentHistory.length === 0 && state.currentIndex >= 0) {
-                    const title = input.length > 35 ? input.slice(0, 35) + '...' : (input || 'Chat có ảnh');
+                    const title = input.length > 35 ? input.slice(0, 35) + '...' : input;
                     state.conversations[state.currentIndex].title = title;
                     renderConvList();
                     saveData();
                 }
 
-                // Convert images to base64
-                let imageData = [];
-                if (hasImages) {
-                    showUploadProgress(10);
-                    imageData = await Promise.all(state.pendingImages.map((file, index) => {
-                        return new Promise((resolve) => {
-                            const reader = new FileReader();
-                            reader.onload = function(e) {
-                                showUploadProgress(10 + ((index + 1) / state.pendingImages.length) * 80);
-                                resolve({
-                                    name: file.name,
-                                    size: file.size,
-                                    type: file.type,
-                                    data: e.target.result
-                                });
-                            };
-                            reader.readAsDataURL(file);
-                        });
-                    }));
-                    showUploadProgress(100);
-                    
-                    // Store for later use
-                    state.imageData = imageData;
-                }
-
-                // Build message content
-                let messageContent = input;
-                if (hasImages) {
-                    const count = imageData.length;
-                    messageContent = input + (input ? '\n\n' : '') + `📸 Đã gửi ${count} ảnh`;
-                    // Add image info
-                    for (const img of imageData) {
-                        messageContent += `\n- ${img.name} (${formatFileSize(img.size)})`;
-                    }
-                }
-
-                // Add user message with images
-                addMessage(messageContent, 'user', imageData);
-
-                // Clear input and images
+                addMessage(input, 'user');
                 chatInput.value = '';
                 autoResize();
                 updateCharCount();
-                clearPendingImages();
-
                 showThinking();
 
                 try {
-                    await askAI(input, imageData);
+                    await askAI(input);
                 } catch (error) {
-                    removeThinking();
-                    addSystemMessage(`❌ Lỗi: ${error.message}`, 'error');
-                    showToast(`❌ ${error.message}`, 'error');
+                    if (error.name === 'AbortError') {
+                        removeThinking();
+                        addSystemMessage('⏹️ Đã dừng tạo câu trả lời theo yêu cầu', 'warning');
+                    } else {
+                        removeThinking();
+                        addSystemMessage('❌ Lỗi: ' + error.message, 'error');
+                        showToast('❌ ' + error.message, 'error');
+                    }
                 } finally {
                     state.isSending = false;
+                    state.isGenerating = false;
                     sendBtn.disabled = false;
                     chatInput.disabled = false;
                     chatInput.style.opacity = '1';
+                    sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+                    removeStopButton();
                     chatInput.focus();
-                    state.imageData = [];
                 }
             }
 
-            async function askAI(userInput, imageData = []) {
+            async function askAI(userInput) {
                 const messages = state.currentHistory.map(m => ({
                     role: m.role,
                     content: m.content
@@ -2478,31 +2600,21 @@ Bạn có khả năng:
 - Viết và sửa code với giải thích rõ ràng
 - Tư vấn và đưa ra lời khuyên hữu ích
 - Hỗ trợ nhiều ngôn ngữ
-- Phân tích và mô tả ảnh (nếu được gửi kèm)
 
 Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
 
-                // Build message with image context
-                let userMessage = userInput;
-                if (imageData.length > 0) {
-                    userMessage += `\n\n[Đã gửi ${imageData.length} ảnh]`;
-                    for (const img of imageData) {
-                        userMessage += `\n- ${img.name} (${formatFileSize(img.size)}, ${img.type})`;
-                    }
-                    userMessage += `\n\nVui lòng phân tích và mô tả nội dung của các ảnh này.`;
-                }
-
                 const fullMessages = [
                     { role: 'system', content: systemPrompt },
-                    ...messages.slice(0, -1),
-                    { role: 'user', content: userMessage }
+                    ...messages
                 ];
+
+                state.abortController = new AbortController();
 
                 const response = await fetch(CONFIG.API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${getApiKey()}`,
+                        'Authorization': 'Bearer ' + getApiKey(),
                     },
                     body: JSON.stringify({
                         model: state.currentModel,
@@ -2511,7 +2623,10 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                         temperature: 0.7,
                         max_tokens: 4096,
                     }),
+                    signal: state.abortController.signal,
                 });
+
+                state.abortController = null;
 
                 const data = await response.json();
 
@@ -2529,9 +2644,7 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                 addMessage(aiText, 'assistant');
             }
 
-            // ============================================================
-            // CODE COPY
-            // ============================================================
+            // Code copy
             function copyCode(codeId) {
                 const code = state.codeBlocks[codeId];
                 if (!code) {
@@ -2541,8 +2654,8 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
 
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     navigator.clipboard.writeText(code).then(() => {
-                        showToast(`✅ Đã sao chép code #${codeId}`, 'success');
-                        const btn = document.querySelector(`.copy-btn[onclick*="${codeId}"]`);
+                        showToast('✅ Đã sao chép code #' + codeId, 'success');
+                        const btn = document.querySelector('.copy-btn[onclick*="' + codeId + '"]');
                         if (btn) {
                             btn.classList.add('copied');
                             btn.innerHTML = '<i class="fas fa-check"></i> Đã sao chép';
@@ -2563,8 +2676,6 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                 textarea.style.position = 'fixed';
                 textarea.style.left = '-9999px';
                 textarea.style.top = '-9999px';
-                textarea.style.width = '1px';
-                textarea.style.height = '1px';
                 document.body.appendChild(textarea);
                 textarea.select();
                 try {
@@ -2576,9 +2687,7 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                 document.body.removeChild(textarea);
             }
 
-            // ============================================================
-            // EXPORT CHAT
-            // ============================================================
+            // Export
             function exportChat() {
                 if (state.currentHistory.length === 0) {
                     showToast('📭 Không có tin nhắn để xuất', 'warning');
@@ -2587,30 +2696,33 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
 
                 const conv = state.conversations[state.currentIndex];
                 let text = '✦ Thành Lợi AI Pro - Xuất cuộc trò chuyện\n';
-                text += `${'='.repeat(60)}\n`;
-                text += `Tiêu đề: ${conv.title}\n`;
-                text += `Ngày tạo: ${new Date(conv.created_at).toLocaleString('vi-VN')}\n`;
-                text += `Số tin nhắn: ${conv.history.length}\n`;
-                text += `Model: ${getModelDisplay(state.currentModel).name}\n`;
-                text += `${'='.repeat(60)}\n\n`;
+                text += '='.repeat(60) + '\n';
+                text += 'Tiêu đề: ' + conv.title + '\n';
+                text += 'Ngày tạo: ' + new Date(conv.created_at).toLocaleString('vi-VN') + '\n';
+                text += 'Số tin nhắn: ' + conv.history.length + '\n';
+                text += 'Model: ' + getModelDisplay(state.currentModel).name + '\n';
+                if (state.currentUser) {
+                    text += 'Người dùng: ' + state.currentUser.name + ' (' + state.currentUser.email + ')\n';
+                }
+                text += '='.repeat(60) + '\n\n';
 
                 for (const msg of state.currentHistory) {
                     if (msg.role === 'user') {
-                        text += `🧑 Bạn:\n${msg.content}\n\n`;
+                        text += '🧑 Bạn:\n' + msg.content + '\n\n';
                     } else {
-                        text += `🤖 Thành Lợi AI (${getModelDisplay(state.currentModel).name}):\n${msg.content}\n\n`;
+                        text += '🤖 Thành Lợi AI (' + getModelDisplay(state.currentModel).name + '):\n' + msg.content + '\n\n';
                     }
                 }
 
-                text += `${'='.repeat(60)}\n`;
-                text += `Xuất lúc: ${new Date().toLocaleString('vi-VN')}\n`;
-                text += `✦ Thành Lợi AI Pro v3.0`;
+                text += '='.repeat(60) + '\n';
+                text += 'Xuất lúc: ' + new Date().toLocaleString('vi-VN') + '\n';
+                text += '✦ Thành Lợi AI Pro v3.2';
 
                 const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `thanhloi_chat_${new Date().toISOString().slice(0,10)}.txt`;
+                a.download = 'thanhloi_chat_' + new Date().toISOString().slice(0,10) + '.txt';
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -2618,9 +2730,7 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                 showToast('✅ Đã xuất cuộc trò chuyện!', 'success');
             }
 
-            // ============================================================
-            // CLEAR MESSAGES
-            // ============================================================
+            // Clear
             function clearMessages() {
                 if (state.currentIndex < 0) {
                     showToast('⚠️ Không có cuộc trò chuyện nào', 'warning');
@@ -2640,41 +2750,36 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                 renderChat();
                 renderConvList();
                 showToast('🗑️ Đã xóa tất cả tin nhắn', 'info');
+                removeStopButton();
             }
 
-            // ============================================================
-            // AUTO-RESIZE
-            // ============================================================
-            function autoResize() {
-                chatInput.style.height = 'auto';
-                const newHeight = Math.min(chatInput.scrollHeight, 100);
-                chatInput.style.height = newHeight + 'px';
+            function clearAllData() {
+                if (!confirm('⚠️ Bạn có chắc chắn muốn xóa TẤT CẢ dữ liệu? Hành động này không thể hoàn tác!')) return;
+                localStorage.removeItem(CONFIG.STORAGE_KEY);
+                state.conversations = [];
+                state.currentIndex = -1;
+                state.currentHistory = [];
+                state.codeBlocks = {};
+                state.codeIdCounter = 0;
+                renderChat();
+                renderConvList();
+                newChat();
+                showToast('🗑️ Đã xóa tất cả dữ liệu', 'success');
+                removeStopButton();
             }
 
-            // ============================================================
-            // KEYBOARD SHORTCUTS
-            // ============================================================
-            function handleKeyboardShortcuts(e) {
-                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            // Keyboard
+            chatInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     sendMessage();
                 }
-                if (e.key === 'Escape') {
-                    closeMobileSidebar();
-                    if (state.pendingImages.length > 0) {
-                        clearPendingImages();
-                        showToast('🗑️ Đã xóa ảnh đang chọn', 'info');
-                    }
-                }
-                if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
-                    e.preventDefault();
-                    newChat();
-                }
-                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D') {
-                    e.preventDefault();
-                    clearMessages();
-                }
-            }
+            });
+
+            chatInput.addEventListener('input', () => {
+                autoResize();
+                updateCharCount();
+            });
 
             // ============================================================
             // INIT
@@ -2685,6 +2790,16 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                 } else {
                     window.addEventListener('load', hideLoading);
                     setTimeout(hideLoading, 2000);
+                }
+
+                // Load QR
+                loadQR();
+
+                const hasAuth = loadAuth();
+                updateAuthUI();
+
+                if (!hasAuth) {
+                    setTimeout(() => { openLoginModal(); }, 500);
                 }
 
                 const hasData = loadData();
@@ -2703,7 +2818,7 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                 renderModelSelector();
                 updateModelUI();
 
-                if (hasData && state.conversations.length > 0) {
+                if (hasAuth && hasData && state.conversations.length > 0) {
                     if (state.currentIndex < 0 || state.currentIndex >= state.conversations.length) {
                         state.currentIndex = 0;
                     }
@@ -2719,102 +2834,34 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                     newChat();
                 }
 
-                chatInput.addEventListener('input', () => {
-                    autoResize();
-                    updateCharCount();
-                });
-                
-                chatInput.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        sendMessage();
-                    }
-                });
-
-                document.addEventListener('keydown', handleKeyboardShortcuts);
-
-                // Drag and drop support for images
-                document.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                });
-                document.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    const files = e.dataTransfer.files;
-                    if (files.length > 0) {
-                        const input = new DataTransfer();
-                        for (const file of files) {
-                            if (CONFIG.ALLOWED_IMAGE_TYPES.includes(file.type)) {
-                                input.items.add(file);
-                            }
-                        }
-                        imageUpload.files = input.files;
-                        handleImageUpload({ target: imageUpload });
-                    }
-                });
-
-                let resizeTimer;
-                window.addEventListener('resize', () => {
-                    clearTimeout(resizeTimer);
-                    resizeTimer = setTimeout(() => {
-                        if (window.innerWidth > 768 && state.isMobileSidebarOpen) {
-                            closeMobileSidebar();
-                        }
-                        if (window.innerWidth <= 768) {
-                            sidebar.classList.remove('collapsed');
-                        } else if (state.isSidebarCollapsed) {
-                            sidebar.classList.add('collapsed');
-                            toggleIcon.className = 'fas fa-chevron-right';
-                        }
-                    }, 200);
-                });
-
-                let lastTouchEnd = 0;
-                document.addEventListener('touchend', (e) => {
-                    const now = Date.now();
-                    if (now - lastTouchEnd <= 300) {
-                        e.preventDefault();
-                    }
-                    lastTouchEnd = now;
-                }, { passive: false });
-
-                window.addEventListener('beforeunload', () => {
-                    saveCurrentConversation();
-                });
-
-                document.addEventListener('visibilitychange', () => {
-                    if (document.hidden) {
-                        saveCurrentConversation();
-                    }
-                });
+                // Expose functions
+                window.stopGeneration = stopGeneration;
+                window.handleLogin = handleLogin;
+                window.switchAuthMode = switchAuthMode;
+                window.logoutUser = logoutUser;
+                window.openLoginModal = openLoginModal;
+                window.closeLoginModal = closeLoginModal;
+                window.toggleSidebar = toggleSidebar;
+                window.toggleMobileSidebar = toggleMobileSidebar;
+                window.closeMobileSidebar = closeMobileSidebar;
+                window.newChat = newChat;
+                window.loadConversation = loadConversation;
+                window.deleteConversation = deleteConversation;
+                window.sendMessage = sendMessage;
+                window.clearMessages = clearMessages;
+                window.exportChat = exportChat;
+                window.copyCode = copyCode;
+                window.switchModel = switchModel;
+                window.clearAllData = clearAllData;
+                window.clearInput = clearInput;
+                window.showToast = showToast;
+                window.loadQR = loadQR;
 
                 setTimeout(() => chatInput.focus(), 300);
 
-                console.log('✦ Thành Lợi AI Pro v3.0 loaded successfully!');
-                console.log(`📊 ${state.conversations.length} conversations, ${state.currentHistory.length} messages`);
-                console.log(`🤖 Current model: ${getModelDisplay(state.currentModel).name}`);
-                console.log(`📸 Image support: ENABLED (${CONFIG.ALLOWED_IMAGE_TYPES.length} formats)`);
+                console.log('✦ Thành Lợi AI Pro v3.2 loaded successfully!');
+                console.log('🔐 Auth: ' + (state.currentUser ? 'Logged in as ' + state.currentUser.name : 'Not logged in'));
             });
-
-            // ============================================================
-            // EXPOSE GLOBALS
-            // ============================================================
-            window.toggleSidebar = toggleSidebar;
-            window.toggleMobileSidebar = toggleMobileSidebar;
-            window.closeMobileSidebar = closeMobileSidebar;
-            window.newChat = newChat;
-            window.loadConversation = loadConversation;
-            window.deleteConversation = deleteConversation;
-            window.sendMessage = sendMessage;
-            window.clearMessages = clearMessages;
-            window.exportChat = exportChat;
-            window.copyCode = copyCode;
-            window.switchModel = switchModel;
-            window.clearAllData = clearAllData;
-            window.clearInput = clearInput;
-            window.showToast = showToast;
-            window.handleImageUpload = handleImageUpload;
-            window.removePendingImage = removePendingImage;
-            window.clearPendingImages = clearPendingImages;
 
         })();
     </script>
