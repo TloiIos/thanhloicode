@@ -1609,12 +1609,12 @@
             // Bước 2: Lấy link ảnh (VD: https://example.com/qr.png)
             // Bước 3: Dán link vào biến QR_IMAGE_URL bên dưới
             // ============================================================
-            const QR_IMAGE_URL = 'https://ibb.co/whRXwhkg'; // <-- Dán link ảnh QR vào đây
+            const QR_IMAGE_URL = 'https://i.imgur.com/Hn5JSWr.png'; // <-- Dán link ảnh QR vào đây
             // Ví dụ: const QR_IMAGE_URL = 'https://i.imgur.com/abc123.png';
             // ============================================================
 
             const CONFIG = {
-                API_URL: 'https://i.imgur.com/OVCaM6H.png',
+                API_URL: 'https://i.imgur.com/HyDYIvD.jpeg',
                 API_KEYS: {
                     'op/deepseek/deepseek-v4-pro': 'sk-544f92225e50d338088b2d54c52c96a8ae0ea709d3546448ff023fa85fc6befb',
                     'cd/gpt-5.4': 'sk-262800e49253720ecedd13eddb3cabff9fb1aaef803131a9df0b2ff23298312e',
@@ -1690,27 +1690,98 @@
             // HIỂN THỊ QR TỪ LINK
             // ============================================================
             function loadQR() {
-                if (QR_IMAGE_URL && QR_IMAGE_URL.length > 0) {
-                    qrImage.src = QR_IMAGE_URL;
-                    qrImage.onload = function() {
-                        qrImage.style.display = 'block';
-                        qrPlaceholder.style.display = 'none';
-                    };
-                    qrImage.onerror = function() {
-                        // Nếu ảnh lỗi, hiển thị placeholder
-                        qrImage.style.display = 'none';
-                        qrPlaceholder.style.display = 'block';
-                        qrPlaceholder.innerHTML = `
-                            <i class="fas fa-exclamation-triangle" style="font-size:40px;display:block;margin-bottom:8px;opacity:0.5;color:var(--warning);"></i>
-                            <span>Không tải được QR</span><br>
-                            <span style="font-size:10px;">Kiểm tra lại link ảnh</span>
-                        `;
-                    };
-                } else {
-                    qrImage.style.display = 'none';
-                    qrPlaceholder.style.display = 'block';
-                }
-            }
+    const qrImage = document.getElementById('qrImage');
+    const qrPlaceholder = document.getElementById('qrPlaceholder');
+    
+    if (!qrImage || !qrPlaceholder) return;
+    
+    // Kiểm tra nếu có link ảnh
+    if (QR_IMAGE_URL && QR_IMAGE_URL.length > 0) {
+        // Thêm timestamp để tránh cache
+        const urlWithTimestamp = QR_IMAGE_URL + '?t=' + Date.now();
+        
+        qrImage.src = urlWithTimestamp;
+        qrImage.crossOrigin = 'anonymous'; // Thử vượt CORS
+        
+        // Sự kiện khi tải thành công
+        qrImage.onload = function() {
+            qrImage.style.display = 'block';
+            qrPlaceholder.style.display = 'none';
+            console.log('✅ QR đã tải thành công');
+        };
+        
+        // Sự kiện khi tải thất bại
+        qrImage.onerror = function() {
+            console.error('❌ Không thể tải QR từ link:', QR_IMAGE_URL);
+            qrImage.style.display = 'none';
+            qrPlaceholder.style.display = 'block';
+            qrPlaceholder.innerHTML = `
+                <i class="fas fa-exclamation-triangle" style="font-size:40px;display:block;margin-bottom:8px;opacity:0.5;color:var(--warning);"></i>
+                <span>Không tải được QR</span><br>
+                <span style="font-size:10px;">Thử dùng link khác hoặc base64</span>
+                <br><br>
+                <button onclick="retryLoadQR()" style="padding:6px 16px;background:var(--primary);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;">
+                    <i class="fas fa-redo"></i> Thử lại
+                </button>
+            `;
+            // Thử tải bằng cách khác (dùng fetch)
+            tryFetchImage();
+        };
+    } else {
+        qrImage.style.display = 'none';
+        qrPlaceholder.style.display = 'block';
+        qrPlaceholder.innerHTML = `
+            <i class="fas fa-qrcode" style="font-size:40px;display:block;margin-bottom:8px;opacity:0.3;"></i>
+            <span>Chưa có QR</span><br>
+            <span style="font-size:10px;">Thêm link ảnh hoặc base64</span>
+        `;
+    }
+}
+
+// Hàm thử tải ảnh bằng fetch (vượt CORS)
+function tryFetchImage() {
+    if (!QR_IMAGE_URL) return;
+    
+    fetch(QR_IMAGE_URL, {
+        mode: 'cors',
+        cache: 'no-cache'
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        return response.blob();
+    })
+    .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const qrImage = document.getElementById('qrImage');
+        const qrPlaceholder = document.getElementById('qrPlaceholder');
+        if (qrImage) {
+            qrImage.src = url;
+            qrImage.style.display = 'block';
+            qrPlaceholder.style.display = 'none';
+            console.log('✅ QR tải thành công qua fetch');
+        }
+    })
+    .catch(err => {
+        console.error('❌ Fetch QR thất bại:', err);
+    });
+}
+
+// Hàm thử lại
+function retryLoadQR() {
+    const qrImage = document.getElementById('qrImage');
+    const qrPlaceholder = document.getElementById('qrPlaceholder');
+    if (qrImage) {
+        qrImage.src = QR_IMAGE_URL + '?t=' + Date.now();
+        qrImage.onload = function() {
+            qrImage.style.display = 'block';
+            qrPlaceholder.style.display = 'none';
+        };
+        qrImage.onerror = function() {
+            // Vẫn lỗi thì thử fetch
+            tryFetchImage();
+        };
+    }
+}
 
             // ============================================================
             // UTILITY
