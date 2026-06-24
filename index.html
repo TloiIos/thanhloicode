@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     
-     <!-- ===== PRELOAD & PRECONNECT ===== -->
+    <!-- ===== PRELOAD & PRECONNECT ===== -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
@@ -20,6 +20,7 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>" />
     
     <style>
+        /* ... (giữ nguyên toàn bộ CSS từ bản gốc) ... */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         :root {
@@ -81,6 +82,7 @@
             overflow: hidden;
         }
 
+        /* Loading screen */
         .loading-screen {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -169,6 +171,7 @@
             50% { opacity: 0.4; transform: scale(0.8); }
         }
 
+        /* Login overlay */
         .login-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -464,7 +467,7 @@
         }
         .login-modal .user-info .logout-btn:active { transform: scale(0.95); }
 
-        /* ===== TITLE BAR ===== */
+        /* Title Bar */
         .title-bar {
             height: 50px;
             min-height: 50px;
@@ -571,7 +574,7 @@
         .menu-toggle:active { transform: scale(0.92); }
         .menu-toggle:hover { background: var(--bg-hover); color: var(--text-primary); }
 
-        /* ===== SIDEBAR ===== */
+        /* Sidebar */
         .main-layout { display: flex; flex: 1; overflow: hidden; position: relative; }
         .sidebar {
             width: 280px;
@@ -823,7 +826,7 @@
         }
         .sidebar-overlay.active { display: block; opacity: 1; }
 
-        /* ===== CHAT PANEL ===== */
+        /* Chat Panel */
         .chat-panel {
             flex: 1;
             display: flex;
@@ -1027,6 +1030,36 @@
         }
         .message.user .bubble .label { opacity: 0.8; }
 
+        /* Image message styles */
+        .message .bubble .image-container {
+            margin: 8px 0;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            max-width: 300px;
+            max-height: 300px;
+        }
+        .message .bubble .image-container img {
+            width: 100%;
+            height: auto;
+            max-height: 300px;
+            object-fit: contain;
+            display: block;
+            border-radius: var(--radius-sm);
+        }
+        .message .bubble .image-container .image-name {
+            font-size: 11px;
+            color: var(--text-muted);
+            padding: 4px 8px;
+            background: rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+        }
+        .message.user .bubble .image-container .image-name {
+            color: rgba(255,255,255,0.7);
+        }
+
         .code-block {
             background: #0d0d14;
             border-radius: var(--radius-sm);
@@ -1176,6 +1209,15 @@
             background: var(--bg-hover);
             color: var(--text-primary);
         }
+        .chat-input-wrapper .input-actions .image-btn {
+            color: var(--secondary);
+        }
+        .chat-input-wrapper .input-actions .image-btn:hover {
+            color: var(--primary);
+        }
+        .chat-input-wrapper .input-actions .image-btn.has-image {
+            color: var(--success);
+        }
         .chat-input-wrapper .send-btn {
             width: 40px;
             height: 40px;
@@ -1210,6 +1252,54 @@
             font-weight: 500;
             min-width: 20px;
             text-align: center;
+        }
+
+        .image-preview-container {
+            display: none;
+            padding: 4px 8px 0 8px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .image-preview-container.active {
+            display: flex;
+        }
+        .image-preview-item {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-tertiary);
+            padding: 4px 8px 4px 4px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+        }
+        .image-preview-item img {
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .image-preview-item .file-name {
+            font-size: 11px;
+            color: var(--text-secondary);
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .image-preview-item .remove-image {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+        .image-preview-item .remove-image:hover {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
         }
 
         .welcome-screen {
@@ -1323,6 +1413,11 @@
         .stop-btn:active { transform: scale(0.95); }
         .stop-btn i { animation: spin 1s linear infinite; }
 
+        /* Hidden file input */
+        #imageInput {
+            display: none;
+        }
+
         @media (max-width: 768px) {
             .menu-toggle { display: flex !important; }
             .sidebar {
@@ -1368,6 +1463,7 @@
             .welcome-screen h2 { font-size: 20px; }
             .login-modal { padding: 30px 20px; }
             .login-modal .support-section .qr-container .qr-box { max-width: 150px; }
+            .message .bubble .image-container { max-width: 200px; max-height: 200px; }
         }
 
         @media (max-width: 480px) {
@@ -1381,6 +1477,7 @@
             .login-modal h2 { font-size: 20px; }
             .login-modal .support-section .qr-container .qr-box { max-width: 120px; }
             .stop-btn { padding: 10px 16px; font-size: 13px; min-height: 44px; min-width: 140px; }
+            .message .bubble .image-container { max-width: 150px; max-height: 150px; }
         }
 
         @supports (padding: max(0px)) {
@@ -1457,9 +1554,6 @@
                     <h4>🌸 Ủng hộ Admin</h4>
                     <div class="qr-container">
                         <div class="qr-box" id="qrBox">
-                            <!-- ========================================== -->
-                            <!--  DÁN LINK ẢNH QR VÀO ĐÂY (thay thế src bên dưới) -->
-                            <!-- ========================================== -->
                             <img id="qrImage" src="" alt="QR ủng hộ" style="display:none;width:100%;height:auto;border-radius:4px;" />
                             <div class="qr-placeholder" id="qrPlaceholder">
                                 <i class="fas fa-qrcode" style="font-size:40px;display:block;margin-bottom:8px;opacity:0.3;"></i>
@@ -1585,10 +1679,18 @@
 
                 <div class="chat-input-container">
                     <div class="chat-input-wrapper">
+                        <!-- Image preview area -->
+                        <div class="image-preview-container" id="imagePreviewContainer">
+                            <!-- Images will be added here dynamically -->
+                        </div>
+                        
                         <div class="input-row">
                             <textarea id="chatInput" placeholder="Nhập tin nhắn... (Enter gửi, Shift+Enter xuống dòng)" rows="1"></textarea>
                             <div class="input-actions">
                                 <span class="char-count" id="charCount">0</span>
+                                <button class="image-btn" id="imageBtn" onclick="document.getElementById('imageInput').click()" title="Đính kèm ảnh">
+                                    <i class="fas fa-image"></i>
+                                </button>
                                 <button onclick="clearInput()">
                                     <i class="fas fa-times"></i>
                                 </button>
@@ -1604,6 +1706,9 @@
         </div>
     </div>
 
+    <!-- Hidden file input for images -->
+    <input type="file" id="imageInput" accept="image/*" multiple onchange="handleImageSelect(event)" />
+
     <script>
         (function() {
             'use strict';
@@ -1611,29 +1716,28 @@
             // ============================================================
             // ⭐ DÁN LINK ẢNH QR VÀO ĐÂY ⭐
             // ============================================================
-            // Bước 1: Upload ảnh QR lên hosting (imgur, postimg, hoặc hosting của bạn)
-            // Bước 2: Lấy link ảnh (VD: https://example.com/qr.png)
-            // Bước 3: Dán link vào biến QR_IMAGE_URL bên dưới
-            // ============================================================
-            const QR_IMAGE_URL = 'https://i.imgur.com/Hn5JSWr.png'; // <-- Dán link ảnh QR vào đây
-            // Ví dụ: const QR_IMAGE_URL = 'https://i.imgur.com/abc123.png';
-            // ============================================================
+            const QR_IMAGE_URL = 'https://i.imgur.com/Hn5JSWr.png';
 
+            // ============================================================
+            // CONFIG
+            // ============================================================
             const CONFIG = {
                 API_URL: 'https://api.vilao.ai/v1/chat/completions',
                 API_KEYS: {
                     'occ/claude-opus-4-8': 'sk-b6dbf43ddb12724c4aed6d03909cae618029398383c02ca4880146498bb4ba9a',
-                    'cd/gpt-5.5': 'sk-b799e245669f5dbdbc29759dba55a68e118d66ff24cbe9438b2dbffe53797341',
+                    'gx/gpt-5.5': 'sk-6c20ddc3bf35dedcde760c68f1678aa798523a0130a901cc2db70a01fd6c9126',
                 },
                 MODEL_DISPLAY: {
                     'occ/claude-opus-4-8': { name: 'claude-opus-4-8', provider: 'Claude', icon: '🧠' },
-                    'cd/gpt-5.5': { name: 'GPT 5.5', provider: 'ChatGPT', icon: '⚡' },
+                    'gx/gpt-5.5': { name: 'GPT 5.5', provider: 'ChatGPT', icon: '⚡' },
                 },
                 DEFAULT_MODEL: 'occ/claude-opus-4-8',
                 STORAGE_KEY: 'thanhloi_ai_pro_data',
                 AUTH_STORAGE_KEY: 'thanhloi_ai_auth_v3',
                 USERS_STORAGE_KEY: 'thanhloi_ai_users_v3',
                 TOAST_DURATION: 3000,
+                MAX_IMAGE_SIZE: 5 * 1024 * 1024, // 5MB
+                MAX_IMAGES: 5,
             };
 
             const state = {
@@ -1650,6 +1754,7 @@
                 isAuthMode: 'login',
                 currentUser: null,
                 isGenerating: false,
+                uploadedImages: [], // Store uploaded image data
             };
 
             // DOM refs
@@ -1670,6 +1775,9 @@
             const charCount = $('charCount');
             const headerAvatar = $('headerAvatar');
             const logoutHeaderBtn = $('logoutHeaderBtn');
+            const imagePreviewContainer = $('imagePreviewContainer');
+            const imageBtn = $('imageBtn');
+            const imageInput = $('imageInput');
 
             const loginOverlay = $('loginOverlay');
             const authForm = $('authForm');
@@ -1693,101 +1801,163 @@
             const qrPlaceholder = $('qrPlaceholder');
 
             // ============================================================
-            // HIỂN THỊ QR TỪ LINK
+            // QR CODE
             // ============================================================
             function loadQR() {
-    const qrImage = document.getElementById('qrImage');
-    const qrPlaceholder = document.getElementById('qrPlaceholder');
-    
-    if (!qrImage || !qrPlaceholder) return;
-    
-    // Kiểm tra nếu có link ảnh
-    if (QR_IMAGE_URL && QR_IMAGE_URL.length > 0) {
-        // Thêm timestamp để tránh cache
-        const urlWithTimestamp = QR_IMAGE_URL + '?t=' + Date.now();
-        
-        qrImage.src = urlWithTimestamp;
-        qrImage.crossOrigin = 'anonymous'; // Thử vượt CORS
-        
-        // Sự kiện khi tải thành công
-        qrImage.onload = function() {
-            qrImage.style.display = 'block';
-            qrPlaceholder.style.display = 'none';
-            console.log('✅ QR đã tải thành công');
-        };
-        
-        // Sự kiện khi tải thất bại
-        qrImage.onerror = function() {
-            console.error('❌ Không thể tải QR từ link:', QR_IMAGE_URL);
-            qrImage.style.display = 'none';
-            qrPlaceholder.style.display = 'block';
-            qrPlaceholder.innerHTML = `
-                <i class="fas fa-exclamation-triangle" style="font-size:40px;display:block;margin-bottom:8px;opacity:0.5;color:var(--warning);"></i>
-                <span>Không tải được QR</span><br>
-                <span style="font-size:10px;">Thử dùng link khác hoặc base64</span>
-                <br><br>
-                <button onclick="retryLoadQR()" style="padding:6px 16px;background:var(--primary);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;">
-                    <i class="fas fa-redo"></i> Thử lại
-                </button>
-            `;
-            // Thử tải bằng cách khác (dùng fetch)
-            tryFetchImage();
-        };
-    } else {
-        qrImage.style.display = 'none';
-        qrPlaceholder.style.display = 'block';
-        qrPlaceholder.innerHTML = `
-            <i class="fas fa-qrcode" style="font-size:40px;display:block;margin-bottom:8px;opacity:0.3;"></i>
-            <span>Chưa có QR</span><br>
-            <span style="font-size:10px;">Thêm link ảnh hoặc base64</span>
-        `;
-    }
-}
+                if (!qrImage || !qrPlaceholder) return;
+                if (QR_IMAGE_URL && QR_IMAGE_URL.length > 0) {
+                    const urlWithTimestamp = QR_IMAGE_URL + '?t=' + Date.now();
+                    qrImage.src = urlWithTimestamp;
+                    qrImage.crossOrigin = 'anonymous';
+                    qrImage.onload = function() {
+                        qrImage.style.display = 'block';
+                        qrPlaceholder.style.display = 'none';
+                        console.log('✅ QR đã tải thành công');
+                    };
+                    qrImage.onerror = function() {
+                        console.error('❌ Không thể tải QR từ link:', QR_IMAGE_URL);
+                        qrImage.style.display = 'none';
+                        qrPlaceholder.style.display = 'block';
+                        qrPlaceholder.innerHTML = `
+                            <i class="fas fa-exclamation-triangle" style="font-size:40px;display:block;margin-bottom:8px;opacity:0.5;color:var(--warning);"></i>
+                            <span>Không tải được QR</span><br>
+                            <span style="font-size:10px;">Thử dùng link khác hoặc base64</span>
+                            <br><br>
+                            <button onclick="retryLoadQR()" style="padding:6px 16px;background:var(--primary);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;">
+                                <i class="fas fa-redo"></i> Thử lại
+                            </button>
+                        `;
+                        tryFetchImage();
+                    };
+                } else {
+                    qrImage.style.display = 'none';
+                    qrPlaceholder.style.display = 'block';
+                    qrPlaceholder.innerHTML = `
+                        <i class="fas fa-qrcode" style="font-size:40px;display:block;margin-bottom:8px;opacity:0.3;"></i>
+                        <span>Chưa có QR</span><br>
+                        <span style="font-size:10px;">Thêm link ảnh hoặc base64</span>
+                    `;
+                }
+            }
 
-// Hàm thử tải ảnh bằng fetch (vượt CORS)
-function tryFetchImage() {
-    if (!QR_IMAGE_URL) return;
-    
-    fetch(QR_IMAGE_URL, {
-        mode: 'cors',
-        cache: 'no-cache'
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('HTTP ' + response.status);
-        return response.blob();
-    })
-    .then(blob => {
-        const url = URL.createObjectURL(blob);
-        const qrImage = document.getElementById('qrImage');
-        const qrPlaceholder = document.getElementById('qrPlaceholder');
-        if (qrImage) {
-            qrImage.src = url;
-            qrImage.style.display = 'block';
-            qrPlaceholder.style.display = 'none';
-            console.log('✅ QR tải thành công qua fetch');
-        }
-    })
-    .catch(err => {
-        console.error('❌ Fetch QR thất bại:', err);
-    });
-}
+            function tryFetchImage() {
+                if (!QR_IMAGE_URL) return;
+                fetch(QR_IMAGE_URL, { mode: 'cors', cache: 'no-cache' })
+                    .then(response => {
+                        if (!response.ok) throw new Error('HTTP ' + response.status);
+                        return response.blob();
+                    })
+                    .then(blob => {
+                        const url = URL.createObjectURL(blob);
+                        if (qrImage) {
+                            qrImage.src = url;
+                            qrImage.style.display = 'block';
+                            qrPlaceholder.style.display = 'none';
+                            console.log('✅ QR tải thành công qua fetch');
+                        }
+                    })
+                    .catch(err => console.error('❌ Fetch QR thất bại:', err));
+            }
 
-// Hàm thử lại
-function retryLoadQR() {
-    const qrImage = document.getElementById('qrImage');
-    const qrPlaceholder = document.getElementById('qrPlaceholder');
-    if (qrImage) {
-        qrImage.src = QR_IMAGE_URL + '?t=' + Date.now();
-        qrImage.onload = function() {
-            qrImage.style.display = 'block';
-            qrPlaceholder.style.display = 'none';
-        };
-        qrImage.onerror = function() {
-            // Vẫn lỗi thì thử fetch
-            tryFetchImage();
-        };
-    }
-}
+            function retryLoadQR() {
+                if (qrImage) {
+                    qrImage.src = QR_IMAGE_URL + '?t=' + Date.now();
+                    qrImage.onload = function() {
+                        qrImage.style.display = 'block';
+                        qrPlaceholder.style.display = 'none';
+                    };
+                    qrImage.onerror = function() {
+                        tryFetchImage();
+                    };
+                }
+            }
+
+            // ============================================================
+            // IMAGE HANDLING
+            // ============================================================
+            function handleImageSelect(event) {
+                const files = event.target.files;
+                if (!files || files.length === 0) return;
+
+                const remainingSlots = CONFIG.MAX_IMAGES - state.uploadedImages.length;
+                if (remainingSlots <= 0) {
+                    showToast('⚠️ Chỉ được đính kèm tối đa ' + CONFIG.MAX_IMAGES + ' ảnh', 'warning');
+                    imageInput.value = '';
+                    return;
+                }
+
+                const validFiles = [];
+                for (let i = 0; i < Math.min(files.length, remainingSlots); i++) {
+                    const file = files[i];
+                    if (file.size > CONFIG.MAX_IMAGE_SIZE) {
+                        showToast('⚠️ Ảnh ' + file.name + ' vượt quá 5MB', 'warning');
+                        continue;
+                    }
+                    if (!file.type.startsWith('image/')) {
+                        showToast('⚠️ ' + file.name + ' không phải là ảnh', 'warning');
+                        continue;
+                    }
+                    validFiles.push(file);
+                }
+
+                if (validFiles.length === 0) {
+                    imageInput.value = '';
+                    return;
+                }
+
+                // Process each file
+                validFiles.forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imageData = {
+                            id: Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+                            name: file.name,
+                            data: e.target.result,
+                            file: file,
+                        };
+                        state.uploadedImages.push(imageData);
+                        renderImagePreviews();
+                        showToast('✅ Đã thêm ảnh: ' + file.name, 'success');
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                imageInput.value = '';
+            }
+
+            function removeImage(imageId) {
+                state.uploadedImages = state.uploadedImages.filter(img => img.id !== imageId);
+                renderImagePreviews();
+                if (state.uploadedImages.length === 0) {
+                    imageBtn.classList.remove('has-image');
+                }
+            }
+
+            function renderImagePreviews() {
+                if (state.uploadedImages.length === 0) {
+                    imagePreviewContainer.classList.remove('active');
+                    imagePreviewContainer.innerHTML = '';
+                    imageBtn.classList.remove('has-image');
+                    return;
+                }
+
+                imagePreviewContainer.classList.add('active');
+                imageBtn.classList.add('has-image');
+
+                let html = '';
+                state.uploadedImages.forEach(img => {
+                    html += `
+                        <div class="image-preview-item">
+                            <img src="${img.data}" alt="${img.name}" />
+                            <span class="file-name">${img.name}</span>
+                            <button class="remove-image" onclick="removeImage('${img.id}')">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+                imagePreviewContainer.innerHTML = html;
+            }
 
             // ============================================================
             // UTILITY
@@ -1842,7 +2012,9 @@ function retryLoadQR() {
                 setTimeout(() => { loadingScreen.style.display = 'none'; }, 600);
             }
 
-            // Auth
+            // ============================================================
+            // AUTH
+            // ============================================================
             function getUsers() {
                 try { return JSON.parse(localStorage.getItem(CONFIG.USERS_STORAGE_KEY) || '[]'); } catch (e) { return []; }
             }
@@ -2137,7 +2309,9 @@ function retryLoadQR() {
                 setTimeout(() => { openLoginModal(); }, 500);
             }
 
-            // Stop generation
+            // ============================================================
+            // STOP GENERATION
+            // ============================================================
             function stopGeneration() {
                 if (state.abortController) {
                     state.abortController.abort();
@@ -2172,7 +2346,9 @@ function retryLoadQR() {
                 if (container) container.remove();
             }
 
-            // Sidebar
+            // ============================================================
+            // SIDEBAR
+            // ============================================================
             function toggleSidebar() {
                 if (window.innerWidth <= 768) {
                     toggleMobileSidebar();
@@ -2202,7 +2378,9 @@ function retryLoadQR() {
                 }
             }
 
-            // Storage
+            // ============================================================
+            // STORAGE
+            // ============================================================
             function saveData() {
                 try {
                     const data = {
@@ -2250,7 +2428,9 @@ function retryLoadQR() {
                 }
             }
 
-            // Conversations
+            // ============================================================
+            // CONVERSATIONS
+            // ============================================================
             function newChat() {
                 if (state.isSending) {
                     showToast('⏳ Vui lòng đợi tin nhắn hiện tại hoàn tất', 'warning');
@@ -2271,6 +2451,8 @@ function retryLoadQR() {
                 state.currentHistory = [];
                 state.codeBlocks = {};
                 state.codeIdCounter = 0;
+                state.uploadedImages = [];
+                renderImagePreviews();
 
                 renderChat();
                 renderConvList();
@@ -2293,6 +2475,8 @@ function retryLoadQR() {
                 state.currentHistory = state.conversations[index].history.slice();
                 state.codeBlocks = {};
                 state.codeIdCounter = 0;
+                state.uploadedImages = [];
+                renderImagePreviews();
 
                 renderChat();
                 renderConvList();
@@ -2316,6 +2500,8 @@ function retryLoadQR() {
                     state.currentHistory = [];
                     state.codeBlocks = {};
                     state.codeIdCounter = 0;
+                    state.uploadedImages = [];
+                    renderImagePreviews();
                     if (state.conversations.length > 0) {
                         loadConversation(0);
                     } else {
@@ -2343,7 +2529,9 @@ function retryLoadQR() {
                 chatSubtitle.textContent = conv.history.length + ' tin nhắn • ' + formatDate(conv.created_at);
             }
 
-            // Model
+            // ============================================================
+            // MODEL
+            // ============================================================
             function switchModel(modelKey) {
                 if (state.isSending) {
                     showToast('⏳ Vui lòng đợi tin nhắn hiện tại hoàn tất', 'warning');
@@ -2383,7 +2571,9 @@ function retryLoadQR() {
                 }
             }
 
-            // Render
+            // ============================================================
+            // RENDER
+            // ============================================================
             function renderChat() {
                 chatMessages.innerHTML = '';
 
@@ -2396,6 +2586,7 @@ function retryLoadQR() {
                             <div class="features">
                                 <div class="feature"><i class="fas fa-brain"></i> Đa mô hình</div>
                                 <div class="feature"><i class="fas fa-code"></i> Hỗ trợ code</div>
+                                <div class="feature"><i class="fas fa-image"></i> Gửi ảnh</div>
                                 <div class="feature"><i class="fas fa-bolt"></i> Phản hồi nhanh</div>
                             </div>
                             <br>
@@ -2428,6 +2619,7 @@ function retryLoadQR() {
                                     <li>🧠 Trả lời câu hỏi và tư vấn</li>
                                     <li>💻 Viết và sửa code</li>
                                     <li>📝 Soạn thảo văn bản</li>
+                                    <li>🖼️ Phân tích ảnh (gửi ảnh cùng tin nhắn)</li>
                                 </ul>
                                 <br>
                                 Hãy hỏi tôi bất cứ điều gì bạn cần biết!
@@ -2466,6 +2658,27 @@ function retryLoadQR() {
             }
 
             function renderMessageContent(text) {
+                // Check if text contains image data
+                const imageMatch = text.match(/!\[.*?\]\(data:image\/[^;]+;base64,[^\)]+\)/);
+                if (imageMatch) {
+                    // Extract image data
+                    const imgTag = imageMatch[0];
+                    const srcMatch = imgTag.match(/src="([^"]+)"/) || imgTag.match(/\(([^)]+)\)/);
+                    if (srcMatch) {
+                        const src = srcMatch[1];
+                        // Get alt text
+                        const altMatch = imgTag.match(/alt="([^"]+)"/);
+                        const alt = altMatch ? altMatch[1] : 'Ảnh';
+                        return `
+                            <div class="image-container">
+                                <img src="${src}" alt="${escapeHtml(alt)}" loading="lazy" />
+                                <div class="image-name"><i class="fas fa-image"></i> ${escapeHtml(alt)}</div>
+                            </div>
+                        ` + renderMessageContent(text.replace(imageMatch[0], ''));
+                    }
+                }
+
+                // Regular content rendering
                 const parts = text.split(/(```[\s\S]*?```)/);
                 let html = '';
 
@@ -2542,9 +2755,18 @@ function retryLoadQR() {
                 convList.innerHTML = html;
             }
 
-            // Messages
-            function addMessage(content, role) {
-                state.currentHistory.push({ role, content });
+            // ============================================================
+            // MESSAGES
+            // ============================================================
+            function addMessage(content, role, images = []) {
+                // If there are images, include them in the message
+                let finalContent = content;
+                if (images && images.length > 0) {
+                    for (const img of images) {
+                        finalContent += `\n![${img.name}](${img.data})`;
+                    }
+                }
+                state.currentHistory.push({ role, content: finalContent });
                 renderChat();
                 saveCurrentConversation();
                 renderConvList();
@@ -2591,6 +2813,8 @@ function retryLoadQR() {
 
             function clearInput() {
                 chatInput.value = '';
+                state.uploadedImages = [];
+                renderImagePreviews();
                 autoResize();
                 updateCharCount();
                 chatInput.focus();
@@ -2606,13 +2830,15 @@ function retryLoadQR() {
                 chatInput.style.height = Math.min(chatInput.scrollHeight, 100) + 'px';
             }
 
-            // Send message
+            // ============================================================
+            // SEND MESSAGE
+            // ============================================================
             async function sendMessage() {
                 if (state.isSending) return;
 
                 const input = chatInput.value.trim();
-                if (!input) {
-                    showToast('📝 Vui lòng nhập tin nhắn', 'warning');
+                if (!input && state.uploadedImages.length === 0) {
+                    showToast('📝 Vui lòng nhập tin nhắn hoặc đính kèm ảnh', 'warning');
                     return;
                 }
 
@@ -2636,14 +2862,22 @@ function retryLoadQR() {
                     saveData();
                 }
 
-                addMessage(input, 'user');
+                const images = [...state.uploadedImages];
+                const messageText = input || 'Xem ảnh đính kèm';
+                
+                // Add user message with images
+                addMessage(messageText, 'user', images);
+                
+                // Clear input and images
                 chatInput.value = '';
+                state.uploadedImages = [];
+                renderImagePreviews();
                 autoResize();
                 updateCharCount();
                 showThinking();
 
                 try {
-                    await askAI(input);
+                    await askAI(messageText, images);
                 } catch (error) {
                     if (error.name === 'AbortError') {
                         removeThinking();
@@ -2665,13 +2899,14 @@ function retryLoadQR() {
                 }
             }
 
-            async function askAI(userInput) {
+            async function askAI(userInput, images = []) {
                 const messages = state.currentHistory.map(m => ({
                     role: m.role,
                     content: m.content
                 }));
 
-                const systemPrompt = `Bạn là Thành Lợi AI Pro, một trợ lý thông minh đa mô hình.
+                // Build system prompt
+                let systemPrompt = `Bạn là Thành Lợi AI Pro, một trợ lý thông minh đa mô hình.
 Bạn có khả năng:
 - Trả lời câu hỏi chính xác và chi tiết
 - Viết và sửa code với giải thích rõ ràng
@@ -2679,6 +2914,11 @@ Bạn có khả năng:
 - Hỗ trợ nhiều ngôn ngữ
 
 Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
+
+                // If images are attached, add note to system prompt
+                if (images && images.length > 0) {
+                    systemPrompt += `\n\nNgười dùng vừa gửi ${images.length} ảnh đính kèm. Nếu cần, hãy yêu cầu người dùng mô tả nội dung ảnh để bạn có thể hỗ trợ tốt hơn vì bạn không thể trực tiếp "nhìn" thấy ảnh.`;
+                }
 
                 const fullMessages = [
                     { role: 'system', content: systemPrompt },
@@ -2721,7 +2961,9 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                 addMessage(aiText, 'assistant');
             }
 
-            // Code copy
+            // ============================================================
+            // CODE COPY
+            // ============================================================
             function copyCode(codeId) {
                 const code = state.codeBlocks[codeId];
                 if (!code) {
@@ -2764,7 +3006,9 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                 document.body.removeChild(textarea);
             }
 
-            // Export
+            // ============================================================
+            // EXPORT
+            // ============================================================
             function exportChat() {
                 if (state.currentHistory.length === 0) {
                     showToast('📭 Không có tin nhắn để xuất', 'warning');
@@ -2784,10 +3028,15 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                 text += '='.repeat(60) + '\n\n';
 
                 for (const msg of state.currentHistory) {
+                    // Clean image data from content for export
+                    let content = msg.content;
+                    // Remove image markdown from export text
+                    content = content.replace(/!\[.*?\]\(data:image\/[^;]+;base64,[^\)]+\)/g, '[Ảnh đính kèm]');
+                    
                     if (msg.role === 'user') {
-                        text += '🧑 Bạn:\n' + msg.content + '\n\n';
+                        text += '🧑 Bạn:\n' + content + '\n\n';
                     } else {
-                        text += '🤖 Thành Lợi AI (' + getModelDisplay(state.currentModel).name + '):\n' + msg.content + '\n\n';
+                        text += '🤖 Thành Lợi AI (' + getModelDisplay(state.currentModel).name + '):\n' + content + '\n\n';
                     }
                 }
 
@@ -2807,7 +3056,9 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                 showToast('✅ Đã xuất cuộc trò chuyện!', 'success');
             }
 
-            // Clear
+            // ============================================================
+            // CLEAR
+            // ============================================================
             function clearMessages() {
                 if (state.currentIndex < 0) {
                     showToast('⚠️ Không có cuộc trò chuyện nào', 'warning');
@@ -2823,6 +3074,8 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                 state.conversations[state.currentIndex].history = [];
                 state.codeBlocks = {};
                 state.codeIdCounter = 0;
+                state.uploadedImages = [];
+                renderImagePreviews();
                 saveData();
                 renderChat();
                 renderConvList();
@@ -2838,6 +3091,8 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                 state.currentHistory = [];
                 state.codeBlocks = {};
                 state.codeIdCounter = 0;
+                state.uploadedImages = [];
+                renderImagePreviews();
                 renderChat();
                 renderConvList();
                 newChat();
@@ -2845,7 +3100,9 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                 removeStopButton();
             }
 
-            // Keyboard
+            // ============================================================
+            // KEYBOARD EVENTS
+            // ============================================================
             chatInput.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
@@ -2856,6 +3113,29 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
             chatInput.addEventListener('input', () => {
                 autoResize();
                 updateCharCount();
+            });
+
+            // ============================================================
+            // DRAG AND DROP SUPPORT
+            // ============================================================
+            document.addEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+
+            document.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const files = e.dataTransfer.files;
+                if (files && files.length > 0) {
+                    // Check if any files are images
+                    const imageFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
+                    if (imageFiles.length > 0) {
+                        // Simulate file input change
+                        const dataTransfer = new DataTransfer();
+                        imageFiles.forEach(f => dataTransfer.items.add(f));
+                        imageInput.files = dataTransfer.files;
+                        handleImageSelect({ target: imageInput });
+                    }
+                }
             });
 
             // ============================================================
@@ -2933,11 +3213,14 @@ Hãy trả lời một cách thân thiện, chuyên nghiệp và hữu ích.`;
                 window.clearInput = clearInput;
                 window.showToast = showToast;
                 window.loadQR = loadQR;
+                window.handleImageSelect = handleImageSelect;
+                window.removeImage = removeImage;
 
                 setTimeout(() => chatInput.focus(), 300);
 
                 console.log('✦ Thành Lợi AI Pro v3.2 loaded successfully!');
                 console.log('🔐 Auth: ' + (state.currentUser ? 'Logged in as ' + state.currentUser.name : 'Not logged in'));
+                console.log('🖼️ Image upload support enabled!');
             });
 
         })();
