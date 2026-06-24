@@ -5,8 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     
+     <!-- ===== PRELOAD & PRECONNECT ===== -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+    <link rel="dns-prefetch" href="https://api.vilao.ai" />
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     
@@ -1569,7 +1575,7 @@
                     </div>
                     <div class="header-actions">
                         <span class="model-badge" id="modelBadge">
-                            <i class="fas fa-robot"></i> DeepSeek V4
+                            <i class="fas fa-robot"></i> Claude V4.8
                         </span>
                         <div class="model-selector" id="modelSelector"></div>
                     </div>
@@ -1614,7 +1620,7 @@
             // ============================================================
 
             const CONFIG = {
-                API_URL: 'https://i.imgur.com/HyDYIvD.jpeg',
+                API_URL: 'https://api.vilao.ai/v1/chat/completions',
                 API_KEYS: {
                     'occ/claude-opus-4-8': 'sk-b6dbf43ddb12724c4aed6d03909cae618029398383c02ca4880146498bb4ba9a',
                     'cd/gpt-5.5': 'sk-b799e245669f5dbdbc29759dba55a68e118d66ff24cbe9438b2dbffe53797341',
