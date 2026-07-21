@@ -2,8 +2,8 @@
 #import <mach/mach.h>
 #import <dlfcn.h>
 #include <sys/sysctl.h>
-#include <libproc.h>
 #include <unistd.h>
+#include <string.h>
 
 @implementation AutoConnectManager {
     NSTimer *_monitorTimer;
@@ -50,50 +50,54 @@
 }
 
 - (void)findGameProcess {
-    // Tìm process của Free Fire
-    pid_t pids[1024];
-    int numPids = proc_listpids(PROC_ALL_PIDS, 0, pids, sizeof(pids));
+    // Sử dụng sysctl để tìm process
+    int mib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
+    size_t size = 0;
     
-    if (numPids <= 0) return;
+    // Lấy kích thước
+    if (sysctl(mib, 4, NULL, &size, NULL, 0) < 0) {
+        return;
+    }
     
-    int numProcesses = numPids / sizeof(pid_t);
+    // Lấy danh sách process
+    struct kinfo_proc *procs = (struct kinfo_proc *)malloc(size);
+    if (!procs) return;
     
-    for (int i = 0; i < numProcesses; i++) {
-        if (pids[i] == 0) continue;
-        
-        char pathBuffer[PROC_PIDPATHINFO_MAXSIZE];
-        int pathLength = proc_pidpath(pids[i], pathBuffer, sizeof(pathBuffer));
-        
-        if (pathLength <= 0) continue;
-        
-        NSString *path = [NSString stringWithUTF8String:pathBuffer];
-        NSString *processName = [path lastPathComponent];
+    if (sysctl(mib, 4, procs, &size, NULL, 0) < 0) {
+        free(procs);
+        return;
+    }
+    
+    int count = size / sizeof(struct kinfo_proc);
+    
+    for (int i = 0; i < count; i++) {
+        struct kinfo_proc *proc = &procs[i];
+        NSString *processName = [NSString stringWithUTF8String:proc->kp_proc.p_comm];
         
         // Kiểm tra tên process của Free Fire
         if ([processName containsString:@"FreeFire"] ||
             [processName containsString:@"garena"] ||
-            [processName containsString:@"com.dts.freefireth"]) {
+            [processName containsString:@"com.dts.freefireth"] ||
+            [processName containsString:@"FreeFire"] ||
+            [processName containsString:@"Garena"]) {
             
             if (!_isConnected) {
                 _isConnected = YES;
                 _gameProcessName = processName;
-                NSLog(@"✅ Found Free Fire process: %@ (PID: %d)", processName, pids[i]);
+                NSLog(@"✅ Found Free Fire process: %@ (PID: %d)", processName, proc->kp_proc.p_pid);
                 [self attachToGame];
             }
+            break;
         }
     }
+    
+    free(procs);
 }
 
 - (void)attachToGame {
-    // Kết nối vào game
     NSLog(@"🔗 Attaching to Free Fire...");
     
-    // Khởi tạo game SDK
-    // game_sdk->init();
-    
-    // Bật ESP tự động
-    // Vars.Enable = true;
-    
+    // Khởi tạo game SDK - sẽ được gọi từ EspManager
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:@"GameConnectedNotification" object:nil];
     });
