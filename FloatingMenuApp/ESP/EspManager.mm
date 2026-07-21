@@ -1,9 +1,24 @@
 #import "EspManager.h"
+#import "AutoConnectManager.h"
 #include "../Helper/Hooks.h"
+#include "../Helper/Offsets.h"
 
 @implementation EspManager
 
 + (void)setupESP {
+    // Bắt đầu monitoring game
+    [[AutoConnectManager sharedInstance] startMonitoringGame];
+    
+    // Đăng ký notification khi kết nối game thành công
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onGameConnected)
+                                                 name:@"GameConnectedNotification"
+                                               object:nil];
+    
+    // Khởi tạo game_sdk
+    game_sdk->init();
+    
+    // Cài đặt mặc định
     Vars.Enable = false;
     Vars.Aimbot = false;
     Vars.AimFov = 90.0f;
@@ -18,15 +33,26 @@
     disp.width = screenSize.width;
     disp.height = screenSize.height;
     disp.wh = ImVec2(screenSize.width, screenSize.height);
+    
+    NSLog(@"✅ ESP Setup complete! Waiting for game...");
+}
+
++ (void)onGameConnected {
+    NSLog(@"✅ Game connected! ESP ready.");
+    // Tự động bật ESP khi game kết nối
+    Vars.Enable = true;
+    Vars.Box = true;
+    Vars.lines = true;
+    Vars.skeleton = true;
+    Vars.ShowInfo = true;
+    Vars.enemycount = true;
+    Vars.enemywarning = true;
 }
 
 // ==================== ESP ====================
 + (void)setEspEnabled:(BOOL)enabled { Vars.Enable = enabled; }
 + (void)setEspBoxEnabled:(BOOL)enabled { Vars.Box = enabled; }
 + (void)setEspLinesEnabled:(BOOL)enabled { Vars.lines = enabled; }
-+ (void)setEspNameEnabled:(BOOL)enabled { Vars.Name = enabled; }
-+ (void)setEspHealthEnabled:(BOOL)enabled { Vars.Health = enabled; }
-+ (void)setEspDistanceEnabled:(BOOL)enabled { Vars.Distance = enabled; }
 + (void)setEspSkeletonEnabled:(BOOL)enabled { Vars.skeleton = enabled; }
 + (void)setEspCircleEnabled:(BOOL)enabled { Vars.circlepos = enabled; }
 + (void)setEspOOFEnabled:(BOOL)enabled { Vars.OOF = enabled; }
@@ -55,16 +81,19 @@
 // ==================== RENDER ====================
 + (void)renderESP {
     if (!Vars.Enable) return;
+    if (![[AutoConnectManager sharedInstance] isConnectedToGame]) return;
     get_players();
 }
 
 + (void)renderAimbot {
     if (!Vars.Aimbot) return;
+    if (![[AutoConnectManager sharedInstance] isConnectedToGame]) return;
     aimbot();
 }
 
 // ==================== STATUS ====================
 + (BOOL)isEspEnabled { return Vars.Enable; }
 + (BOOL)isAimbotEnabled { return Vars.Aimbot; }
++ (BOOL)isGameConnected { return [[AutoConnectManager sharedInstance] isConnectedToGame]; }
 
 @end
