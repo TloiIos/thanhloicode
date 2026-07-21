@@ -60,4 +60,4 @@
 + (BOOL)isAimbotEnabled { return Vars.Aimbot; }
 
 @end
-EOF
+
