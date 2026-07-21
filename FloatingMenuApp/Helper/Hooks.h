@@ -1,12 +1,15 @@
 #import "vinhtran.hpp"
 #import "loading.hxx"
-#import "Mem.h"
 #include <fstream>
 #include <algorithm>
 #include <chrono>
 #include <string>
 #include <cmath>
 #include <cstring>
+#include <vector>
+
+// Mem.h có getRealOffset
+#include "Mem.h"
 
 extern "C" uintptr_t get_libBase();
 uintptr_t get_libBase();
@@ -29,7 +32,6 @@ enum AimTarget {
 
 // ==================== STRUCTS ====================
 struct Vars_t {
-    // ESP
     bool Enable = false;
     bool Box = false;
     bool lines = false;
@@ -42,8 +44,6 @@ struct Vars_t {
     bool ShowInfo = false;
     bool enemycount = false;
     bool enemywarning = false;
-    
-    // Aimbot
     bool Aimbot = false;
     float AimFov = 90.0f;
     bool ShowFovCircle = true;
@@ -57,11 +57,7 @@ struct Vars_t {
     float BulletTravelTime = 0.04f;
     float fovLineColor[4] = {1.00f, 0.41f, 0.71f, 1.00f};
     bool fovaimglow = false;
-    
-    // Silent Aim
     bool SilentAim = false;
-    
-    // Thống kê
     int headshotCount = 0;
     int totalShots = 0;
 } Vars;
