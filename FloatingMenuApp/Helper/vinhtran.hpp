@@ -6,6 +6,8 @@
 #include <vector>
 #include <algorithm>
 #include <chrono>
+#include <cstdlib>
+#include <cstring>
 
 // ==================== IMGUI STUB ====================
 struct ImVec2 {
@@ -39,7 +41,10 @@ struct ImDrawList {
 };
 
 struct ImFont {
-    ImVec2 CalcTextSizeA(float size, float maxWidth, float unknown, const char* text) { return ImVec2(0,0); }
+    ImVec2 CalcTextSizeA(float size, float maxWidth, float unknown, const char* text) { 
+        float len = strlen(text) * size * 0.5f;
+        return ImVec2(len, size);
+    }
 };
 
 struct ImRect {
@@ -54,73 +59,27 @@ namespace ImGui {
         ImVec2 DisplaySize;
         double DeltaTime;
         ImFont* Fonts[10];
+        IO() : DisplaySize(0,0), DeltaTime(0.016f) {
+            for(int i=0;i<10;i++) Fonts[i]=nullptr;
+        }
     };
-    static IO GetIO() { 
-        IO io; 
-        io.DisplaySize = ImVec2(0,0); 
-        io.DeltaTime = 0.016f;
+    static IO& GetIO() { 
+        static IO io;
         return io; 
     }
-    static ImDrawList* GetBackgroundDrawList() { return new ImDrawList(); }
-    static ImDrawList* GetForegroundDrawList() { return new ImDrawList(); }
+    static ImDrawList* GetBackgroundDrawList() { 
+        static ImDrawList drawList;
+        return &drawList; 
+    }
+    static ImDrawList* GetForegroundDrawList() { 
+        static ImDrawList drawList;
+        return &drawList; 
+    }
+    static ImVec2 CalcTextSize(const char* text) {
+        if(!text) return ImVec2(0,0);
+        return ImVec2(strlen(text) * 8.0f, 16.0f);
+    }
 }
-
-// ==================== MACROS ====================
-#define ImCalcTextSize(str) ImVec2(0,0)
-#define calc_size(size, str) ImVec2(0,0)
-
-#define HOOKAF(ret, func, ...)      \
-    ret (*old_##func)(__VA_ARGS__); \
-    ret hook_##func(__VA_ARGS__)
-
-#define const_ptr(object, offset) *reinterpret_cast<uintptr_t *>(object + offset)
-#define Str(ret) std::to_string(ret).c_str()
-#define const_ptr_set(type, object, offset) *reinterpret_cast<type *>(object + offset)
-#define const_field(type, object, offset) *reinterpret_cast<type *>(reinterpret_cast<uintptr_t>(object) + offset)
-#define const_field_set(ret, first, second, val) *reinterpret_cast<ret *>(reinterpret_cast<uintptr_t>(first) + second) = val
-#define const_dict(retf, rets, first, second) *reinterpret_cast<monoDictionary<retf, rets> **>(reinterpret_cast<uintptr_t>(first) + second)
-#define const_array(retf, first, second) *reinterpret_cast<monoArray<retf> **>(reinterpret_cast<uintptr_t>(first) + second)
-
-// ==================== IMVEC2 OPERATORS ====================
-static inline ImVec2 operator*(const ImVec2 &lhs, const float rhs) { return ImVec2(lhs.x * rhs, lhs.y * rhs); }
-static inline ImVec2 operator/(const ImVec2 &lhs, const float rhs) { return ImVec2(lhs.x / rhs, lhs.y / rhs); }
-static inline ImVec2 operator+(const ImVec2 &lhs, const float rhs) { return ImVec2(lhs.x + rhs, lhs.y + rhs); }
-static inline ImVec2 operator+(const ImVec2 &lhs, const ImVec2 &rhs) { return ImVec2(lhs.x + rhs.x, lhs.y + rhs.y); }
-static inline ImVec2 operator-(const ImVec2 &lhs, const ImVec2 &rhs) { return ImVec2(lhs.x - rhs.x, lhs.y - rhs.y); }
-static inline ImVec2 operator-(const ImVec2 &lhs, const float rhs) { return ImVec2(lhs.x - rhs, lhs.y - rhs); }
-static inline ImVec2 operator*(const ImVec2 &lhs, const ImVec2 &rhs) { return ImVec2(lhs.x * rhs.x, lhs.y * rhs.y); }
-static inline ImVec2 operator/(const ImVec2 &lhs, const ImVec2 &rhs) { return ImVec2(lhs.x / rhs.x, lhs.y / rhs.y); }
-static inline ImVec2 &operator*=(ImVec2 &lhs, const float rhs) { lhs.x *= rhs; lhs.y *= rhs; return lhs; }
-static inline ImVec2 &operator/=(ImVec2 &lhs, const float rhs) { lhs.x /= rhs; lhs.y /= rhs; return lhs; }
-static inline ImVec2 &operator+=(ImVec2 &lhs, const ImVec2 &rhs) { lhs.x += rhs.x; lhs.y += rhs.y; return lhs; }
-static inline ImVec2 &operator-=(ImVec2 &lhs, const ImVec2 &rhs) { lhs.x -= rhs.x; lhs.y -= rhs.y; return lhs; }
-static inline ImVec2 &operator*=(ImVec2 &lhs, const ImVec2 &rhs) { lhs.x *= rhs.x; lhs.y *= rhs.y; return lhs; }
-static inline ImVec2 &operator/=(ImVec2 &lhs, const ImVec2 &rhs) { lhs.x /= rhs.x; lhs.y /= rhs.y; return lhs; }
-
-inline ImVec2 flooring(ImVec2 vec) { return ImVec2((float)(int)vec.x, (float)(int)vec.y); }
-inline ImVec2 flooring(float x, float y) { return ImVec2((float)(int)x, (float)(int)y); }
-inline ImVec2 flooring(int x, int y) { return ImVec2((float)x, (float)y); }
-
-inline ImVec2 delvec(ImVec2 a, float b) { return ImVec2(a.x - b, a.y - b); }
-inline ImVec2 addvec(ImVec2 a, float b) { return ImVec2(a.x + b, a.y + b); }
-
-// ==================== STUB FUNCTIONS ====================
-inline void AddText(ImFont *font, float size, bool shadow, bool outline, const ImVec2 &textpos, ImColor col, std::string value, ImDrawList *drawlist = nullptr) {}
-inline void drawcircleglow(ImDrawList *draw, ImVec2 pos, float rad, ImColor col, int segm, int thickness, int size) {}
-inline void drawlineglow(ImDrawList* draw, ImVec2 start, ImVec2 end, ImColor col, int thickness, int size) {}
-inline void Draw3DCircle(Vector3 pos, float radius, float stroke, ImColor color, float segments, bool filled, float fillopacity) {}
-inline void OtFovV1(float x, float y, float radius, float min_angle, float max_angle, ImColor col, float thickness) {}
-
-// ==================== CLAMP ====================
-template<typename T>
-inline T clamp(T value, T min, T max) {
-    return std::max(min, std::min(max, value));
-}
-
-// ==================== RAD/DEG ====================
-#define PI 3.14159265358979323846f
-#define Deg2Rad (PI / 180.0f)
-#define Rad2Deg (180.0f / PI)
 
 // ==================== VECTOR3 ====================
 struct Vector3 {
@@ -203,7 +162,6 @@ struct Quaternion {
     Quaternion(float _x, float _y, float _z, float _w) : x(_x), y(_y), z(_z), w(_w) {}
     
     static Quaternion LookRotation(Vector3 forward, Vector3 up) {
-        // Đơn giản hóa - chỉ trả về identity
         return Quaternion(0, 0, 0, 1);
     }
 };
@@ -236,12 +194,55 @@ struct monoString {
     }
 };
 
-// ==================== FMT ====================
-namespace fmt {
-    template<typename T>
-    std::string format(const char* fmt, T arg) {
-        return std::to_string(arg);
-    }
+// ==================== MACROS ====================
+#define ImCalcTextSize(str) ImGui::CalcTextSize(str)
+#define calc_size(size, str) ImVec2(0,0)
+#define IM_COL32(r,g,b,a) (((a)<<24)|((b)<<16)|((g)<<8)|(r))
+
+#define HOOKAF(ret, func, ...)      \
+    ret (*old_##func)(__VA_ARGS__); \
+    ret hook_##func(__VA_ARGS__)
+
+#define const_ptr(object, offset) *reinterpret_cast<uintptr_t *>(object + offset)
+#define Str(ret) std::to_string(ret).c_str()
+#define const_ptr_set(type, object, offset) *reinterpret_cast<type *>(object + offset)
+#define const_field(type, object, offset) *reinterpret_cast<type *>(reinterpret_cast<uintptr_t>(object) + offset)
+#define const_field_set(ret, first, second, val) *reinterpret_cast<ret *>(reinterpret_cast<uintptr_t>(first) + second) = val
+#define const_dict(retf, rets, first, second) *reinterpret_cast<monoDictionary<retf, rets> **>(reinterpret_cast<uintptr_t>(first) + second)
+#define const_array(retf, first, second) *reinterpret_cast<monoArray<retf> **>(reinterpret_cast<uintptr_t>(first) + second)
+
+// ==================== IMVEC2 OPERATORS ====================
+static inline ImVec2 operator*(const ImVec2 &lhs, const float rhs) { return ImVec2(lhs.x * rhs, lhs.y * rhs); }
+static inline ImVec2 operator/(const ImVec2 &lhs, const float rhs) { return ImVec2(lhs.x / rhs, lhs.y / rhs); }
+static inline ImVec2 operator+(const ImVec2 &lhs, const float rhs) { return ImVec2(lhs.x + rhs, lhs.y + rhs); }
+static inline ImVec2 operator+(const ImVec2 &lhs, const ImVec2 &rhs) { return ImVec2(lhs.x + rhs.x, lhs.y + rhs.y); }
+static inline ImVec2 operator-(const ImVec2 &lhs, const ImVec2 &rhs) { return ImVec2(lhs.x - rhs.x, lhs.y - rhs.y); }
+static inline ImVec2 operator-(const ImVec2 &lhs, const float rhs) { return ImVec2(lhs.x - rhs, lhs.y - rhs); }
+static inline ImVec2 operator*(const ImVec2 &lhs, const ImVec2 &rhs) { return ImVec2(lhs.x * rhs.x, lhs.y * rhs.y); }
+static inline ImVec2 operator/(const ImVec2 &lhs, const ImVec2 &rhs) { return ImVec2(lhs.x / rhs.x, lhs.y / rhs.y); }
+
+inline ImVec2 flooring(ImVec2 vec) { return ImVec2((float)(int)vec.x, (float)(int)vec.y); }
+inline ImVec2 flooring(float x, float y) { return ImVec2((float)(int)x, (float)(int)y); }
+inline ImVec2 flooring(int x, int y) { return ImVec2((float)x, (float)y); }
+inline ImVec2 delvec(ImVec2 a, float b) { return ImVec2(a.x - b, a.y - b); }
+inline ImVec2 addvec(ImVec2 a, float b) { return ImVec2(a.x + b, a.y + b); }
+
+// ==================== STUB FUNCTIONS ====================
+inline void AddText(ImFont *font, float size, bool shadow, bool outline, const ImVec2 &textpos, ImColor col, std::string value, ImDrawList *drawlist = nullptr) {}
+inline void drawcircleglow(ImDrawList *draw, ImVec2 pos, float rad, ImColor col, int segm, int thickness, int size) {}
+inline void drawlineglow(ImDrawList* draw, ImVec2 start, ImVec2 end, ImColor col, int thickness, int size) {}
+inline void Draw3DCircle(Vector3 pos, float radius, float stroke, ImColor color, float segments, bool filled, float fillopacity) {}
+inline void OtFovV1(float x, float y, float radius, float min_angle, float max_angle, ImColor col, float thickness) {}
+
+// ==================== CLAMP ====================
+template<typename T>
+inline T clamp(T value, T min, T max) {
+    return std::max(min, std::min(max, value));
 }
+
+// ==================== RAD/DEG ====================
+#define PI 3.14159265358979323846f
+#define Deg2Rad (PI / 180.0f)
+#define Rad2Deg (180.0f / PI)
 
 #endif // VINHTRAN_HPP_INCLUDED
