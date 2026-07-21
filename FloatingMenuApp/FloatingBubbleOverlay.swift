@@ -11,6 +11,7 @@ struct FloatingBubbleOverlay: View {
     @State private var dragOffset: CGSize = .zero
     @State private var panelVisible: Bool = false
     @State private var fovValue: Float = 90.0
+    @State private var isGameConnected: Bool = false
     
     @State private var toggles: [ToggleItem] = [
         ToggleItem(title: "ESP", isOn: false),
@@ -62,6 +63,10 @@ struct FloatingBubbleOverlay: View {
         }
         .onAppear {
             EspManager.setupESP()
+            // Kiểm tra kết nối game mỗi giây
+            Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                isGameConnected = EspManager.isGameConnected()
+            }
         }
     }
     
@@ -71,24 +76,46 @@ struct FloatingBubbleOverlay: View {
                 panelVisible.toggle()
             }
         } label: {
-            Image(systemName: "scope")
-                .font(.system(size: 20, weight: .bold))
-                .foregroundStyle(.white)
-                .frame(width: 52, height: 52)
-                .background(
-                    Circle().fill(Color(red: 0.10, green: 0.55, blue: 0.95))
-                )
-                .shadow(color: .black.opacity(0.35), radius: 8, y: 4)
+            ZStack {
+                Image(systemName: "scope")
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundStyle(.white)
+                
+                // Trạng thái kết nối game
+                Circle()
+                    .fill(isGameConnected ? Color.green : Color.red)
+                    .frame(width: 10, height: 10)
+                    .offset(x: 20, y: -20)
+            }
+            .frame(width: 52, height: 52)
+            .background(
+                Circle().fill(Color(red: 0.10, green: 0.55, blue: 0.95))
+            )
+            .shadow(color: .black.opacity(0.35), radius: 8, y: 4)
         }
     }
     
     private var panelView: some View {
-        VStack(spacing: 0) {
+        let espToggles = toggles.prefix(8)
+        let aimToggles = toggles.suffix(3)
+        
+        return VStack(spacing: 0) {
             Text("ESP & AIMBOT")
                 .font(.headline)
                 .foregroundStyle(.white)
                 .padding(.top, 14)
                 .padding(.bottom, 8)
+            
+            // Trạng thái kết nối game
+            HStack {
+                Circle()
+                    .fill(isGameConnected ? Color.green : Color.red)
+                    .frame(width: 8, height: 8)
+                Text(isGameConnected ? "✅ Connected to Free Fire" : "⏳ Waiting for Free Fire...")
+                    .font(.system(size: 12))
+                    .foregroundStyle(isGameConnected ? .green : .orange)
+            }
+            .padding(.bottom, 4)
             
             Divider().background(Color.white.opacity(0.15))
             
@@ -101,11 +128,16 @@ struct FloatingBubbleOverlay: View {
                         .padding(.top, 6)
                         .padding(.bottom, 2)
                     
-                    ForEach(0..<8, id: \.self) { index in
+                    ForEach(Array(espToggles.enumerated()), id: \.element.id) { index, item in
                         ToggleRow(
-                            title: toggles[index].title,
-                            isOn: $toggles[index].isOn,
-                            onToggle: handleToggle
+                            title: item.title,
+                            isOn: Binding(
+                                get: { toggles[index].isOn },
+                                set: { newValue in
+                                    toggles[index].isOn = newValue
+                                    handleToggle(item.title, isOn: newValue)
+                                }
+                            )
                         )
                     }
                     
@@ -118,11 +150,17 @@ struct FloatingBubbleOverlay: View {
                         .padding(.top, 6)
                         .padding(.bottom, 2)
                     
-                    ForEach(8..<11, id: \.self) { index in
+                    ForEach(Array(aimToggles.enumerated()), id: \.element.id) { index, item in
+                        let actualIndex = toggles.count - 3 + index
                         ToggleRow(
-                            title: toggles[index].title,
-                            isOn: $toggles[index].isOn,
-                            onToggle: handleToggle
+                            title: item.title,
+                            isOn: Binding(
+                                get: { toggles[actualIndex].isOn },
+                                set: { newValue in
+                                    toggles[actualIndex].isOn = newValue
+                                    handleToggle(item.title, isOn: newValue)
+                                }
+                            )
                         )
                     }
                     
@@ -176,7 +214,7 @@ struct FloatingBubbleOverlay: View {
                 }
                 .padding(.bottom, 10)
             }
-            .frame(height: 460)
+            .frame(height: 480)
         }
         .frame(width: 270)
         .background(
@@ -231,7 +269,6 @@ struct FloatingBubbleOverlay: View {
 struct ToggleRow: View {
     let title: String
     @Binding var isOn: Bool
-    let onToggle: (String, Bool) -> Void
     
     var body: some View {
         HStack {
@@ -242,9 +279,6 @@ struct ToggleRow: View {
             Toggle("", isOn: $isOn)
                 .labelsHidden()
                 .tint(.green)
-                .onChange(of: isOn) { newValue in
-                    onToggle(title, newValue)
-                }
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 6)
