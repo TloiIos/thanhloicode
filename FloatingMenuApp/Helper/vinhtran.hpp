@@ -10,19 +10,20 @@
 #include <cstring>
 
 // ==================== IMGUI STUB ====================
-// Định nghĩa ImFont TRƯỚC KHI DÙNG
+// Định nghĩa ImVec2 TRƯỚC
+struct ImVec2 {
+    float x, y;
+    ImVec2() : x(0), y(0) {}
+    ImVec2(float _x, float _y) : x(_x), y(_y) {}
+};
+
+// Định nghĩa ImFont SAU ImVec2
 struct ImFont {
     ImVec2 CalcTextSizeA(float size, float maxWidth, float unknown, const char* text) { 
         if (!text) return ImVec2(0,0);
         float len = strlen(text) * size * 0.5f;
         return ImVec2(len, size);
     }
-};
-
-struct ImVec2 {
-    float x, y;
-    ImVec2() : x(0), y(0) {}
-    ImVec2(float _x, float _y) : x(_x), y(_y) {}
 };
 
 struct ImVec4 {
@@ -39,14 +40,14 @@ struct ImColor {
 };
 
 struct ImDrawList {
-    void AddCircle(ImVec2 center, float radius, ImColor col, int segments, float thickness) {}
-    void AddLine(ImVec2 p1, ImVec2 p2, ImColor col, float thickness) {}
-    void AddRect(ImVec2 p1, ImVec2 p2, ImColor col, float rounding, int flags, float thickness) {}
-    void AddRectFilled(ImVec2 p1, ImVec2 p2, ImColor col, float rounding) {}
+    void AddCircle(ImVec2 center, float radius, ImColor col, int segments = 12, float thickness = 1.0f) {}
+    void AddLine(ImVec2 p1, ImVec2 p2, ImColor col, float thickness = 1.0f) {}
+    void AddRect(ImVec2 p1, ImVec2 p2, ImColor col, float rounding = 0.0f, int flags = 0, float thickness = 1.0f) {}
+    void AddRectFilled(ImVec2 p1, ImVec2 p2, ImColor col, float rounding = 0.0f) {}
     void AddText(ImFont* font, float size, ImVec2 pos, ImColor col, const char* text) {}
     void AddTriangleFilled(ImVec2 p1, ImVec2 p2, ImVec2 p3, ImColor col) {}
-    void AddTriangle(ImVec2 p1, ImVec2 p2, ImVec2 p3, ImColor col, float thickness) {}
-    void AddQuad(ImVec2 p1, ImVec2 p2, ImVec2 p3, ImVec2 p4, ImColor col, float thickness) {}
+    void AddTriangle(ImVec2 p1, ImVec2 p2, ImVec2 p3, ImColor col, float thickness = 1.0f) {}
+    void AddQuad(ImVec2 p1, ImVec2 p2, ImVec2 p3, ImVec2 p4, ImColor col, float thickness = 1.0f) {}
 };
 
 struct ImRect {
@@ -196,10 +197,45 @@ struct monoString {
     }
 };
 
+// ==================== DICTIONARY TEMPLATE ====================
+template<typename TKey, typename TValue>
+struct Dictionary {
+    struct Entry {
+        int hashCode;
+        int next;
+        TKey key;
+        TValue value;
+    };
+    
+    void* klass;
+    void* monitor;
+    void* buckets;
+    Entry* entries;
+    int count;
+    int version;
+    int freeList;
+    int freeCount;
+    void* comparer;
+    void* keys;
+    void* values;
+    void* syncRoot;
+    
+    int getSize() { return count; }
+    TValue* getValues() { 
+        if (!entries) return nullptr;
+        TValue* result = new TValue[count];
+        for (int i = 0; i < count; i++) {
+            result[i] = entries[i].value;
+        }
+        return result;
+    }
+};
+
 // ==================== MACROS ====================
 #define ImCalcTextSize(str) ImGui::CalcTextSize(str)
 #define calc_size(size, str) ImVec2(0,0)
 #define IM_COL32(r,g,b,a) (((a)<<24)|((b)<<16)|((g)<<8)|(r))
+#define IM_PI 3.14159265358979323846f
 
 #define HOOKAF(ret, func, ...)      \
     ret (*old_##func)(__VA_ARGS__); \
@@ -243,8 +279,14 @@ inline T clamp(T value, T min, T max) {
 }
 
 // ==================== RAD/DEG ====================
-#define PI 3.14159265358979323846f
 #define Deg2Rad (PI / 180.0f)
 #define Rad2Deg (180.0f / PI)
+
+// ==================== FORWARD DECLARATIONS ====================
+void DrawSkeleton(void* player, ImDrawList* drawList);
+void ProcessAimbot();
+void DrawESP();
+void get_players();
+void aimbot();
 
 #endif // VINHTRAN_HPP_INCLUDED
