@@ -1,3 +1,5 @@
+
+// Hooks.h - ESP & Aimbot for Free Fire
 #import "vinhtran.hpp"
 #import "loading.hxx"
 #import "Mem.h"
@@ -71,60 +73,7 @@ struct TargetCache {
 };
 static TargetCache targetCache;
 
-// ==================== GAME SDK (Forward Declaration) ====================
-class game_sdk_t;
-extern game_sdk_t *game_sdk;
-
-// ==================== AUTO CONNECT ====================
-class AutoConnect {
-public:
-    static bool FindGameProcess() {
-        int mib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
-        size_t size = 0;
-        
-        if (sysctl(mib, 4, NULL, &size, NULL, 0) < 0) return false;
-        
-        struct kinfo_proc *procs = (struct kinfo_proc *)malloc(size);
-        if (!procs) return false;
-        
-        if (sysctl(mib, 4, procs, &size, NULL, 0) < 0) {
-            free(procs);
-            return false;
-        }
-        
-        int count = (int)(size / sizeof(struct kinfo_proc));
-        bool found = false;
-        
-        for (int i = 0; i < count; i++) {
-            struct kinfo_proc *proc = &procs[i];
-            NSString *processName = [NSString stringWithUTF8String:proc->kp_proc.p_comm];
-            
-            if ([processName containsString:@"FreeFire"] ||
-                [processName containsString:@"garena"] ||
-                [processName containsString:@"com.dts.freefireth"]) {
-                Vars.gameState = GAME_FOUND;
-                found = true;
-                break;
-            }
-        }
-        
-        free(procs);
-        return found;
-    }
-    
-    static void ConnectToGame() {
-        if (Vars.gameState == GAME_FOUND) {
-            if (game_sdk) {
-                game_sdk->init();
-                Vars.gameState = GAME_CONNECTED;
-                Vars.Enable = true;
-                NSLog(@"✅ Connected to Free Fire!");
-            }
-        }
-    }
-};
-
-// ==================== GAME SDK ====================
+// ==================== GAME SDK (Định nghĩa TRƯỚC AutoConnect) ====================
 class game_sdk_t {
 public:
     void init();
@@ -191,6 +140,55 @@ void game_sdk_t::init() {
     this->_getLeftForeArmTF = (void *(*)(void *))getRealOffset(OFFSET_LEFT_FOREARM);
     this->_getRightForeArmTF = (void *(*)(void *))getRealOffset(OFFSET_RIGHT_FOREARM);
 }
+
+// ==================== AUTO CONNECT ====================
+class AutoConnect {
+public:
+    static bool FindGameProcess() {
+        int mib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
+        size_t size = 0;
+        
+        if (sysctl(mib, 4, NULL, &size, NULL, 0) < 0) return false;
+        
+        struct kinfo_proc *procs = (struct kinfo_proc *)malloc(size);
+        if (!procs) return false;
+        
+        if (sysctl(mib, 4, procs, &size, NULL, 0) < 0) {
+            free(procs);
+            return false;
+        }
+        
+        int count = (int)(size / sizeof(struct kinfo_proc));
+        bool found = false;
+        
+        for (int i = 0; i < count; i++) {
+            struct kinfo_proc *proc = &procs[i];
+            NSString *processName = [NSString stringWithUTF8String:proc->kp_proc.p_comm];
+            
+            if ([processName containsString:@"FreeFire"] ||
+                [processName containsString:@"garena"] ||
+                [processName containsString:@"com.dts.freefireth"]) {
+                Vars.gameState = GAME_FOUND;
+                found = true;
+                break;
+            }
+        }
+        
+        free(procs);
+        return found;
+    }
+    
+    static void ConnectToGame() {
+        if (Vars.gameState == GAME_FOUND) {
+            if (game_sdk) {
+                game_sdk->init();
+                Vars.gameState = GAME_CONNECTED;
+                Vars.Enable = true;
+                NSLog(@"✅ Connected to Free Fire!");
+            }
+        }
+    }
+};
 
 // ==================== HELPER FUNCTIONS ====================
 Vector3 getPosition(void *player) {
