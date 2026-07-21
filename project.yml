@@ -1,4 +1,4 @@
-
+cat > project.yml << 'EOF'
 name: FloatingMenuApp
 options:
   bundleIdPrefix: com.demo.floatingmenuapp
@@ -33,9 +33,7 @@ targets:
         CLANG_ENABLE_OBJC_ARC: YES
         CLANG_CXX_LANGUAGE_STANDARD: "c++17"
         CLANG_CXX_LIBRARY: "libc++"
-        OTHER_LDFLAGS:
-          - "-ObjC"
-          - "-lc++"
+        SWIFT_OBJC_BRIDGING_HEADER: "FloatingMenuApp/FloatingMenuApp-Bridging-Header.h"
         HEADER_SEARCH_PATHS:
           - "$(inherited)"
           - "$(SRCROOT)/FloatingMenuApp"
@@ -44,3 +42,4 @@ targets:
         LIBRARY_SEARCH_PATHS:
           - "$(inherited)"
           - "$(SRCROOT)/FloatingMenuApp"
+EOF
