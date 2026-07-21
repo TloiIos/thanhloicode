@@ -1,13 +1,9 @@
-
 #import "EspManager.h"
-#import "../Helper/Hooks.h"  // ← Import Hooks từ Helper
+#include "../Helper/Hooks.h"
 
 @implementation EspManager
 
 + (void)setupESP {
-    // Khởi tạo game_sdk
-    // game_sdk->init();
-    
     Vars.Enable = false;
     Vars.Aimbot = false;
     Vars.AimFov = 90.0f;
@@ -16,6 +12,7 @@
     Vars.Target = HEAD;
     Vars.VisibleCheck = true;
     Vars.ShowFovCircle = true;
+    Vars.isAimFov = true;
     
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
     disp.width = screenSize.width;
@@ -27,6 +24,9 @@
 + (void)setEspEnabled:(BOOL)enabled { Vars.Enable = enabled; }
 + (void)setEspBoxEnabled:(BOOL)enabled { Vars.Box = enabled; }
 + (void)setEspLinesEnabled:(BOOL)enabled { Vars.lines = enabled; }
++ (void)setEspNameEnabled:(BOOL)enabled { Vars.Name = enabled; }
++ (void)setEspHealthEnabled:(BOOL)enabled { Vars.Health = enabled; }
++ (void)setEspDistanceEnabled:(BOOL)enabled { Vars.Distance = enabled; }
 + (void)setEspSkeletonEnabled:(BOOL)enabled { Vars.skeleton = enabled; }
 + (void)setEspCircleEnabled:(BOOL)enabled { Vars.circlepos = enabled; }
 + (void)setEspOOFEnabled:(BOOL)enabled { Vars.OOF = enabled; }
@@ -35,8 +35,16 @@
 + (void)setEspEnemyWarningEnabled:(BOOL)enabled { Vars.enemywarning = enabled; }
 
 // ==================== AIMBOT ====================
-+ (void)setAimbotEnabled:(BOOL)enabled { Vars.Aimbot = enabled; }
-+ (void)setAimbotFov:(float)fov { Vars.AimFov = fov; Vars.isAimFov = YES; }
++ (void)setAimbotEnabled:(BOOL)enabled { 
+    Vars.Aimbot = enabled;
+    if (enabled) Vars.isAimFov = true;
+}
+
++ (void)setAimbotFov:(float)fov { 
+    Vars.AimFov = fov;
+    Vars.isAimFov = (fov > 0);
+}
+
 + (void)setAimbotTarget:(NSInteger)target { Vars.Target = (AimTarget)target; }
 + (void)setAimbotMode:(NSInteger)mode { Vars.AimMode = (int)mode; }
 + (void)setAimbotWhen:(NSInteger)when { Vars.AimWhen = (int)when; }
@@ -47,12 +55,12 @@
 // ==================== RENDER ====================
 + (void)renderESP {
     if (!Vars.Enable) return;
-    get_players();  // Hàm này từ Hooks.h
+    get_players();
 }
 
 + (void)renderAimbot {
     if (!Vars.Aimbot) return;
-    aimbot();  // Hàm này từ Hooks.h
+    aimbot();
 }
 
 // ==================== STATUS ====================
@@ -60,4 +68,3 @@
 + (BOOL)isAimbotEnabled { return Vars.Aimbot; }
 
 @end
-
