@@ -71,6 +71,10 @@ struct TargetCache {
 };
 static TargetCache targetCache;
 
+// ==================== GAME SDK (Forward Declaration) ====================
+class game_sdk_t;
+extern game_sdk_t *game_sdk;
+
 // ==================== AUTO CONNECT ====================
 class AutoConnect {
 public:
@@ -110,10 +114,12 @@ public:
     
     static void ConnectToGame() {
         if (Vars.gameState == GAME_FOUND) {
-            game_sdk->init();
-            Vars.gameState = GAME_CONNECTED;
-            Vars.Enable = true;
-            NSLog(@"✅ Connected to Free Fire!");
+            if (game_sdk) {
+                game_sdk->init();
+                Vars.gameState = GAME_CONNECTED;
+                Vars.Enable = true;
+                NSLog(@"✅ Connected to Free Fire!");
+            }
         }
     }
 };
@@ -418,11 +424,9 @@ void DrawESP() {
         void *cameraTransform = game_sdk->Component_GetTransform(game_sdk->get_camera());
         if (!cameraTransform) return;
         
-        int enemy_index = 0;
         int enemyCount = 0;
         int botCount = 0;
         int enemyVisibleCount = 0;
-        const auto &viewpos = game_sdk->get_position(game_sdk->Component_GetTransform(game_sdk->get_camera()));
         
         for (int u = 0; u < players->getSize(); u++) {
             void *closestEnemy = players->getValues()[u];
@@ -444,7 +448,6 @@ void DrawESP() {
             bool w2sc;
             ImVec2 top_pos = Camera$$WorldToScreen::Regular(pos + Vector3(0, 1.6, 0));
             ImVec2 bot_pos = Camera$$WorldToScreen::Regular(pos);
-            ImVec2 pos_3 = Camera$$WorldToScreen::Checker(pos, w2sc);
             
             auto pmtXtop = top_pos.x;
             auto pmtXbottom = bot_pos.x;
