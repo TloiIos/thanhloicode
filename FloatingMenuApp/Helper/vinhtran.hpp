@@ -10,6 +10,15 @@
 #include <cstring>
 
 // ==================== IMGUI STUB ====================
+// Định nghĩa ImFont TRƯỚC KHI DÙNG
+struct ImFont {
+    ImVec2 CalcTextSizeA(float size, float maxWidth, float unknown, const char* text) { 
+        if (!text) return ImVec2(0,0);
+        float len = strlen(text) * size * 0.5f;
+        return ImVec2(len, size);
+    }
+};
+
 struct ImVec2 {
     float x, y;
     ImVec2() : x(0), y(0) {}
@@ -38,13 +47,6 @@ struct ImDrawList {
     void AddTriangleFilled(ImVec2 p1, ImVec2 p2, ImVec2 p3, ImColor col) {}
     void AddTriangle(ImVec2 p1, ImVec2 p2, ImVec2 p3, ImColor col, float thickness) {}
     void AddQuad(ImVec2 p1, ImVec2 p2, ImVec2 p3, ImVec2 p4, ImColor col, float thickness) {}
-};
-
-struct ImFont {
-    ImVec2 CalcTextSizeA(float size, float maxWidth, float unknown, const char* text) { 
-        float len = strlen(text) * size * 0.5f;
-        return ImVec2(len, size);
-    }
 };
 
 struct ImRect {
