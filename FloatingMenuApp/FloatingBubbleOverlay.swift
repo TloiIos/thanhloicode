@@ -13,6 +13,7 @@ struct FloatingBubbleOverlay: View {
     @State private var fovValue: Float = 90.0
     
     @State private var toggles: [ToggleItem] = [
+        ToggleItem(title: "ESP", isOn: false),
         ToggleItem(title: "ESP Box", isOn: false),
         ToggleItem(title: "ESP Lines", isOn: false),
         ToggleItem(title: "ESP Skeleton", isOn: false),
@@ -200,6 +201,7 @@ struct FloatingBubbleOverlay: View {
     
     private func handleToggle(_ title: String, isOn: Bool) {
         switch title {
+        case "ESP": EspManager.setEspEnabled(isOn)
         case "ESP Box": EspManager.setEspBoxEnabled(isOn)
         case "ESP Lines": EspManager.setEspLinesEnabled(isOn)
         case "ESP Skeleton": EspManager.setEspSkeletonEnabled(isOn)
