@@ -517,7 +517,7 @@ void DrawESP() {
                     std::string dist = std::to_string((int)distance) + "M";
                     
                     ImFont* info_font = main_font;
-                    if (!info_font) info_font = ImGui::GetIO().Fonts->Fonts[0];
+                    if (!info_font) info_font = ImGui::GetIO().Fonts[0];
                     
                     float fontSize = 13.0f;
                     float pad_x = 5.f;
@@ -659,7 +659,7 @@ void DrawESP() {
             
             bool hasEnemy = (enemyCount > 0 || botCount > 0);
             ImFont* count_font = main_font;
-            if (!count_font) count_font = ImGui::GetIO().Fonts->Fonts[0];
+            if (!count_font) count_font = ImGui::GetIO().Fonts[0];
             
             float fontSize = 16.0f;
             if (draw_list && count_font) {
@@ -679,7 +679,7 @@ void DrawESP() {
         // ENEMY WARNING
         if (Vars.enemywarning) {
             ImFont* font = main_font;
-            if (!font) font = ImGui::GetIO().Fonts->Fonts[0];
+            if (!font) font = ImGui::GetIO().Fonts[0];
             ImVec2 screen = ImGui::GetIO().DisplaySize;
             
             if (enemyVisibleCount > 0) {
