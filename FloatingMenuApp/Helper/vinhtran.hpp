@@ -10,14 +10,14 @@
 #include <cstring>
 
 // ==================== IMGUI STUB ====================
-// Định nghĩa ImVec2 TRƯỚC
+// QUAN TRỌNG: Định nghĩa ImVec2 TRƯỚC ImFont
 struct ImVec2 {
     float x, y;
     ImVec2() : x(0), y(0) {}
     ImVec2(float _x, float _y) : x(_x), y(_y) {}
 };
 
-// Định nghĩa ImFont SAU ImVec2
+// ImFont sử dụng ImVec2, phải định nghĩa SAU ImVec2
 struct ImFont {
     ImVec2 CalcTextSizeA(float size, float maxWidth, float unknown, const char* text) { 
         if (!text) return ImVec2(0,0);
@@ -279,14 +279,10 @@ inline T clamp(T value, T min, T max) {
 }
 
 // ==================== RAD/DEG ====================
-#define Deg2Rad (PI / 180.0f)
-#define Rad2Deg (180.0f / PI)
+#define Deg2Rad (IM_PI / 180.0f)
+#define Rad2Deg (180.0f / IM_PI)
 
 // ==================== FORWARD DECLARATIONS ====================
 void DrawSkeleton(void* player, ImDrawList* drawList);
-void ProcessAimbot();
-void DrawESP();
-void get_players();
-void aimbot();
 
 #endif // VINHTRAN_HPP_INCLUDED
