@@ -1,4 +1,3 @@
-// EspManager.h
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
@@ -26,9 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 // Aimbot Toggles
 + (void)setAimbotEnabled:(BOOL)enabled;
 + (void)setAimbotFov:(float)fov;
-+ (void)setAimbotTarget:(NSInteger)target; // 0=Head, 1=HeadV2, 2=Body
-+ (void)setAimbotMode:(NSInteger)mode; // 0=360, 1=180, 2=FOV
-+ (void)setAimbotWhen:(NSInteger)when; // 0=Always, 1=Fire, 2=Scope, 3=Fire&Scope
++ (void)setAimbotTarget:(NSInteger)target;
++ (void)setAimbotMode:(NSInteger)mode;
++ (void)setAimbotWhen:(NSInteger)when;
 + (void)setAimbotVisibleCheck:(BOOL)enabled;
 + (void)setAimbotShowFovCircle:(BOOL)enabled;
 + (void)setSilentAimEnabled:(BOOL)enabled;
