@@ -12,9 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)setEspEnabled:(BOOL)enabled;
 + (void)setEspBoxEnabled:(BOOL)enabled;
 + (void)setEspLinesEnabled:(BOOL)enabled;
-+ (void)setEspNameEnabled:(BOOL)enabled;
-+ (void)setEspHealthEnabled:(BOOL)enabled;
-+ (void)setEspDistanceEnabled:(BOOL)enabled;
 + (void)setEspSkeletonEnabled:(BOOL)enabled;
 + (void)setEspCircleEnabled:(BOOL)enabled;
 + (void)setEspOOFEnabled:(BOOL)enabled;
@@ -39,6 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 // Status
 + (BOOL)isEspEnabled;
 + (BOOL)isAimbotEnabled;
++ (BOOL)isGameConnected;
 
 @end
 
