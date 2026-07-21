@@ -1,4 +1,4 @@
-cat > FloatingMenuApp/ESP/EspManager.mm << 'EOF'
+
 #import "EspManager.h"
 #import "../Helper/Hooks.h"  // ← Import Hooks từ Helper
 
