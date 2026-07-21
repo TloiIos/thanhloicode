@@ -1,13 +1,12 @@
 #import "vinhtran.hpp"
 #import "loading.hxx"
+#import "Mem.h"
 #include <fstream>
 #include <algorithm>
 #include <chrono>
 #include <string>
 #include <cmath>
 #include <cstring>
-
-// Không cần fmt/core.h nữa
 
 extern "C" uintptr_t get_libBase();
 uintptr_t get_libBase();
@@ -273,56 +272,6 @@ bool isFov(Vector3 vec1, Vector3 vec2, int radius) {
 bool isWithin180FOV(Vector3 localPos, Vector3 enemyPos, Vector3 forward) {
     Vector3 directionToEnemy = Vector3::Normalized(enemyPos - localPos);
     return Vector3::Dot(forward, directionToEnemy) >= 0.0f;
-}
-
-// ==================== DRAW FUNCTIONS ====================
-void DrawSkeleton(void* player, ImDrawList* drawList) {
-    if (!player || !drawList) return;
-    
-    bool isPlayerVisible = tanghinh::isVisible(player);
-    bool isDead = game_sdk->get_IsDieing(player);
-    
-    Vector3 headPos = GetBonePosition(player, game_sdk->_GetHeadPositions);
-    Vector3 hipPos = GetBonePosition(player, game_sdk->_newHipMods);
-    Vector3 leftAnklePos = GetBonePosition(player, game_sdk->_GetLeftAnkleTF);
-    Vector3 rightAnklePos = GetBonePosition(player, game_sdk->_GetRightAnkleTF);
-    Vector3 leftToePos = GetBonePosition(player, game_sdk->_GetLeftToeTF);
-    Vector3 rightToePos = GetBonePosition(player, game_sdk->_GetRightToeTF);
-    Vector3 leftHandPos = GetBonePosition(player, game_sdk->_getLeftHandTF);
-    Vector3 rightHandPos = GetBonePosition(player, game_sdk->_getRightHandTF);
-    Vector3 leftForeArmPos = GetBonePosition(player, game_sdk->_getLeftForeArmTF);
-    Vector3 rightForeArmPos = GetBonePosition(player, game_sdk->_getRightForeArmTF);
-    
-    bool visible;
-    ImVec2 headScreen = Camera$$WorldToScreen::Checker(headPos, visible);
-    if (!visible) return;
-    
-    ImVec2 hipScreen = Camera$$WorldToScreen::Regular(hipPos);
-    ImVec2 leftAnkleScreen = Camera$$WorldToScreen::Regular(leftAnklePos);
-    ImVec2 rightAnkleScreen = Camera$$WorldToScreen::Regular(rightAnklePos);
-    ImVec2 leftToeScreen = Camera$$WorldToScreen::Regular(leftToePos);
-    ImVec2 rightToeScreen = Camera$$WorldToScreen::Regular(rightToePos);
-    ImVec2 leftHandScreen = Camera$$WorldToScreen::Regular(leftHandPos);
-    ImVec2 rightHandScreen = Camera$$WorldToScreen::Regular(rightHandPos);
-    ImVec2 leftForeArmScreen = Camera$$WorldToScreen::Regular(leftForeArmPos);
-    ImVec2 rightForeArmScreen = Camera$$WorldToScreen::Regular(rightForeArmPos);
-    
-    ImColor boneColor = isDead ? ImColor(255, 70, 70, 220) : 
-                        isPlayerVisible ? ImColor(0, 255, 120, 220) : 
-                        ImColor(230, 230, 230, 180);
-    
-    float thickness = 0.7f;
-    
-    drawList->AddCircle(headScreen, 2.0f, boneColor, 12, thickness);
-    drawList->AddLine(headScreen, hipScreen, boneColor, thickness);
-    drawList->AddLine(headScreen, leftForeArmScreen, boneColor, thickness);
-    drawList->AddLine(headScreen, rightForeArmScreen, boneColor, thickness);
-    drawList->AddLine(leftForeArmScreen, leftHandScreen, boneColor, thickness);
-    drawList->AddLine(rightForeArmScreen, rightHandScreen, boneColor, thickness);
-    drawList->AddLine(hipScreen, leftAnkleScreen, boneColor, thickness);
-    drawList->AddLine(hipScreen, rightAnkleScreen, boneColor, thickness);
-    drawList->AddLine(leftAnkleScreen, leftToeScreen, boneColor, thickness);
-    drawList->AddLine(rightAnkleScreen, rightToeScreen, boneColor, thickness);
 }
 
 // ==================== GET CLOSEST ENEMY ====================
@@ -758,6 +707,56 @@ void DrawESP() {
     } catch (...) {
         return;
     }
+}
+
+// ==================== DRAW SKELETON ====================
+void DrawSkeleton(void* player, ImDrawList* drawList) {
+    if (!player || !drawList) return;
+    
+    bool isPlayerVisible = tanghinh::isVisible(player);
+    bool isDead = game_sdk->get_IsDieing(player);
+    
+    Vector3 headPos = GetBonePosition(player, game_sdk->_GetHeadPositions);
+    Vector3 hipPos = GetBonePosition(player, game_sdk->_newHipMods);
+    Vector3 leftAnklePos = GetBonePosition(player, game_sdk->_GetLeftAnkleTF);
+    Vector3 rightAnklePos = GetBonePosition(player, game_sdk->_GetRightAnkleTF);
+    Vector3 leftToePos = GetBonePosition(player, game_sdk->_GetLeftToeTF);
+    Vector3 rightToePos = GetBonePosition(player, game_sdk->_GetRightToeTF);
+    Vector3 leftHandPos = GetBonePosition(player, game_sdk->_getLeftHandTF);
+    Vector3 rightHandPos = GetBonePosition(player, game_sdk->_getRightHandTF);
+    Vector3 leftForeArmPos = GetBonePosition(player, game_sdk->_getLeftForeArmTF);
+    Vector3 rightForeArmPos = GetBonePosition(player, game_sdk->_getRightForeArmTF);
+    
+    bool visible;
+    ImVec2 headScreen = Camera$$WorldToScreen::Checker(headPos, visible);
+    if (!visible) return;
+    
+    ImVec2 hipScreen = Camera$$WorldToScreen::Regular(hipPos);
+    ImVec2 leftAnkleScreen = Camera$$WorldToScreen::Regular(leftAnklePos);
+    ImVec2 rightAnkleScreen = Camera$$WorldToScreen::Regular(rightAnklePos);
+    ImVec2 leftToeScreen = Camera$$WorldToScreen::Regular(leftToePos);
+    ImVec2 rightToeScreen = Camera$$WorldToScreen::Regular(rightToePos);
+    ImVec2 leftHandScreen = Camera$$WorldToScreen::Regular(leftHandPos);
+    ImVec2 rightHandScreen = Camera$$WorldToScreen::Regular(rightHandPos);
+    ImVec2 leftForeArmScreen = Camera$$WorldToScreen::Regular(leftForeArmPos);
+    ImVec2 rightForeArmScreen = Camera$$WorldToScreen::Regular(rightForeArmPos);
+    
+    ImColor boneColor = isDead ? ImColor(255, 70, 70, 220) : 
+                        isPlayerVisible ? ImColor(0, 255, 120, 220) : 
+                        ImColor(230, 230, 230, 180);
+    
+    float thickness = 0.7f;
+    
+    drawList->AddCircle(headScreen, 2.0f, boneColor, 12, thickness);
+    drawList->AddLine(headScreen, hipScreen, boneColor, thickness);
+    drawList->AddLine(headScreen, leftForeArmScreen, boneColor, thickness);
+    drawList->AddLine(headScreen, rightForeArmScreen, boneColor, thickness);
+    drawList->AddLine(leftForeArmScreen, leftHandScreen, boneColor, thickness);
+    drawList->AddLine(rightForeArmScreen, rightHandScreen, boneColor, thickness);
+    drawList->AddLine(hipScreen, leftAnkleScreen, boneColor, thickness);
+    drawList->AddLine(hipScreen, rightAnkleScreen, boneColor, thickness);
+    drawList->AddLine(leftAnkleScreen, leftToeScreen, boneColor, thickness);
+    drawList->AddLine(rightAnkleScreen, rightToeScreen, boneColor, thickness);
 }
 
 // ==================== MAIN FUNCTIONS ====================
