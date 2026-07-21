@@ -1,7 +1,6 @@
 #import "vinhtran.hpp"
 #import "loading.hxx"
 #import "Mem.h"
-#import "Monostring.h"
 #import "Offsets.h"
 #include <fstream>
 #include <algorithm>
@@ -11,7 +10,6 @@
 #include <cstring>
 #include <vector>
 #include <sys/sysctl.h>
-#include <libproc.h>
 
 extern "C" uintptr_t get_libBase();
 uintptr_t get_libBase();
@@ -77,29 +75,37 @@ static TargetCache targetCache;
 class AutoConnect {
 public:
     static bool FindGameProcess() {
-        pid_t pids[1024];
-        int numPids = proc_listpids(PROC_ALL_PIDS, 0, pids, sizeof(pids));
-        if (numPids <= 0) return false;
+        int mib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
+        size_t size = 0;
         
-        int numProcesses = numPids / sizeof(pid_t);
-        for (int i = 0; i < numProcesses; i++) {
-            if (pids[i] == 0) continue;
-            char pathBuffer[PROC_PIDPATHINFO_MAXSIZE];
-            int pathLength = proc_pidpath(pids[i], pathBuffer, sizeof(pathBuffer));
-            if (pathLength <= 0) continue;
-            
-            NSString *path = [NSString stringWithUTF8String:pathBuffer];
-            NSString *processName = [path lastPathComponent];
+        if (sysctl(mib, 4, NULL, &size, NULL, 0) < 0) return false;
+        
+        struct kinfo_proc *procs = (struct kinfo_proc *)malloc(size);
+        if (!procs) return false;
+        
+        if (sysctl(mib, 4, procs, &size, NULL, 0) < 0) {
+            free(procs);
+            return false;
+        }
+        
+        int count = (int)(size / sizeof(struct kinfo_proc));
+        bool found = false;
+        
+        for (int i = 0; i < count; i++) {
+            struct kinfo_proc *proc = &procs[i];
+            NSString *processName = [NSString stringWithUTF8String:proc->kp_proc.p_comm];
             
             if ([processName containsString:@"FreeFire"] ||
                 [processName containsString:@"garena"] ||
                 [processName containsString:@"com.dts.freefireth"]) {
                 Vars.gameState = GAME_FOUND;
-                return true;
+                found = true;
+                break;
             }
         }
-        Vars.gameState = GAME_NOT_FOUND;
-        return false;
+        
+        free(procs);
+        return found;
     }
     
     static void ConnectToGame() {
@@ -149,6 +155,7 @@ public:
 game_sdk_t *game_sdk = new game_sdk_t();
 
 void game_sdk_t::init() {
+    // Player
     this->GetHp = (int (*)(void *))getRealOffset(OFFSET_GET_HP);
     this->get_MaxHP = (int (*)(void *))getRealOffset(OFFSET_GET_MAX_HP);
     this->get_IsDieing = (bool (*)(void *))getRealOffset(OFFSET_IS_DEAD);
