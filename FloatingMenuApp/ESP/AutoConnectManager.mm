@@ -50,16 +50,13 @@
 }
 
 - (void)findGameProcess {
-    // Sử dụng sysctl để tìm process
     int mib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
     size_t size = 0;
     
-    // Lấy kích thước
     if (sysctl(mib, 4, NULL, &size, NULL, 0) < 0) {
         return;
     }
     
-    // Lấy danh sách process
     struct kinfo_proc *procs = (struct kinfo_proc *)malloc(size);
     if (!procs) return;
     
@@ -68,13 +65,13 @@
         return;
     }
     
-    int count = size / sizeof(struct kinfo_proc);
+    // Sửa warning: cast size_t sang int
+    int count = (int)(size / sizeof(struct kinfo_proc));
     
     for (int i = 0; i < count; i++) {
         struct kinfo_proc *proc = &procs[i];
         NSString *processName = [NSString stringWithUTF8String:proc->kp_proc.p_comm];
         
-        // Kiểm tra tên process của Free Fire
         if ([processName containsString:@"FreeFire"] ||
             [processName containsString:@"garena"] ||
             [processName containsString:@"com.dts.freefireth"] ||
@@ -97,7 +94,6 @@
 - (void)attachToGame {
     NSLog(@"🔗 Attaching to Free Fire...");
     
-    // Khởi tạo game SDK - sẽ được gọi từ EspManager
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:@"GameConnectedNotification" object:nil];
     });
