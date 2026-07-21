@@ -1,12 +1,13 @@
-// Hooks.h - ESP & Aimbot Only
 #import "vinhtran.hpp"
 #import "loading.hxx"
 #include <fstream>
 #include <algorithm>
 #include <chrono>
+#include <string>
+#include <cmath>
+#include <cstring>
 
-#define FMT_HEADER_ONLY
-#include "fmt/core.h"
+// Không cần fmt/core.h nữa
 
 extern "C" uintptr_t get_libBase();
 uintptr_t get_libBase();
@@ -49,8 +50,8 @@ struct Vars_t {
     bool ShowFovCircle = true;
     bool isAimFov = true;
     AimTarget Target = HEAD;
-    int AimWhen = 3; // 0=Always, 1=Fire, 2=Scope, 3=Fire&Scope
-    int AimMode = 2; // 0=360°, 1=180°, 2=FOV
+    int AimWhen = 3;
+    int AimMode = 2;
     bool VisibleCheck = true;
     bool IgnoreKnocked = true;
     float AimSpeed = 1000.0f;
@@ -127,44 +128,44 @@ game_sdk_t *game_sdk = new game_sdk_t();
 
 void game_sdk_t::init() {
     // Player
-    this->GetHp = (int (*)(void *))getRealOffset(oxo("0x543592C"));
-    this->get_MaxHP = (int (*)(void *))getRealOffset(oxo("0x5435A3C"));
-    this->get_IsDieing = (bool (*)(void *))getRealOffset(oxo("0x53AA18C"));
-    this->get_isVisible = (bool (*)(void *))getRealOffset(oxo("0x53C8894"));
-    this->get_isLocalTeam = (bool (*)(void *))getRealOffset(oxo("0x53E20C4"));
-    this->name = (monoString * (*)(void *player)) getRealOffset(oxo("0x53BE8E0"));
+    this->GetHp = (int (*)(void *))getRealOffset(0x543592C);
+    this->get_MaxHP = (int (*)(void *))getRealOffset(0x5435A3C);
+    this->get_IsDieing = (bool (*)(void *))getRealOffset(0x53AA18C);
+    this->get_isVisible = (bool (*)(void *))getRealOffset(0x53C8894);
+    this->get_isLocalTeam = (bool (*)(void *))getRealOffset(0x53E20C4);
+    this->name = (monoString * (*)(void *player)) getRealOffset(0x53BE8E0);
     
     // Transform
-    this->Component_GetTransform = (void *(*)(void *))getRealOffset(oxo("0x91B82E4"));
-    this->get_position = (Vector3(*)(void *))getRealOffset(oxo("0x91CA56C"));
+    this->Component_GetTransform = (void *(*)(void *))getRealOffset(0x91B82E4);
+    this->get_position = (Vector3(*)(void *))getRealOffset(0x91CA56C);
     this->set_position = (void (*)(void *, Vector3))getRealOffset(0x91CA634);
-    this->GetForward = (Vector3(*)(void *))getRealOffset(oxo("0x91CAF64"));
+    this->GetForward = (Vector3(*)(void *))getRealOffset(0x91CAF64);
     
     // Camera
-    this->get_camera = (void *(*)())getRealOffset(oxo("0x915E9E4"));
-    this->WorldToViewpoint = (Vector3(*)(void*, Vector3, int))getRealOffset(oxo("0x915E364"));
+    this->get_camera = (void *(*)())getRealOffset(0x915E9E4);
+    this->WorldToViewpoint = (Vector3(*)(void*, Vector3, int))getRealOffset(0x915E364);
     
     // Aim
-    this->set_aim = (void (*)(void *, Quaternion))getRealOffset(oxo("0x53C4534"));
-    this->get_IsSighting = (bool (*)(void *))getRealOffset(oxo("0x53B769C"));
-    this->get_IsFiring = (bool (*)(void *))getRealOffset(oxo("0x53ACC9C"));
+    this->set_aim = (void (*)(void *, Quaternion))getRealOffset(0x53C4534);
+    this->get_IsSighting = (bool (*)(void *))getRealOffset(0x53B769C);
+    this->get_IsFiring = (bool (*)(void *))getRealOffset(0x53ACC9C);
     
     // Game
-    this->Curent_Match = (void *(*)())getRealOffset(oxo("0x55C4DA4"));
-    this->GetLocalPlayer = (void *(*)(void *))getRealOffset(oxo("0x2FFE494"));
+    this->Curent_Match = (void *(*)())getRealOffset(0x55C4DA4);
+    this->GetLocalPlayer = (void *(*)(void *))getRealOffset(0x2FFE494);
     
     // Bones
-    this->GetHeadPositions = (void *(*)(void *))getRealOffset(oxo("0x54547E0"));
-    this->_GetHeadPositions = (void *(*)(void *))getRealOffset(oxo("0x54547E0"));
-    this->_newHipMods = (void *(*)(void *))getRealOffset(oxo("0x5454990"));
-    this->_GetLeftAnkleTF = (void *(*)(void *))getRealOffset(oxo("0x5454DE0"));
-    this->_GetRightAnkleTF = (void *(*)(void *))getRealOffset(oxo("0x5454EEC"));
-    this->_GetLeftToeTF = (void *(*)(void *))getRealOffset(oxo("0x5454FF8"));
-    this->_GetRightToeTF = (void *(*)(void *))getRealOffset(oxo("0x5455104"));
-    this->_getLeftHandTF = (void *(*)(void *))getRealOffset(oxo("0x53C3608"));
-    this->_getRightHandTF = (void *(*)(void *))getRealOffset(oxo("0x53C370C"));
-    this->_getLeftForeArmTF = (void *(*)(void *))getRealOffset(oxo("0x53C3810"));
-    this->_getRightForeArmTF = (void *(*)(void *))getRealOffset(oxo("0x53C3914"));
+    this->GetHeadPositions = (void *(*)(void *))getRealOffset(0x54547E0);
+    this->_GetHeadPositions = (void *(*)(void *))getRealOffset(0x54547E0);
+    this->_newHipMods = (void *(*)(void *))getRealOffset(0x5454990);
+    this->_GetLeftAnkleTF = (void *(*)(void *))getRealOffset(0x5454DE0);
+    this->_GetRightAnkleTF = (void *(*)(void *))getRealOffset(0x5454EEC);
+    this->_GetLeftToeTF = (void *(*)(void *))getRealOffset(0x5454FF8);
+    this->_GetRightToeTF = (void *(*)(void *))getRealOffset(0x5455104);
+    this->_getLeftHandTF = (void *(*)(void *))getRealOffset(0x53C3608);
+    this->_getRightHandTF = (void *(*)(void *))getRealOffset(0x53C370C);
+    this->_getLeftForeArmTF = (void *(*)(void *))getRealOffset(0x53C3810);
+    this->_getRightForeArmTF = (void *(*)(void *))getRealOffset(0x53C3914);
 }
 
 // ==================== HELPER FUNCTIONS ====================
@@ -234,20 +235,20 @@ public:
     static Vector3 Transform_GetPosition(void *player) {
         Vector3 out = Vector3::zero();
         void (*_Transform_GetPosition)(void *transform, Vector3 *out) = 
-            (void (*)(void *, Vector3 *))getRealOffset(oxo("0x91CA5D0"));
+            (void (*)(void *, Vector3 *))getRealOffset(0x91CA5D0);
         _Transform_GetPosition(player, &out);
         return out;
     }
     
     static void *Player_GetHeadCollider(void *player) {
         void *(*_Player_GetHeadCollider)(void *players) = 
-            (void *(*)(void *))getRealOffset(oxo("0x53C2630"));
+            (void *(*)(void *))getRealOffset(0x53C2630);
         return _Player_GetHeadCollider(player);
     }
     
     static bool Physics_Raycast(Vector3 camLocation, Vector3 headLocation, unsigned int LayerID, void *collider) {
         bool (*_Physics_Raycast)(Vector3 camLocation, Vector3 headLocation, unsigned int LayerID, void *collider) = 
-            (bool (*)(Vector3, Vector3, unsigned int, void *))getRealOffset(oxo("0x5FE855C"));
+            (bool (*)(Vector3, Vector3, unsigned int, void *))getRealOffset(0x5FE855C);
         return _Physics_Raycast(camLocation, headLocation, LayerID, collider);
     }
     
@@ -264,8 +265,8 @@ public:
 
 // ==================== FOV FUNCTIONS ====================
 bool isFov(Vector3 vec1, Vector3 vec2, int radius) {
-    int x = vec1.x, y = vec1.y;
-    int x0 = vec2.x, y0 = vec2.y;
+    int x = (int)vec1.x, y = (int)vec1.y;
+    int x0 = (int)vec2.x, y0 = (int)vec2.y;
     return (pow(x - x0, 2) + pow(y - y0, 2)) <= pow(radius, 2);
 }
 
@@ -366,7 +367,7 @@ void *GetClosestEnemyByMode() {
             } else if (checkFOV) {
                 ImVec2 enemyScreenPos = Camera$$WorldToScreen::Regular(PlayerPos);
                 isValidTarget = isFov(Vector3(enemyScreenPos.x, enemyScreenPos.y, 0), 
-                                      Vector3(center.x, center.y, 0), Vars.AimFov);
+                                      Vector3(center.x, center.y, 0), (int)Vars.AimFov);
             }
             
             if (isValidTarget) {
@@ -516,7 +517,7 @@ void DrawESP() {
                 bool isDead = game_sdk->get_IsDieing(closestEnemy);
                 ImColor edgeColor = isDead ? ImColor(255, 80, 80, 180) : ImColor(210, 210, 210, 170);
                 
-                // ==================== LINES ====================
+                // LINES
                 if (Vars.lines) {
                     draw_list->AddLine(
                         ImVec2(ImGui::GetIO().DisplaySize.x / 2, 0),
@@ -525,7 +526,7 @@ void DrawESP() {
                     );
                 }
                 
-                // ==================== BOX ====================
+                // BOX
                 if (Vars.Box) {
                     float thickness = 0.7f;
                     float corner = 7.0f;
@@ -541,7 +542,7 @@ void DrawESP() {
                     draw_list->AddLine(rect.Max - ImVec2(0, corner), rect.Max, edgeColor, thickness);
                 }
                 
-                // ==================== SHOW INFO ====================
+                // SHOW INFO
                 if (Vars.ShowInfo && closestEnemy != NULL) {
                     enemy_index++;
                     
@@ -628,18 +629,18 @@ void DrawESP() {
                     }
                 }
                 
-                // ==================== CIRCLE ====================
+                // CIRCLE
                 if (Vars.circlepos) {
                     Draw3DCircle(pos, 1.0f, 0.5f, ImColor(255, 0, 0), 36, false, 0.5f);
                 }
                 
-                // ==================== SKELETON ====================
+                // SKELETON
                 if (Vars.skeleton) {
                     DrawSkeleton(closestEnemy, draw_list);
                 }
             }
             
-            // ==================== OOF (Out Of Frame) ====================
+            // OOF
             if (Vars.OOF) {
                 if ((pos_3.x < 0 || pos_3.x > disp.width) ||
                     (pos_3.y < 0 || pos_3.y > disp.height) || !w2sc) {
@@ -698,7 +699,7 @@ void DrawESP() {
             }
         }
         
-        // ==================== ENEMY COUNT ====================
+        // ENEMY COUNT
         if (Vars.enemycount) {
             std::string count_text = "";
             if (enemyCount > 0 && botCount > 0) {
@@ -730,7 +731,7 @@ void DrawESP() {
             }
         }
         
-        // ==================== ENEMY WARNING ====================
+        // ENEMY WARNING
         if (Vars.enemywarning) {
             ImFont* font = main_font;
             if (!font) font = ImGui::GetIO().Fonts->Fonts[0];
