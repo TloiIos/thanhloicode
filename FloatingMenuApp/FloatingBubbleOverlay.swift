@@ -1,6 +1,4 @@
-// FloatingBubbleOverlay.swift
 import SwiftUI
-import UIKit
 
 struct ToggleItem: Identifiable {
     let id = UUID()
@@ -15,7 +13,6 @@ struct FloatingBubbleOverlay: View {
     @State private var fovValue: Float = 90.0
     
     @State private var toggles: [ToggleItem] = [
-        // ESP Section
         ToggleItem(title: "ESP Box", isOn: false),
         ToggleItem(title: "ESP Lines", isOn: false),
         ToggleItem(title: "ESP Skeleton", isOn: false),
@@ -24,8 +21,6 @@ struct FloatingBubbleOverlay: View {
         ToggleItem(title: "ESP Show Info", isOn: false),
         ToggleItem(title: "ESP Enemy Count", isOn: false),
         ToggleItem(title: "ESP Warning", isOn: false),
-        
-        // Aimbot Section
         ToggleItem(title: "Aimbot", isOn: false),
         ToggleItem(title: "Silent Aim", isOn: false),
         ToggleItem(title: "Visible Check", isOn: true),
@@ -105,8 +100,12 @@ struct FloatingBubbleOverlay: View {
                         .padding(.top, 6)
                         .padding(.bottom, 2)
                     
-                    ForEach($toggles.prefix(8)) { $item in
-                        ToggleRow(item: $item, onToggle: handleToggle)
+                    ForEach(0..<8, id: \.self) { index in
+                        ToggleRow(
+                            title: toggles[index].title,
+                            isOn: $toggles[index].isOn,
+                            onToggle: handleToggle
+                        )
                     }
                     
                     Divider().background(Color.white.opacity(0.1))
@@ -118,8 +117,12 @@ struct FloatingBubbleOverlay: View {
                         .padding(.top, 6)
                         .padding(.bottom, 2)
                     
-                    ForEach($toggles.suffix(3)) { $item in
-                        ToggleRow(item: $item, onToggle: handleToggle)
+                    ForEach(8..<11, id: \.self) { index in
+                        ToggleRow(
+                            title: toggles[index].title,
+                            isOn: $toggles[index].isOn,
+                            onToggle: handleToggle
+                        )
                     }
                     
                     // FOV Slider
@@ -129,7 +132,7 @@ struct FloatingBubbleOverlay: View {
                                 .font(.system(size: 13))
                                 .foregroundStyle(.white)
                             Spacer()
-                            Text("Headshot Rate")
+                            Text(fovValue < 30 ? "🎯 Perfect" : fovValue < 60 ? "⚡ Good" : "📡 Wide")
                                 .font(.system(size: 11))
                                 .foregroundStyle(fovValue < 30 ? .green : fovValue < 60 ? .orange : .red)
                         }
@@ -172,7 +175,7 @@ struct FloatingBubbleOverlay: View {
                 }
                 .padding(.bottom, 10)
             }
-            .frame(height: 480)
+            .frame(height: 460)
         }
         .frame(width: 270)
         .background(
@@ -197,7 +200,6 @@ struct FloatingBubbleOverlay: View {
     
     private func handleToggle(_ title: String, isOn: Bool) {
         switch title {
-        // ESP
         case "ESP Box": EspManager.setEspBoxEnabled(isOn)
         case "ESP Lines": EspManager.setEspLinesEnabled(isOn)
         case "ESP Skeleton": EspManager.setEspSkeletonEnabled(isOn)
@@ -206,22 +208,17 @@ struct FloatingBubbleOverlay: View {
         case "ESP Show Info": EspManager.setEspShowInfoEnabled(isOn)
         case "ESP Enemy Count": EspManager.setEspEnemyCountEnabled(isOn)
         case "ESP Warning": EspManager.setEspEnemyWarningEnabled(isOn)
-            
-        // Aimbot
-        case "Aimbot": 
+        case "Aimbot":
             EspManager.setAimbotEnabled(isOn)
             if isOn { EspManager.setEspEnabled(true) }
         case "Silent Aim": EspManager.setSilentAimEnabled(isOn)
         case "Visible Check": EspManager.setAimbotVisibleCheck(isOn)
-            
         default: break
         }
         
-        // Enable ESP if any ESP feature is on
-        let anyEspOn = toggles.filter { 
-            ["ESP Box", "ESP Lines", "ESP Skeleton", "ESP Circle", 
-             "ESP OOF", "ESP Show Info", "ESP Enemy Count", "ESP Warning"].contains($0.title) && $0.isOn
-        }.count > 0
+        let espTitles = ["ESP Box", "ESP Lines", "ESP Skeleton", "ESP Circle",
+                         "ESP OOF", "ESP Show Info", "ESP Enemy Count", "ESP Warning"]
+        let anyEspOn = toggles.filter { espTitles.contains($0.title) && $0.isOn }.count > 0
         
         if anyEspOn {
             EspManager.setEspEnabled(true)
@@ -230,20 +227,21 @@ struct FloatingBubbleOverlay: View {
 }
 
 struct ToggleRow: View {
-    @Binding var item: ToggleItem
+    let title: String
+    @Binding var isOn: Bool
     let onToggle: (String, Bool) -> Void
     
     var body: some View {
         HStack {
-            Text(item.title)
+            Text(title)
                 .font(.system(size: 14))
                 .foregroundStyle(.white)
             Spacer()
-            Toggle("", isOn: $item.isOn)
+            Toggle("", isOn: $isOn)
                 .labelsHidden()
                 .tint(.green)
-                .onChange(of: item.isOn) { newValue in
-                    onToggle(item.title, newValue)
+                .onChange(of: isOn) { newValue in
+                    onToggle(title, newValue)
                 }
         }
         .padding(.horizontal, 14)
