@@ -8,7 +8,6 @@ class OverlayWindow: UIWindow {
     
     private override init(frame: CGRect) {
         super.init(frame: frame)
-        print("🔵 1. Init called")
         setupWindow()
     }
     
@@ -17,54 +16,64 @@ class OverlayWindow: UIWindow {
     }
     
     private func setupWindow() {
-        print("🔵 2. Setup window")
-        
-        // Cấu hình window
+        // QUAN TRỌNG: Set windowLevel cao hơn tất cả
+        // UIWindowLevelStatusBar = 1000
+        // UIWindowLevelAlert = 2000
+        // Dùng level cao nhất để hiển thị trên game
+        self.windowLevel = .alert + 2
         self.backgroundColor = .clear
-        self.windowLevel = .alert + 1  // Dùng level cao nhất
-        self.isUserInteractionEnabled = true
         self.isHidden = false
         self.alpha = 1.0
+        self.isUserInteractionEnabled = true
         
         // Tạo SwiftUI view
         let hubView = SystemFloatingHub()
         let controller = UIHostingController(rootView: hubView)
         controller.view.backgroundColor = .clear
-        controller.view.frame = self.bounds
         controller.view.isUserInteractionEnabled = true
+        controller.view.frame = self.bounds
         
         self.rootViewController = controller
         self.hostingController = controller
         
-        // Force hiển thị
+        // QUAN TRỌNG: Đảm bảo window hiển thị
         self.makeKeyAndVisible()
         
-        print("🔵 3. Window setup complete")
-        print("   - isHidden: \(self.isHidden)")
-        print("   - isKeyWindow: \(self.isKeyWindow)")
-        print("   - windowLevel: \(self.windowLevel.rawValue)")
+        // Đưa lên trên cùng
+        self.layer.zPosition = CGFloat(Float.greatestFiniteMagnitude)
+        
+        print("✅ OverlayWindow setup complete")
+        print("📐 Frame: \(self.frame)")
+        print("🎚️ WindowLevel: \(self.windowLevel.rawValue)")
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(bringToFront),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
+    }
+    
+    @objc private func bringToFront() {
+        self.windowLevel = .alert + 2
+        self.isHidden = false
+        self.makeKeyAndVisible()
+        self.layer.zPosition = CGFloat(Float.greatestFiniteMagnitude)
     }
     
     func show() {
         DispatchQueue.main.async {
-            print("🔵 4. show() called")
-            
             self.isHidden = false
-            self.alpha = 1.0
-            self.windowLevel = .alert + 1
+            self.windowLevel = .alert + 2
             self.makeKeyAndVisible()
-            
-            // Force update
+            self.layer.zPosition = CGFloat(Float.greatestFiniteMagnitude)
             self.layoutIfNeeded()
-            self.setNeedsDisplay()
             
-            print("   - After show - isHidden: \(self.isHidden)")
-            print("   - After show - isKeyWindow: \(self.isKeyWindow)")
+            print("✅ OverlayWindow shown - level: \(self.windowLevel.rawValue)")
         }
     }
     
     func hide() {
-        print("🔴 hide() called")
         self.isHidden = true
     }
 }
