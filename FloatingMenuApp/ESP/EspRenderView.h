@@ -1,11 +1,10 @@
-
+// EspRenderView.h
 #import <UIKit/UIKit.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
 @interface EspRenderView : UIView
+
++ (instancetype)sharedInstance;
 - (void)startRendering;
 - (void)stopRendering;
-@end
 
-NS_ASSUME_NONNULL_END
+@end
