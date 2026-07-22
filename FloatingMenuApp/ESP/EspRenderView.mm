@@ -1,4 +1,4 @@
-cat > FloatingMenuApp/ESP/EspRenderView.mm << 'EOF'
+
 #import "EspRenderView.h"
 #import "EspManager.h"
 #import <QuartzCore/QuartzCore.h>
@@ -62,4 +62,4 @@ cat > FloatingMenuApp/ESP/EspRenderView.mm << 'EOF'
 }
 
 @end
-EOF
+
