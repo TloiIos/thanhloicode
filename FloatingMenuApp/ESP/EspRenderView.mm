@@ -1,4 +1,4 @@
-
+// EspRenderView.mm
 #import "EspRenderView.h"
 #import "EspManager.h"
 #import <QuartzCore/QuartzCore.h>
@@ -25,7 +25,8 @@
     if (self) {
         self.backgroundColor = [UIColor clearColor];
         self.userInteractionEnabled = NO;
-        self.windowLevel = UIWindowLevelStatusBar + 2;
+        self.windowLevel = UIWindowLevelStatusBar + 2;  // Now this works
+        self.hidden = YES;  // Start hidden
         [self startRendering];
     }
     return self;
@@ -61,5 +62,8 @@
     if ([EspManager isAimbotEnabled]) [EspManager renderAimbot];
 }
 
-@end
+- (void)dealloc {
+    [self stopRendering];
+}
 
+@end
