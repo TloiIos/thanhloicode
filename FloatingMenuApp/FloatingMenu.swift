@@ -182,6 +182,7 @@ struct FloatingMenu: View {
             targetButton(title: "Head", targetValue: 0, boneValue: 0)
             targetButton(title: "Body", targetValue: 1, boneValue: 2)
             targetButton(title: "Chest", targetValue: 2, boneValue: 1)
+            targetButton(title: "Legs", targetValue: 3, boneValue: 3)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 4)
@@ -189,7 +190,7 @@ struct FloatingMenu: View {
     }
     
     // MARK: - Target Button Helper
-    private func targetButton(title: String, targetValue: Int, boneValue: Int) -> some View {
+    private func targetButton(title: String, targetValue: Int, boneValue: Int32) -> some View {
         Button(title) {
             selectedTarget = targetValue
             EspManager.setAimbotTarget(boneValue)
@@ -237,7 +238,6 @@ struct FloatingMenu: View {
             EspManager.setAimbotEnabled(isOn)
             if isOn {
                 EspManager.setEspEnabled(true)
-                // Also update the ESP toggle state
                 if let espIndex = toggles.firstIndex(where: { $0.title == "ESP" }) {
                     toggles[espIndex].isOn = true
                 }
