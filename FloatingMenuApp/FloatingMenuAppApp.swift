@@ -1,45 +1,35 @@
-// FloatingMenuAppApp.swift - GIỮ LẠI FILE NÀY
 import SwiftUI
 
 @main
 struct FloatingMenuAppApp: App {
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    print("📱 ContentView appeared")
+                    
+                    // Hiển thị overlay sau 0.5 giây
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        OverlayWindow.shared.show()
+                        
+                        // Debug thêm: Kiểm tra cửa sổ
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            let windows = UIApplication.shared.windows
+                            print("📱 Total windows: \(windows.count)")
+                            for (index, window) in windows.enumerated() {
+                                print("  Window \(index): \(type(of: window)) - hidden: \(window.isHidden)")
+                                if let overlay = window as? OverlayWindow {
+                                    print("  ✅ Found OverlayWindow at index \(index)")
+                                }
+                            }
+                        }
+                    }
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                         OverlayWindow.shared.show()
                     }
                 }
-        }
-    }
-}
-
-// MARK: - AppDelegate
-class AppDelegate: NSObject, UIApplicationDelegate {
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        // Hiển thị overlay window sau khi app khởi động
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            OverlayWindow.shared.show()
-            print("✅ OverlayWindow shown from AppDelegate")
-        }
-        return true
-    }
-    
-    func applicationWillResignActive(_ application: UIApplication) {
-        // Giữ overlay khi app background
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            OverlayWindow.shared.show()
-        }
-    }
-    
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        // Hiển thị lại overlay khi app active
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            OverlayWindow.shared.show()
-            print("✅ OverlayWindow shown - App became active")
         }
     }
 }
