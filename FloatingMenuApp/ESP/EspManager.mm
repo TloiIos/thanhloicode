@@ -519,6 +519,11 @@ static BOOL _aimbotFovEnabled = YES;
     CGContextStrokePath(context);
 }
 
++ (void)setAimbotTarget:(int)target {
+    [Vars setAimbotBone:target];
+    NSLog(@"Aimbot target set to: %d", target);
+}
+
 + (void)updateESP {
     [[EspRenderView sharedInstance] setNeedsDisplay];
 }
