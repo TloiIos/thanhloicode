@@ -1,24 +1,14 @@
 #import "EspManager.h"
-#import "AutoConnectManager.h"
 #include "../Helper/Hooks.h"
-#include "../Helper/Offsets.h"
 
 @implementation EspManager
 
+static BOOL _isMonitoring = NO;
+
 + (void)setupESP {
-    // Bắt đầu monitoring game
-    [[AutoConnectManager sharedInstance] startMonitoringGame];
-    
-    // Đăng ký notification khi kết nối game thành công
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(onGameConnected)
-                                                 name:@"GameConnectedNotification"
-                                               object:nil];
-    
     // Khởi tạo game_sdk
     game_sdk->init();
     
-    // Cài đặt mặc định
     Vars.Enable = false;
     Vars.Aimbot = false;
     Vars.AimFov = 90.0f;
@@ -28,25 +18,39 @@
     Vars.VisibleCheck = true;
     Vars.ShowFovCircle = true;
     Vars.isAimFov = true;
+    Vars.gameState = GAME_NOT_FOUND;
     
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
     disp.width = screenSize.width;
     disp.height = screenSize.height;
     disp.wh = ImVec2(screenSize.width, screenSize.height);
     
-    NSLog(@"✅ ESP Setup complete! Waiting for game...");
+    // Bắt đầu monitoring game
+    [self startMonitoring];
 }
 
-+ (void)onGameConnected {
-    NSLog(@"✅ Game connected! ESP ready.");
-    // Tự động bật ESP khi game kết nối
-    Vars.Enable = true;
-    Vars.Box = true;
-    Vars.lines = true;
-    Vars.skeleton = true;
-    Vars.ShowInfo = true;
-    Vars.enemycount = true;
-    Vars.enemywarning = true;
++ (void)startMonitoring {
+    if (_isMonitoring) return;
+    _isMonitoring = YES;
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        while (_isMonitoring) {
+            if (Vars.gameState != GAME_CONNECTED) {
+                if (AutoConnect::FindGameProcess()) {
+                    AutoConnect::ConnectToGame();
+                    // Gửi notification khi kết nối thành công
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"GameConnectedNotification" object:nil];
+                    });
+                }
+            }
+            [NSThread sleepForTimeInterval:0.5];
+        }
+    });
+}
+
++ (void)stopMonitoring {
+    _isMonitoring = NO;
 }
 
 // ==================== ESP ====================
@@ -81,19 +85,17 @@
 // ==================== RENDER ====================
 + (void)renderESP {
     if (!Vars.Enable) return;
-    if (![[AutoConnectManager sharedInstance] isConnectedToGame]) return;
+    if (Vars.gameState != GAME_CONNECTED) return;
     get_players();
 }
 
 + (void)renderAimbot {
     if (!Vars.Aimbot) return;
-    if (![[AutoConnectManager sharedInstance] isConnectedToGame]) return;
+    if (Vars.gameState != GAME_CONNECTED) return;
     aimbot();
 }
 
 // ==================== STATUS ====================
 + (BOOL)isEspEnabled { return Vars.Enable; }
 + (BOOL)isAimbotEnabled { return Vars.Aimbot; }
-+ (BOOL)isGameConnected { return [[AutoConnectManager sharedInstance] isConnectedToGame]; }
-
-@end
++ (BOOL)isGameConnected { return Vars.gameState == GAME_CONNECTED; }
