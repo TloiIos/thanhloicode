@@ -9,32 +9,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        print("🚀 App started")
+        // Tạo cửa sổ chính
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.rootViewController = UIHostingController(rootView: ContentView())
+        window?.makeKeyAndVisible()
         
-        // KHÔNG tạo window chính, chỉ tạo overlay window
-        // Overlay sẽ hiển thị trên game
-        
-        // Tạo overlay window ngay lập tức
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        // Tạo overlay window để hiển thị trên tất cả app
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.overlayWindow = OverlayWindow.shared
             self.overlayWindow?.show()
-            
-            print("✅ Overlay window created and shown")
-            
-            // In ra tất cả windows để debug
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                print("📱 All windows:")
-                for (index, win) in UIApplication.shared.windows.enumerated() {
-                    print("  [\(index)] \(type(of: win)) - hidden: \(win.isHidden), level: \(win.windowLevel.rawValue)")
-                }
-            }
         }
         
         return true
     }
     
+    func applicationWillResignActive(_ application: UIApplication) {
+        overlayWindow?.show()
+    }
+    
     func applicationDidBecomeActive(_ application: UIApplication) {
-        print("App became active")
         overlayWindow?.show()
     }
 }
