@@ -16,24 +16,36 @@ struct SystemFloatingHub: View {
     @State private var injectionStatus: String = "🔍 Scanning..."
     @State private var lastScanTime: Date = Date()
     @State private var scanTimer: Timer?
+    @State private var scanCount: Int = 0
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     
     // Danh sách game cần tự động detect
-    let gameList = [
-        "com.tencent.ig",           // PUBG Mobile     // Free Fire
-        "com.activision.callofduty", // Call of Duty
-        "com.mobile.legends",       // Mobile Legends
-        "com.garena",               // Garena
-        "com.vng.pubg",             // PUBG VNG
-        "com.tencent.tmgp",         // Tencent Games
-        "com.dts.freefireth",       // Free Fire Thailand
-        "com.madhead.tos.zh",       // Tower of Saviors
-        "com.netease",              // NetEase Games
-        "com.supercell",            // Supercell
-        "com.miHoYo",               // Genshin Impact
-        "com.ea.games",             // EA Games
+    let gameList: [String: String] = [
+        "com.tencent.ig": "PUBG Mobile",
+        "com.activision.callofduty": "Call of Duty",
+        "com.mobile.legends": "Mobile Legends",
+        "com.garena": "Garena",
+        "com.vng.pubg": "PUBG VNG",
+        "com.tencent.tmgp": "Tencent Games",
+        "com.dts.freefireth": "Free Fire",
+        "com.miHoYo": "Genshin Impact",
+        "com.ea.games": "EA Games",
+        "com.supercell": "Supercell",
+        "com.netease": "NetEase Games",
+    ]
+    
+    let gameIcons: [String: String] = [
+        "com.tencent.ig": "gamecontroller.fill",
+        "com.garena.game.ff": "flame.fill",
+        "com.activision.callofduty": "target",
+        "com.mobile.legends": "shield.fill",
+        "com.garena": "star.fill",
+        "com.miHoYo": "wand.and.rays",
+        "com.ea.games": "gamecontroller.fill",
+        "com.supercell": "crown.fill",
+        "com.netease": "cloud.fill",
     ]
     
     var body: some View {
@@ -323,9 +335,9 @@ struct SystemFloatingHub: View {
         // Scan ngay lập tức
         performScan()
         
-        // Tạo timer scan mỗi 2 giây
+        // Tạo timer scan mỗi 3 giây
         scanTimer?.invalidate()
-        scanTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
+        scanTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
             if !autoInjectEnabled {
                 self.stopAutoScan()
                 return
@@ -347,6 +359,7 @@ struct SystemFloatingHub: View {
             
             DispatchQueue.main.async {
                 self.lastScanTime = Date()
+                self.scanCount += 1
                 
                 if let app = detectedApp {
                     if self.currentApp?.bundleId != app.bundleId {
@@ -368,7 +381,7 @@ struct SystemFloatingHub: View {
                         self.isGameConnected = false
                         self.injectionStatus = "❌ Game closed - Waiting..."
                     } else {
-                        self.injectionStatus = "🔍 Scanning for games..."
+                        self.injectionStatus = "🔍 Scanning for games... (\(self.scanCount))"
                     }
                 }
             }
@@ -378,80 +391,56 @@ struct SystemFloatingHub: View {
     private func detectRunningGame() -> AppInfo? {
         var detectedApp: AppInfo?
         
-        // Sử dụng danh sách app đang chạy từ UIApplication
-        // Lưu ý: Trên iOS thực tế, không thể get running apps do sandbox
-        // Đây là giải pháp mô phỏng
+        // Cách 1: Kiểm tra thông qua UIApplication (chỉ detect app của mình)
+        // Cách 2: Dùng private API (cần entitlements)
+        // Cách 3: Mô phỏng cho demo
         
-        // Kiểm tra các app đang chạy thông qua UIApplication
-        // Thực tế chỉ có thể detect app của mình
-        
-        // Giả lập: Kiểm tra nếu có game đang chạy trong danh sách
-        // Trong thực tế, bạn cần dùng phương pháp khác (Jailbreak, private API)
-        
-        // Mô phỏng phát hiện game
         #if targetEnvironment(simulator)
-        // Trên simulator, dùng sample
-        let sampleGames = [
-            "com.tencent.ig",
-            "com.dts.freefireth",
-            "com.activision.callofduty"
-        ]
-        let randomGame = sampleGames.randomElement() ?? "com.tencent.ig"
-        detectedApp = AppInfo(
-            name: self.getGameName(from: randomGame),
-            bundleId: randomGame,
-            icon: self.getGameIcon(from: randomGame)
-        )
-        #else
-        // Trên device thật, bạn cần dùng private API hoặc jailbreak
-        // Tạm thời mô phỏng
-        let sampleGames = [
-            "com.tencent.ig",
-            "com.dts.freefireth"
-        ]
-        if let randomGame = sampleGames.randomElement() {
+        // Trên simulator, mô phỏng scan
+        let gameBundleIds = Array(gameList.keys)
+        if let randomBundleId = gameBundleIds.randomElement() {
+            let gameName = gameList[randomBundleId] ?? randomBundleId
+            let icon = gameIcons[randomBundleId] ?? "app.fill"
             detectedApp = AppInfo(
-                name: self.getGameName(from: randomGame),
-                bundleId: randomGame,
-                icon: self.getGameIcon(from: randomGame)
+                name: gameName,
+                bundleId: randomBundleId,
+                icon: icon
             )
         }
+        #else
+        // Trên device thật
+        // Lưu ý: iOS sandbox không cho phép get running apps
+        // Bạn cần jailbreak hoặc dùng entitlements đặc biệt
+        
+        // Demo: Luân phiên các game để test
+        let gameBundleIds = Array(gameList.keys)
+        let index = Int(Date().timeIntervalSince1970) % gameBundleIds.count
+        let bundleId = gameBundleIds[index]
+        let gameName = gameList[bundleId] ?? bundleId
+        let icon = gameIcons[bundleId] ?? "app.fill"
+        
+        detectedApp = AppInfo(
+            name: gameName,
+            bundleId: bundleId,
+            icon: icon
+        )
         #endif
         
         return detectedApp
     }
     
     private func getGameName(from bundleId: String) -> String {
-        let gameNames: [String: String] = [
-            "com.tencent.ig": "PUBG Mobile",
-            "com.garena.game.ff": "Free Fire",
-            "com.activision.callofduty": "Call of Duty",
-            "com.mobile.legends": "Mobile Legends",
-            "com.garena": "Garena",
-            "com.vng.pubg": "PUBG VNG",
-            "com.tencent.tmgp": "Tencent Games",
-            "com.dts.freefireth": "Free Fire",
-            "com.miHoYo": "Genshin Impact",
-        ]
-        return gameNames[bundleId] ?? bundleId
+        return gameList[bundleId] ?? bundleId
     }
     
     private func getGameIcon(from bundleId: String) -> String {
-        let gameIcons: [String: String] = [
-            "com.tencent.ig": "gamecontroller.fill",
-            "com.garena.game.ff": "flame.fill",
-            "com.activision.callofduty": "target",
-            "com.mobile.legends": "shield.fill",
-            "com.garena": "star.fill",
-            "com.miHoYo": "wand.and.rays",
-        ]
         return gameIcons[bundleId] ?? "app.fill"
     }
     
     private func autoInject(_ app: AppInfo) {
         injectionStatus = "💉 Injecting into \(app.name)..."
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             // Giả lập inject thành công
             self.isGameConnected = true
             self.isAutoInjecting = false
@@ -466,13 +455,19 @@ struct SystemFloatingHub: View {
             // Haptic feedback
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.success)
+            
+            // Cập nhật UI
+            self.isEspEnabled = true
+            self.isAimbotEnabled = true
         }
     }
     
     private func handleToggle(_ title: String, isOn: Bool) {
         print("🔄 Toggle: \(title) = \(isOn)")
         switch title {
-        case "ESP": EspManager.setEspEnabled(isOn)
+        case "ESP": 
+            EspManager.setEspEnabled(isOn)
+            isEspEnabled = isOn
         case "ESP Box": EspManager.setEspBoxEnabled(isOn)
         case "ESP Lines": EspManager.setEspLinesEnabled(isOn)
         case "ESP Skeleton": EspManager.setEspSkeletonEnabled(isOn)
@@ -483,8 +478,10 @@ struct SystemFloatingHub: View {
         case "Enemy Warning": EspManager.setEspEnemyWarningEnabled(isOn)
         case "Aimbot":
             EspManager.setAimbotEnabled(isOn)
+            isAimbotEnabled = isOn
             if isOn {
                 EspManager.setEspEnabled(true)
+                isEspEnabled = true
             }
         case "Silent Aim": EspManager.setSilentAimEnabled(isOn)
         case "Visible Check": EspManager.setAimbotVisibleCheck(isOn)
