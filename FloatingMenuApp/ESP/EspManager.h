@@ -1,3 +1,4 @@
+// EspManager.h
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
@@ -5,38 +6,55 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EspManager : NSObject
 
-// Setup
-+ (void)setupESP;
+// Singleton
++ (instancetype)sharedManager;
 
-// ESP Toggles
+// Game State
++ (BOOL)isGameConnected;
++ (BOOL)isGameDisconnected;
++ (BOOL)isGameConnecting;
++ (void)setGameStateConnected;
++ (void)setGameStateDisconnected;
+
+// ESP
++ (BOOL)isEspEnabled;
 + (void)setEspEnabled:(BOOL)enabled;
-+ (void)setEspBoxEnabled:(BOOL)enabled;
-+ (void)setEspLinesEnabled:(BOOL)enabled;
-+ (void)setEspSkeletonEnabled:(BOOL)enabled;
-+ (void)setEspCircleEnabled:(BOOL)enabled;
-+ (void)setEspOOFEnabled:(BOOL)enabled;
-+ (void)setEspShowInfoEnabled:(BOOL)enabled;
-+ (void)setEspEnemyCountEnabled:(BOOL)enabled;
-+ (void)setEspEnemyWarningEnabled:(BOOL)enabled;
++ (void)toggleEsp;
 
-// Aimbot Toggles
+// Aimbot
++ (BOOL)isAimbotEnabled;
 + (void)setAimbotEnabled:(BOOL)enabled;
-+ (void)setAimbotFov:(float)fov;
-+ (void)setAimbotTarget:(NSInteger)target;
-+ (void)setAimbotMode:(NSInteger)mode;
-+ (void)setAimbotWhen:(NSInteger)when;
-+ (void)setAimbotVisibleCheck:(BOOL)enabled;
-+ (void)setAimbotShowFovCircle:(BOOL)enabled;
-+ (void)setSilentAimEnabled:(BOOL)enabled;
++ (void)toggleAimbot;
 
-// Render
+// ESP Options
++ (BOOL)showBoxes;
++ (void)setShowBoxes:(BOOL)show;
++ (BOOL)showLines;
++ (void)setShowLines:(BOOL)show;
++ (BOOL)showDistance;
++ (void)setShowDistance:(BOOL)show;
++ (BOOL)showHealth;
++ (void)setShowHealth:(BOOL)show;
++ (BOOL)showSnaplines;
++ (void)setShowSnaplines:(BOOL)show;
+
+// Aimbot Settings
++ (float)aimbotFov;
++ (void)setAimbotFov:(float)fov;
++ (float)aimbotSmooth;
++ (void)setAimbotSmooth:(float)smooth;
++ (int)aimbotBone;
++ (void)setAimbotBone:(int)bone;
+
+// Rendering
 + (void)renderESP;
 + (void)renderAimbot;
 
-// Status
-+ (BOOL)isEspEnabled;
-+ (BOOL)isAimbotEnabled;
-+ (BOOL)isGameConnected;
+// Utility
++ (void)showOverlay;
++ (void)hideOverlay;
++ (void)resetAllSettings;
++ (void)logStatus;
 
 @end
 
