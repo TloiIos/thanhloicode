@@ -26,7 +26,6 @@ struct FloatingMenu: View {
         ToggleItem(title: "Visible Check", isOn: true),
     ]
     
-    // MARK: - Body
     var body: some View {
         VStack(spacing: 0) {
             headerView
@@ -53,7 +52,6 @@ struct FloatingMenu: View {
             Spacer()
             
             connectionStatusView
-            
             closeButton
         }
         .padding(.horizontal, 16)
@@ -286,17 +284,5 @@ struct ToggleRow: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 3)
-    }
-}
-
-// MARK: - Preview
-struct FloatingMenu_Previews: PreviewProvider {
-    static var previews: some View {
-        FloatingMenu(
-            isOpen: .constant(true),
-            isGameConnected: .constant(true)
-        )
-        .previewLayout(.sizeThatFits)
-        .background(Color.black)
     }
 }
