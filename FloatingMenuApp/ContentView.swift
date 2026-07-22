@@ -12,12 +12,12 @@ struct ContentView: View {
             .edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 20) {
-                Text("ThanhLoi")
+                Text("🎮 ESP & Aimbot")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                 
-                Text("Vòng tròn nổi ở góc phải")
+                Text("Nút tròn sẽ xuất hiện ở góc phải")
                     .font(.subheadline)
                     .foregroundColor(.gray)
                 
