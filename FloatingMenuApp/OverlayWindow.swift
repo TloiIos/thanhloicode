@@ -2,12 +2,12 @@ import UIKit
 import SwiftUI
 
 class OverlayWindow: UIWindow {
-    static let shared = OverlayWindow(frame: UIScreen.main.bounds)
+    static let shared = OverlayWindow()
     
     private var hostingController: UIHostingController<SystemFloatingHub>?
     
     private override init(frame: CGRect) {
-        super.init(frame: frame)
+        super.init(frame: UIScreen.main.bounds)
         setupWindow()
     }
     
@@ -49,9 +49,17 @@ class OverlayWindow: UIWindow {
         self.isHidden = false
         self.windowLevel = .statusBar + 1
         self.makeKeyAndVisible()
+        
+        // Debug
+        print("✅ OverlayWindow shown")
     }
     
     func hide() {
         self.isHidden = true
+        print("🔴 OverlayWindow hidden")
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
