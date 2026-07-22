@@ -2,12 +2,12 @@ import UIKit
 import SwiftUI
 
 class OverlayWindow: UIWindow {
-    static let shared = OverlayWindow()
+    static let shared = OverlayWindow(frame: UIScreen.main.bounds)  // Thêm frame
     
     private var hostingController: UIHostingController<SystemFloatingHub>?
     
     private override init(frame: CGRect) {
-        super.init(frame: UIScreen.main.bounds)
+        super.init(frame: frame)
         setupWindow()
     }
     
@@ -49,8 +49,6 @@ class OverlayWindow: UIWindow {
         self.isHidden = false
         self.windowLevel = .statusBar + 1
         self.makeKeyAndVisible()
-        
-        // Debug
         print("✅ OverlayWindow shown")
     }
     
