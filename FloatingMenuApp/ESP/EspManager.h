@@ -53,7 +53,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)setShowHealth:(BOOL)show;
 + (BOOL)showSnaplines;
 + (void)setShowSnaplines:(BOOL)show;
-
+// EspManager.h - Add these missing methods
++ (void)setAimbotTarget:(int)target;
 // Aimbot
 + (BOOL)isAimbotEnabled;
 + (void)setAimbotEnabled:(BOOL)enabled;
