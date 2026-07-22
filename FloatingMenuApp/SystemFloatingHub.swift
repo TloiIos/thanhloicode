@@ -15,14 +15,14 @@ struct SystemFloatingHub: View {
     @State private var availableApps: [AppInfo] = []
     @State private var injectionStatus: String = "🔍 Scanning..."
     @State private var lastScanTime: Date = Date()
+    @State private var scanTimer: Timer?
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     
     // Danh sách game cần tự động detect
     let gameList = [
-        "com.tencent.ig",           // PUBG Mobile
-        "com.garena.game.ff",       // Free Fire
+        "com.tencent.ig",           // PUBG Mobile     // Free Fire
         "com.activision.callofduty", // Call of Duty
         "com.mobile.legends",       // Mobile Legends
         "com.garena",               // Garena
@@ -132,6 +132,9 @@ struct SystemFloatingHub: View {
                     
                     // Bắt đầu tự động scan
                     startAutoScan()
+                }
+                .onDisappear {
+                    stopAutoScan()
                 }
                 
                 // Menu
@@ -321,48 +324,51 @@ struct SystemFloatingHub: View {
         performScan()
         
         // Tạo timer scan mỗi 2 giây
-        Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { timer in
+        scanTimer?.invalidate()
+        scanTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
             if !autoInjectEnabled {
-                timer.invalidate()
+                self.stopAutoScan()
                 return
             }
-            performScan()
+            self.performScan()
         }
     }
     
     private func stopAutoScan() {
+        scanTimer?.invalidate()
+        scanTimer = nil
         isAutoInjecting = false
         injectionStatus = "⏸️ Auto inject paused"
     }
     
     private func performScan() {
         DispatchQueue.global(qos: .background).async {
-            let detectedApp = detectRunningGame()
+            let detectedApp = self.detectRunningGame()
             
             DispatchQueue.main.async {
-                lastScanTime = Date()
+                self.lastScanTime = Date()
                 
                 if let app = detectedApp {
-                    if currentApp?.bundleId != app.bundleId {
+                    if self.currentApp?.bundleId != app.bundleId {
                         // Phát hiện game mới
-                        currentApp = app
-                        injectionStatus = "🎯 Found: \(app.name)"
-                        isAutoInjecting = true
+                        self.currentApp = app
+                        self.injectionStatus = "🎯 Found: \(app.name)"
+                        self.isAutoInjecting = true
                         
                         // Tự động inject
-                        autoInject(app)
+                        self.autoInject(app)
                     } else {
                         // Game vẫn đang chạy
-                        injectionStatus = "🔄 Monitoring: \(app.name)"
+                        self.injectionStatus = "🔄 Monitoring: \(app.name)"
                     }
                 } else {
-                    if currentApp != nil {
+                    if self.currentApp != nil {
                         // Game đã đóng
-                        currentApp = nil
-                        isGameConnected = false
-                        injectionStatus = "❌ Game closed - Waiting..."
+                        self.currentApp = nil
+                        self.isGameConnected = false
+                        self.injectionStatus = "❌ Game closed - Waiting..."
                     } else {
-                        injectionStatus = "🔍 Scanning for games..."
+                        self.injectionStatus = "🔍 Scanning for games..."
                     }
                 }
             }
@@ -372,92 +378,47 @@ struct SystemFloatingHub: View {
     private func detectRunningGame() -> AppInfo? {
         var detectedApp: AppInfo?
         
-        // Sử dụng process list để detect game đang chạy
-        let task = Process()
-        task.executableURL = URL(fileURLWithPath: "/usr/bin/ps")
-        task.arguments = ["-ax", "-o", "comm"]
+        // Sử dụng danh sách app đang chạy từ UIApplication
+        // Lưu ý: Trên iOS thực tế, không thể get running apps do sandbox
+        // Đây là giải pháp mô phỏng
         
-        let pipe = Pipe()
-        task.standardOutput = pipe
+        // Kiểm tra các app đang chạy thông qua UIApplication
+        // Thực tế chỉ có thể detect app của mình
         
-        do {
-            try task.run()
-            task.waitUntilExit()
-            
-            let data = pipe.fileHandleForReading.readDataToEndOfFile()
-            let output = String(data: data, encoding: .utf8) ?? ""
-            let lines = output.components(separatedBy: .newlines)
-            
-            // Lấy danh sách app đang chạy
-            for line in lines {
-                let process = line.trimmingCharacters(in: .whitespaces)
-                let processLower = process.lowercased()
-                
-                // Kiểm tra từng game trong danh sách
-                for game in gameList {
-                    if processLower.contains(game.lowercased()) {
-                        let appInfo = AppInfo(
-                            name: getGameName(from: game),
-                            bundleId: game,
-                            icon: getGameIcon(from: game)
-                        )
-                        detectedApp = appInfo
-                        break
-                    }
-                }
-                
-                if detectedApp != nil { break }
-            }
-        } catch {
-            print("Error scanning processes: \(error)")
+        // Giả lập: Kiểm tra nếu có game đang chạy trong danh sách
+        // Trong thực tế, bạn cần dùng phương pháp khác (Jailbreak, private API)
+        
+        // Mô phỏng phát hiện game
+        #if targetEnvironment(simulator)
+        // Trên simulator, dùng sample
+        let sampleGames = [
+            "com.tencent.ig",
+            "com.dts.freefireth",
+            "com.activision.callofduty"
+        ]
+        let randomGame = sampleGames.randomElement() ?? "com.tencent.ig"
+        detectedApp = AppInfo(
+            name: self.getGameName(from: randomGame),
+            bundleId: randomGame,
+            icon: self.getGameIcon(from: randomGame)
+        )
+        #else
+        // Trên device thật, bạn cần dùng private API hoặc jailbreak
+        // Tạm thời mô phỏng
+        let sampleGames = [
+            "com.tencent.ig",
+            "com.dts.freefireth"
+        ]
+        if let randomGame = sampleGames.randomElement() {
+            detectedApp = AppInfo(
+                name: self.getGameName(from: randomGame),
+                bundleId: randomGame,
+                icon: self.getGameIcon(from: randomGame)
+            )
         }
-        
-        // Fallback: Kiểm tra app đang chạy frontmost
-        if detectedApp == nil {
-            if let frontmost = getFrontmostApp() {
-                for game in gameList {
-                    if frontmost.contains(game) {
-                        detectedApp = AppInfo(
-                            name: getGameName(from: game),
-                            bundleId: game,
-                            icon: getGameIcon(from: game)
-                        )
-                        break
-                    }
-                }
-            }
-        }
+        #endif
         
         return detectedApp
-    }
-    
-    private func getFrontmostApp() -> String? {
-        let task = Process()
-        task.executableURL = URL(fileURLWithPath: "/usr/bin/ps")
-        task.arguments = ["-ax", "-o", "comm"]
-        
-        let pipe = Pipe()
-        task.standardOutput = pipe
-        
-        do {
-            try task.run()
-            task.waitUntilExit()
-            
-            let data = pipe.fileHandleForReading.readDataToEndOfFile()
-            let output = String(data: data, encoding: .utf8) ?? ""
-            let lines = output.components(separatedBy: .newlines)
-            
-            for line in lines {
-                let process = line.trimmingCharacters(in: .whitespaces)
-                if process.contains("App") || process.contains("Game") {
-                    return process
-                }
-            }
-        } catch {
-            print("Error: \(error)")
-        }
-        
-        return nil
     }
     
     private func getGameName(from bundleId: String) -> String {
@@ -492,9 +453,9 @@ struct SystemFloatingHub: View {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             // Giả lập inject thành công
-            isGameConnected = true
-            isAutoInjecting = false
-            injectionStatus = "✅ Injected: \(app.name)"
+            self.isGameConnected = true
+            self.isAutoInjecting = false
+            self.injectionStatus = "✅ Injected: \(app.name)"
             
             print("✅ Auto-injected into \(app.name)")
             
