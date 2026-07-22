@@ -9,6 +9,7 @@ struct SystemFloatingHub: View {
     @State private var isGameConnected = false
     @State private var isEspEnabled = false
     @State private var isAimbotEnabled = false
+    @State private var isVisible = false
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
@@ -47,7 +48,7 @@ struct SystemFloatingHub: View {
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(.white)
                         
-                        // Trạng thái kết nối game (chấm tròn nhỏ)
+                        // Trạng thái kết nối game
                         Circle()
                             .fill(isGameConnected ? Color.green : Color.red)
                             .frame(width: 12, height: 12)
@@ -80,7 +81,6 @@ struct SystemFloatingHub: View {
                             )
                             dragOffset = .zero
                             
-                            // Lưu vị trí
                             UserDefaults.standard.set(position.x, forKey: "hubPositionX")
                             UserDefaults.standard.set(position.y, forKey: "hubPositionY")
                         }
@@ -92,15 +92,18 @@ struct SystemFloatingHub: View {
                         position = CGPoint(x: x, y: y)
                     }
                     
-                    // Cập nhật trạng thái mỗi giây
+                    isVisible = true
+                    
+                    // Cập nhật trạng thái
                     Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
                         isGameConnected = EspManager.isGameConnected()
                         isEspEnabled = EspManager.isEspEnabled()
                         isAimbotEnabled = EspManager.isAimbotEnabled()
                     }
                     
-                    print("✅ SystemFloatingHub đã xuất hiện!")
-                    print("📍 Vị trí: \(position)")
+                    print("✅ SystemFloatingHub appeared!")
+                    print("📍 Position: \(position)")
+                    print("📐 Screen: \(screenWidth)x\(screenHeight)")
                 }
                 
                 // Menu
@@ -114,13 +117,12 @@ struct SystemFloatingHub: View {
             }
         }
         .ignoresSafeArea()
-    }
-}
-
-// MARK: - Preview
-struct SystemFloatingHub_Previews: PreviewProvider {
-    static var previews: some View {
-        SystemFloatingHub()
-            .background(Color.black)
+        .background(
+            // Debug: Thêm background để thấy nếu view xuất hiện
+            Color.clear
+                .onAppear {
+                    print("🟢 SystemFloatingHub view appeared in hierarchy")
+                }
+        )
     }
 }
