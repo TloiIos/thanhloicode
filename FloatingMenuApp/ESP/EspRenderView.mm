@@ -1,3 +1,4 @@
+// EspRenderView.mm
 #import "EspRenderView.h"
 #import "EspManager.h"
 #import <QuartzCore/QuartzCore.h>
@@ -5,6 +6,7 @@
 @interface EspRenderView () {
     CADisplayLink *_displayLink;
     BOOL _isRendering;
+    UIWindow *_containerWindow;  // Add container window
 }
 @end
 
@@ -24,10 +26,28 @@
     if (self) {
         self.backgroundColor = [UIColor clearColor];
         self.userInteractionEnabled = NO;
-        self.windowLevel = UIWindowLevelStatusBar + 2;
+        self.hidden = YES;
+        
+        // Create a container window
+        _containerWindow = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+        _containerWindow.backgroundColor = [UIColor clearColor];
+        _containerWindow.windowLevel = UIWindowLevelStatusBar + 2;
+        _containerWindow.rootViewController = [[UIViewController alloc] init];
+        _containerWindow.rootViewController.view.backgroundColor = [UIColor clearColor];
+        _containerWindow.rootViewController.view.userInteractionEnabled = NO;
+        [_containerWindow makeKeyAndVisible];
+        
+        // Add self to the container window
+        [_containerWindow.rootViewController.view addSubview:self];
+        
         [self startRendering];
     }
     return self;
+}
+
+- (void)dealloc {
+    [self stopRendering];
+    _containerWindow = nil;
 }
 
 - (void)startRendering {
