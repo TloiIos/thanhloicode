@@ -12,7 +12,7 @@ struct ContentView: View {
             .edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 20) {
-                Text("🎮 ESP & Aimbot")
+                Text("ThanhLoi")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
@@ -21,15 +21,16 @@ struct ContentView: View {
                     .font(.subheadline)
                     .foregroundColor(.gray)
                 
+                Text("👉 Nếu không thấy, kiểm tra console log")
+                    .font(.caption)
+                    .foregroundColor(.yellow)
+                
                 Spacer()
             }
             .padding()
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+        .onAppear {
+            print("📱 ContentView appeared")
+        }
     }
 }
