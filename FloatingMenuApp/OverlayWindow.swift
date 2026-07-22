@@ -2,12 +2,12 @@ import UIKit
 import SwiftUI
 
 class OverlayWindow: UIWindow {
-    static let shared = OverlayWindow()
+    static let shared = OverlayWindow(frame: UIScreen.main.bounds)
     
     private var hostingController: UIHostingController<SystemFloatingHub>?
     
     private override init(frame: CGRect) {
-        super.init(frame: UIScreen.main.bounds)
+        super.init(frame: frame)
         setupWindow()
     }
     
