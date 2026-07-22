@@ -1,7 +1,7 @@
 // EspRenderView.h
 #import <UIKit/UIKit.h>
 
-@interface EspRenderView : UIView
+@interface EspRenderView : UIWindow  // Change from UIView to UIWindow
 
 + (instancetype)sharedInstance;
 - (void)startRendering;
