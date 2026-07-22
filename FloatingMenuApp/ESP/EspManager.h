@@ -9,13 +9,15 @@ NS_ASSUME_NONNULL_BEGIN
 // Singleton
 + (instancetype)sharedManager;
 
+// Setup
++ (void)setupESP;
+
 // Game State
 + (BOOL)isGameConnected;
 + (BOOL)isGameDisconnected;
 + (BOOL)isGameConnecting;
 + (void)setGameStateConnected;
 + (void)setGameStateDisconnected;
-+ (void)setupESP;
 
 // ESP Main
 + (BOOL)isEspEnabled;
@@ -42,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL)isEspFovEnabled;
 + (void)setEspFovEnabled:(BOOL)enabled;
 
-// ESP Display Options
+// ESP Display Options (Legacy support)
 + (BOOL)showBoxes;
 + (void)setShowBoxes:(BOOL)show;
 + (BOOL)showLines;
@@ -53,12 +55,13 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)setShowHealth:(BOOL)show;
 + (BOOL)showSnaplines;
 + (void)setShowSnaplines:(BOOL)show;
-// EspManager.h - Add these missing methods
-+ (void)setAimbotTarget:(int)target;
-// Aimbot
+
+// Aimbot Main
 + (BOOL)isAimbotEnabled;
 + (void)setAimbotEnabled:(BOOL)enabled;
 + (void)toggleAimbot;
+
+// Aimbot Features
 + (BOOL)isSilentAimEnabled;
 + (void)setSilentAimEnabled:(BOOL)enabled;
 + (BOOL)isAimbotVisibleCheck;
@@ -73,6 +76,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)setAimbotSmooth:(float)smooth;
 + (int)aimbotBone;
 + (void)setAimbotBone:(int)bone;
++ (void)setAimbotTarget:(int)target;
 
 // Rendering
 + (void)renderESP;
