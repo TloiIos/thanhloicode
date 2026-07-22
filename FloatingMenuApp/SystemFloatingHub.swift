@@ -16,7 +16,7 @@ struct SystemFloatingHub: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                // Nút Hub
+                // Nút Hub tròn
                 Button(action: {
                     withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                         isMenuOpen.toggle()
@@ -47,12 +47,18 @@ struct SystemFloatingHub: View {
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(.white)
                         
-                        // Trạng thái kết nối game
+                        // Trạng thái kết nối game (chấm tròn nhỏ)
                         Circle()
                             .fill(isGameConnected ? Color.green : Color.red)
                             .frame(width: 12, height: 12)
                             .offset(x: 22, y: -22)
                             .shadow(color: isGameConnected ? .green.opacity(0.6) : .red.opacity(0.6), radius: 4)
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.white, lineWidth: 2)
+                                    .frame(width: 12, height: 12)
+                                    .offset(x: 22, y: -22)
+                            )
                     }
                 }
                 .position(x: position.x + dragOffset.width,
@@ -92,6 +98,9 @@ struct SystemFloatingHub: View {
                         isEspEnabled = EspManager.isEspEnabled()
                         isAimbotEnabled = EspManager.isAimbotEnabled()
                     }
+                    
+                    print("✅ SystemFloatingHub đã xuất hiện!")
+                    print("📍 Vị trí: \(position)")
                 }
                 
                 // Menu
@@ -100,9 +109,18 @@ struct SystemFloatingHub: View {
                         .position(x: position.x + dragOffset.width + 145,
                                  y: position.y + dragOffset.height)
                         .transition(.scale(scale: 0.8).combined(with: .opacity))
+                        .zIndex(1)
                 }
             }
         }
         .ignoresSafeArea()
+    }
+}
+
+// MARK: - Preview
+struct SystemFloatingHub_Previews: PreviewProvider {
+    static var previews: some View {
+        SystemFloatingHub()
+            .background(Color.black)
     }
 }
