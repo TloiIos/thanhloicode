@@ -15,18 +15,34 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL)isGameConnecting;
 + (void)setGameStateConnected;
 + (void)setGameStateDisconnected;
++ (void)setupESP;
 
-// ESP
+// ESP Main
 + (BOOL)isEspEnabled;
 + (void)setEspEnabled:(BOOL)enabled;
 + (void)toggleEsp;
 
-// Aimbot
-+ (BOOL)isAimbotEnabled;
-+ (void)setAimbotEnabled:(BOOL)enabled;
-+ (void)toggleAimbot;
+// ESP Features
++ (BOOL)isEspBoxEnabled;
++ (void)setEspBoxEnabled:(BOOL)enabled;
++ (BOOL)isEspLinesEnabled;
++ (void)setEspLinesEnabled:(BOOL)enabled;
++ (BOOL)isEspSkeletonEnabled;
++ (void)setEspSkeletonEnabled:(BOOL)enabled;
++ (BOOL)isEspCircleEnabled;
++ (void)setEspCircleEnabled:(BOOL)enabled;
++ (BOOL)isEspOOFEnabled;
++ (void)setEspOOFEnabled:(BOOL)enabled;
++ (BOOL)isEspShowInfoEnabled;
++ (void)setEspShowInfoEnabled:(BOOL)enabled;
++ (BOOL)isEspEnemyCountEnabled;
++ (void)setEspEnemyCountEnabled:(BOOL)enabled;
++ (BOOL)isEspEnemyWarningEnabled;
++ (void)setEspEnemyWarningEnabled:(BOOL)enabled;
++ (BOOL)isEspFovEnabled;
++ (void)setEspFovEnabled:(BOOL)enabled;
 
-// ESP Options
+// ESP Display Options
 + (BOOL)showBoxes;
 + (void)setShowBoxes:(BOOL)show;
 + (BOOL)showLines;
@@ -37,6 +53,17 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)setShowHealth:(BOOL)show;
 + (BOOL)showSnaplines;
 + (void)setShowSnaplines:(BOOL)show;
+
+// Aimbot
++ (BOOL)isAimbotEnabled;
++ (void)setAimbotEnabled:(BOOL)enabled;
++ (void)toggleAimbot;
++ (BOOL)isSilentAimEnabled;
++ (void)setSilentAimEnabled:(BOOL)enabled;
++ (BOOL)isAimbotVisibleCheck;
++ (void)setAimbotVisibleCheck:(BOOL)enabled;
++ (BOOL)isAimbotFovEnabled;
++ (void)setAimbotFovEnabled:(BOOL)enabled;
 
 // Aimbot Settings
 + (float)aimbotFov;
@@ -49,6 +76,8 @@ NS_ASSUME_NONNULL_BEGIN
 // Rendering
 + (void)renderESP;
 + (void)renderAimbot;
++ (void)updateESP;
++ (void)updateAimbot;
 
 // Utility
 + (void)showOverlay;
