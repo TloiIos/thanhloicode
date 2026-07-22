@@ -9,25 +9,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        print("🚀 App did finish launching")
+        print("🚀 App started")
         
-        // 1. Tạo cửa sổ chính
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = UIHostingController(rootView: ContentView())
-        window?.makeKeyAndVisible()
-        print("✅ Main window created")
+        // KHÔNG tạo window chính, chỉ tạo overlay window
+        // Overlay sẽ hiển thị trên game
         
-        // 2. Tạo và hiển thị overlay window sau 0.5s
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            print("⏰ Creating overlay window...")
-            self?.overlayWindow = OverlayWindow.shared
-            self?.overlayWindow?.show()
+        // Tạo overlay window ngay lập tức
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.overlayWindow = OverlayWindow.shared
+            self.overlayWindow?.show()
             
-            // Debug: In ra tất cả windows
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                print("📱 All windows after overlay:")
+            print("✅ Overlay window created and shown")
+            
+            // In ra tất cả windows để debug
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                print("📱 All windows:")
                 for (index, win) in UIApplication.shared.windows.enumerated() {
-                    print("  Window \(index): \(type(of: win)) - hidden: \(win.isHidden)")
+                    print("  [\(index)] \(type(of: win)) - hidden: \(win.isHidden), level: \(win.windowLevel.rawValue)")
                 }
             }
         }
@@ -36,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
-        print("▶️ App became active")
+        print("App became active")
         overlayWindow?.show()
     }
 }
